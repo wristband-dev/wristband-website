@@ -1,0 +1,56 @@
+---
+import { LINKS, SITE } from '../lib/constants';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="/images/wristband_white_logo.svg" alt="Wristband" width="160" height="28" />
+        <p>Authentication for multi-tenant apps. Build secure B2B auth flows with hosted pages and APIs.</p>
+        <div class="footer-badges" style="margin-top: 24px;">
+          <img src="/images/badges/soc2.webp" alt="SOC 2 Type II" />
+          <img src="/images/badges/ccpa.webp" alt="CCPA" />
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/pricing">Pricing</a>
+        <a href={LINKS.docs}>Support</a>
+        <a href="/request-demo">Request Demo</a>
+        <a href={LINKS.calendly}>Book a Call</a>
+        <a href="/compare/wristband-vs-auth0">Wristband vs Auth0</a>
+        <a href="/customers/thoughtly">Case Studies</a>
+      </div>
+      <div class="footer-col">
+        <h4>Developers</h4>
+        <a href={LINKS.quickStart}>Quick Start</a>
+        <a href={LINKS.apiReference}>API Reference</a>
+        <a href={LINKS.changelog}>Changelog</a>
+        <a href={LINKS.status}>Status Page</a>
+        <a href={LINKS.slack}>Community Slack</a>
+        <a href={LINKS.passwordGenerator}>Password Generator</a>
+        <a href={LINKS.jwtValidator}>JWT Validator</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href={`mailto:${SITE.email}`}>Contact Us</a>
+        <a href="/the-team">Team</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/privacy">Privacy</a>
+        <a href={LINKS.trust}>Trust Center</a>
+        <a href={LINKS.press}>Press and Media</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© {new Date().getFullYear()} Apitopia, Inc.</p>
+      <div class="socials">
+        <a href={LINKS.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href={LINKS.twitter} target="_blank" rel="noopener noreferrer">X</a>
+        <a href={LINKS.bluesky} target="_blank" rel="noopener noreferrer">Bluesky</a>
+      </div>
+    </div>
+  </div>
+</footer>

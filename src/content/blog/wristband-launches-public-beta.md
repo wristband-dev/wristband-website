@@ -1,0 +1,37 @@
+---
+title: "Wristband Launches Public Beta"
+summary: ""
+category: "Press"
+pubDate: 2024-04-01
+author: "Wristband Team"
+coverImage: "/images/misc/66aaf17b8dbfff780c904d2a_ph-main.png"
+---
+
+*This article was originally published on*[Yahoo Finance](https://finance.yahoo.com/news/prediction-2-artificial-intelligence-ai-122100967.html)*.*
+
+**‍SAN FRANCISCO, CA – August 1, 2024** - Wristband, a developer-first authentication platform designed for B2B SaaS, today announced the public beta launch of its highly anticipated platform. Wristband empowers startups and scale-ups to implement secure and customizable authentication solutions, saving development time and resources while providing a superior user experience.
+
+“Building robust B2B authentication in-house is a complex and time-consuming process that can distract founders from their core product,” said Jim Verducci, CEO of Wristband. “Wristband eliminates the need for developers to reinvent the wheel, providing them with a secure-by-default, multi-tenant platform that can be easily customized and scaled.”
+
+Wristband aims to do this all while unlocking enterprise-grade auth for millions of small businesses that are priced-out of the most secure auth platforms. "For too long, small businesses have been locked out of enterprise-grade authentication and security due to unnecessary gates like the 'SSO tax'. It's time to democratize access to robust security, empowering businesses of all sizes to protect their users and their data." said Jim Manico, OWASP Board member and advisor to Wristband.
+
+Early customers of Wristband's platform are already seeing significant benefits. Daniel Paik, CEO of CuroWork, emphasizes, "The user authentication experience is critical in SaaS. With Wristband, I know it's taken care of and I can focus on my actual business." Kai Russo, CTO of CuroWork, highlights the platform's efficiency: "As a young startup, there's so much to do. With Wristband, we were up and running in an afternoon with all the bells and whistles and compliance required for high-level authentication." Both executives praised Wristband's native multi-tenant architecture as a key selling point, with Russo noting, "Wristband's multi-tenant design from the start makes it more stable and safer than add-ons to existing platforms.
+
+Wristband offers a comprehensive suite of features and benefits, including:
+- Enterprise-Grade Security: Built-in security features and compliance certifications ensure data isolation and protection, adhering to industry standards.
+- Deep Customization: Unparalleled flexibility allows developers to tailor authentication flows, user interfaces, and integrations to match their unique brand and customer needs.
+- Cost-Effective Scaling: Transparent pricing with no hidden fees or "SSO tax" makes enterprise-level authentication accessible to businesses of all sizes.
+- Developer-Friendly: Easy-to-use APIs, SDKs, and comprehensive documentation simplify implementation and streamline development workflows.
+
+During the public beta period, developers are invited to try Wristband for free and provide valuable feedback to help refine the platform before its official launch.
+
+“We’re excited to welcome developers to our public beta program and get their feedback,” said David Chu, CTO of Wristband. “Our goal is to build the most developer-friendly and comprehensive B2B authentication platform on the market, and we believe that close collaboration with the developer community is essential to achieving that goal.”
+
+To learn more about Wristband and sign up for the public beta, visit [https://wristband.dev](https://wristband.dev).
+
+**About Wristband**
+
+Wristband is a developer-first authentication platform designed specifically for B2B SaaS companies. Founded by a team of experienced engineers and security experts, Wristband's mission is to simplify B2B authentication, making it more secure, customizable, and accessible for businesses of all sizes. The company is headquartered in Berkeley, CA.
+
+‍
+[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/team/jim-verducci)[Jim VerducciCEO / Co-founder](/team/jim-verducci)[](https://www.linkedin.com/in/jim-verducci/)

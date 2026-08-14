@@ -1,0 +1,18 @@
+---
+import WebflowLayout from '../../layouts/WebflowLayout.astro';
+import { getWebflowMeta } from '../../lib/webflow';
+import bodyHtml from '../../webflow/compare-wristband-vs-auth0.html?raw';
+
+const meta = getWebflowMeta('compare-wristband-vs-auth0');
+---
+
+<WebflowLayout
+  title={meta.title}
+  description={meta.description || undefined}
+  ogImage={meta.ogImage || undefined}
+  wfPage={meta.wfPage}
+  wfSite={meta.wfSite}
+  bodyClass={meta.bodyClass}
+>
+  <Fragment set:html={bodyHtml} />
+</WebflowLayout>

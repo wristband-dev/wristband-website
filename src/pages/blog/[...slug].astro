@@ -1,0 +1,79 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import WebflowLayout from '../../layouts/WebflowLayout.astro';
+import BlogArticleLayout from '../../layouts/BlogArticleLayout.astro';
+import { getWebflowMeta, type WebflowPageMeta } from '../../lib/webflow';
+import { getWebflowBlogSlugs } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const postById = new Map(posts.map((entry) => [entry.id, entry]));
+  const webflowSlugs = getWebflowBlogSlugs();
+  const slugs = new Set([...webflowSlugs, ...postById.keys()]);
+
+  return [...slugs].map((slug) => ({
+    params: { slug },
+    props: {
+      webflowKey: webflowSlugs.has(slug) ? `blog-${slug}` : undefined,
+      post: postById.get(slug),
+    },
+  }));
+}
+
+interface Props {
+  webflowKey?: string;
+  post?: CollectionEntry<'blog'>;
+}
+
+const { webflowKey, post } = Astro.props;
+const modules = import.meta.glob('../../webflow/blog-*.html', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+let webflowMeta: WebflowPageMeta | undefined;
+let webflowHtml: string | undefined;
+let entry: CollectionEntry<'blog'> | undefined;
+let Content: Awaited<ReturnType<typeof render>>['Content'] | undefined;
+let ogImage: string | undefined;
+
+if (webflowKey) {
+  webflowMeta = getWebflowMeta(webflowKey);
+  webflowHtml = modules[`../../webflow/${webflowKey}.html`] as string;
+} else if (post) {
+  entry = post;
+  ({ Content } = await render(post));
+  const cover = post.data.coverImage;
+  ogImage = cover.startsWith('http')
+    ? cover
+    : new URL(cover, Astro.site ?? 'https://www.wristband.dev').href;
+} else {
+  throw new Error(`No Webflow HTML or content entry for blog slug "${Astro.params.slug}"`);
+}
+---
+
+{
+  webflowMeta && webflowHtml ? (
+    <WebflowLayout
+      title={webflowMeta.title}
+      description={webflowMeta.description || undefined}
+      ogImage={webflowMeta.ogImage || undefined}
+      wfPage={webflowMeta.wfPage}
+      wfSite={webflowMeta.wfSite}
+      bodyClass={webflowMeta.bodyClass}
+    >
+      <Fragment set:html={webflowHtml} />
+    </WebflowLayout>
+  ) : entry && Content ? (
+    <BlogArticleLayout
+      title={entry.data.title}
+      summary={entry.data.summary}
+      category={entry.data.category}
+      coverImage={entry.data.coverImage}
+      ogImage={ogImage}
+    >
+      <Content />
+    </BlogArticleLayout>
+  ) : null
+}

@@ -1,0 +1,18 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import { getWebflowMeta } from '../lib/webflow';
+import bodyHtml from '../webflow/terms.html?raw';
+
+const meta = getWebflowMeta('terms');
+---
+
+<WebflowLayout
+  title={meta.title}
+  description={meta.description || undefined}
+  ogImage={meta.ogImage || undefined}
+  wfPage={meta.wfPage}
+  wfSite={meta.wfSite}
+  bodyClass={meta.bodyClass}
+>
+  <Fragment set:html={bodyHtml} />
+</WebflowLayout>

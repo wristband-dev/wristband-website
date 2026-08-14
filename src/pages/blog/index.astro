@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import WebflowLayout from '../../layouts/WebflowLayout.astro';
+import { getWebflowMeta } from '../../lib/webflow';
+import { getWebflowBlogSlugs, injectContentPostsIntoIndex } from '../../lib/blog';
+import bodyHtml from '../../webflow/blog.html?raw';
+
+const meta = getWebflowMeta('blog');
+const webflowSlugs = getWebflowBlogSlugs();
+const extraPosts = (await getCollection('blog')).filter((post) => !webflowSlugs.has(post.id));
+const html = injectContentPostsIntoIndex(bodyHtml, extraPosts);
+---
+
+<WebflowLayout
+  title={meta.title}
+  description={meta.description || undefined}
+  ogImage={meta.ogImage || undefined}
+  wfPage={meta.wfPage}
+  wfSite={meta.wfSite}
+  bodyClass={meta.bodyClass}
+>
+  <Fragment set:html={html} />
+</WebflowLayout>

@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects — keep marketing URLs stable after Webflow cutover
+/signup  https://dashboard-wristband.us.wristband.dev/signup  302
+/login   https://dashboard-wristband.us.wristband.dev/login   302

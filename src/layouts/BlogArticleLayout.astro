@@ -1,0 +1,89 @@
+---
+import WebflowLayout from './WebflowLayout.astro';
+import { BLOG_POST_WF_PAGE } from '../lib/blog';
+import chromeSource from '../webflow/blog-wristband-launches-public-beta.html?raw';
+
+interface Props {
+  title: string;
+  summary?: string;
+  category: string;
+  coverImage: string;
+  ogImage?: string;
+}
+
+const { title, summary, category, coverImage, ogImage } = Astro.props;
+
+const wrapperOpen = '<div class="page-wrapper">';
+const headerStart = chromeSource.indexOf(wrapperOpen);
+const sectionStart = chromeSource.indexOf('<div class="section blog-post">');
+const footerStart = chromeSource.indexOf('<footer class="footer">');
+const commentsStart = chromeSource.indexOf('<!--Start of Google Tag Manager Script-->');
+
+if (headerStart < 0 || sectionStart < 0 || footerStart < 0 || commentsStart < 0) {
+  throw new Error('Failed to extract Webflow header/footer for blog articles');
+}
+
+const headerHtml = chromeSource.slice(headerStart + wrapperOpen.length, sectionStart);
+const footerHtml = chromeSource.slice(footerStart, commentsStart).replace(/<\/div>\s*$/, '');
+---
+
+<WebflowLayout
+  title={title}
+  description={summary || undefined}
+  ogImage={ogImage}
+  wfPage={BLOG_POST_WF_PAGE}
+  bodyClass="body"
+>
+  <div class="page-wrapper">
+    <Fragment set:html={headerHtml} />
+    <div class="section blog-post">
+      <div class="container-header w-container">
+        <div class="inner-container-1020px">
+          <div class="text-center">
+            <div class="mg-bottom-16px">
+              <a href="/blog" class="badge w-inline-block"><div>{category}</div></a>
+            </div>
+            <h1 class="heading-10">{title}</h1>
+            {
+              summary && (
+                <div class="inner-container-600px align-center">
+                  <p class="mg-bottom-0px">{summary}</p>
+                </div>
+              )
+            }
+          </div>
+          <div class="image-wrapper basic-frame---large mg-top-large-80px">
+            <img src={coverImage} alt="" class="image post-hero" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg blog-post"></div>
+  </div>
+  <div class="section blog-post">
+    <div class="container-medium w-container">
+      <div class="rich-text w-richtext mdx-article">
+        <slot />
+      </div>
+    </div>
+  </div>
+  <Fragment set:html={footerHtml} />
+</WebflowLayout>
+
+<style is:global>
+  .mdx-article img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .mdx-article pre {
+    margin: 1.5em 0;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+
+  .mdx-article :not(pre) > code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.9em;
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../lib/constants';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title = SITE.name,
+  description = SITE.description,
+  image = '/images/hero_background.webp',
+  noIndex = false,
+} = Astro.props;
+
+const pageTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Tag Manager -->
+    <script is:inline>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-KQNQ4T3V');
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KQNQ4T3V"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <!-- Crisp -->
+    <script is:inline>
+      window.$crisp = [];
+      window.CRISP_WEBSITE_ID = '5d9c651e-6a02-41be-9102-aa164316299e';
+      (function () {
+        d = document;
+        s = d.createElement('script');
+        s.src = 'https://client.crisp.chat/l.js';
+        s.async = 1;
+        d.getElementsByTagName('head')[0].appendChild(s);
+      })();
+    </script>
+    <!-- Termly cookie consent -->
+    <script
+      is:inline
+      type="text/javascript"
+      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
+    ></script>
+  </body>
+</html>
