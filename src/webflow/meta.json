@@ -2,7 +2,7 @@
   "blog-how-to-test-tenant-subdomains-on-macos-with-dnsmasq": {
     "title": "How to Test Tenant Subdomains on macOS with Dnsmasq",
     "description": "Learn why tenant subdomains are useful and how to use Dnsmasq on macOS to route them locally for production-like testing.",
-    "ogImage": "",
+    "ogImage": "/images/misc/6875eecb9b754e8136411d26_image02.webp",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -10,9 +10,9 @@
     "bytes": 29973
   },
   "blog-multi-tenant-b2b-authentication-explained-key-concepts-components": {
-    "title": "Multi-tenant B2B Authentication Explained: Key Concepts &amp; Components",
-    "description": "Building B2B authentication is complex. Learn about multi-tenancy, SSO, user provisioning, and RBAC \u2013 essential components for secure B2B SaaS applications.",
-    "ogImage": "",
+    "title": "Multi-tenant B2B Authentication Explained: Key Concepts & Components",
+    "description": "Building B2B authentication is complex. Learn about multi-tenancy, SSO, user provisioning, and RBAC – essential components for secure B2B SaaS applications.",
+    "ogImage": "/images/misc/6875e9c4b12b50f5845b756a_image01.webp",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -20,9 +20,9 @@
     "bytes": 26495
   },
   "blog-security-auth-for-small-businesses-best-practices-with-jim-manico-webinar": {
-    "title": "Security &amp; Auth for Small Businesses: Best Practices with Jim Manico [Webinar]",
-    "description": "Don\u2019t miss this opportunity to improve your security practices with insights from one of the leading experts in the field.",
-    "ogImage": "",
+    "title": "Security & Auth for Small Businesses: Best Practices with Jim Manico [Webinar]",
+    "description": "Don’t miss this opportunity to improve your security practices with insights from one of the leading experts in the field.",
+    "ogImage": "/images/misc/66aafda19f5d25de053832f8_wristband-webinar---jim-manico-cover.jpg",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -31,8 +31,8 @@
   },
   "blog-the-sso-tax-when-better-security-comes-with-a-steep-price": {
     "title": "The SSO Tax: When Better Security Comes with a Steep Price",
-    "description": "The \u201cSSO tax\u201d is a hidden cost many businesses face when trying to implement secure authentication practices.",
-    "ogImage": "",
+    "description": "The “SSO tax” is a hidden cost many businesses face when trying to implement secure authentication practices.",
+    "ogImage": "/images/misc/677b279da40b89e5879e5560_677b2780046e98b547549215_sso-tax-pricing.png",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -42,7 +42,7 @@
   "blog-white-labeling-auth-for-b2b-apps-making-your-customer-the-hero": {
     "title": "White-Labeling Auth for B2B apps: Making Your Customer the Hero",
     "description": "In the competitive world of B2B SaaS, creating an exceptional user experience is paramount. One powerful way to achieve this is through white-labeling authentication.",
-    "ogImage": "",
+    "ogImage": "/images/misc/66a40dc3e1f8c8d87a0eeaad_screenshot-2024-07-26-at-1.57.06-pm.png",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -52,7 +52,7 @@
   "blog-wristband-launches-public-beta": {
     "title": "Wristband Launches Public Beta",
     "description": "Wristband, a developer-first authentication platform designed for B2B SaaS, today announced the public beta launch of its highly anticipated platform.",
-    "ogImage": "",
+    "ogImage": "/images/misc/66aaf17b8dbfff780c904d2a_ph-main.png",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -62,7 +62,7 @@
   "blog": {
     "title": "Wristband Engineering Blog - Multi-Tenant Authentication Insights",
     "description": "Essential best practices for building multi-tenant auth, designed for engineers and founders looking to scale securely and efficiently.",
-    "ogImage": "",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331aa5",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -71,8 +71,8 @@
   },
   "compare-wristband-vs-auth0": {
     "title": "Wristband vs Auth0",
-    "description": "Get enterprise-level auth without the high cost. Wristband\u2019s API-first, multi-tenant auth platform delivers powerful features \u2014 even on the Free tier.",
-    "ogImage": "",
+    "description": "Get enterprise-level auth without the high cost. Wristband’s API-first, multi-tenant auth platform delivers powerful features — even on the Free tier.",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "67cd451dc6708f96ebc3c5e7",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -81,8 +81,8 @@
   },
   "customers-thoughtly": {
     "title": "Thoughtly Found an Auth0 Alternative for Multi-Tenant Auth",
-    "description": "Discover how Thoughtly unified auth for product-led growth and enterprise sales by moving from Auth0 to Wristband\u2019s multi-tenant architecture.",
-    "ogImage": "",
+    "description": "Discover how Thoughtly unified auth for product-led growth and enterprise sales by moving from Auth0 to Wristband’s multi-tenant architecture.",
+    "ogImage": "/images/misc/682d7588b08074e3d22ce582_thoughtly-case-study-open-graph.png",
     "wfPage": "680d8f80fc716f3fc0ed998c",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body-4",
@@ -91,8 +91,8 @@
   },
   "home": {
     "title": "Wristband",
-    "description": "Developers can quickly integrate multi-tenant auth flows with Wristband\u2019s hosted pages and APIs, helping B2B companies scale faster with enterprise-grade security.",
-    "ogImage": "",
+    "description": "Developers can quickly integrate multi-tenant auth flows with Wristband’s hosted pages and APIs, helping B2B companies scale faster with enterprise-grade security.",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331ac0",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -101,8 +101,8 @@
   },
   "pricing": {
     "title": "Pricing: Affordable Enterprise Auth",
-    "description": "No more hidden &quot;enterprise&quot; taxes. SSO, MFA, and Role-based Access Control is free with every plan. No credit card required to start.",
-    "ogImage": "",
+    "description": "No more hidden \"enterprise\" taxes. SSO, MFA, and Role-based Access Control is free with every plan. No credit card required to start.",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331abf",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -111,8 +111,8 @@
   },
   "privacy": {
     "title": "Privacy Policy - Wristband",
-    "description": "Read Wristband&#x27;s Privacy Policy to understand how we collect, use, and protect your personal information and data.",
-    "ogImage": "",
+    "description": "Read Wristband's Privacy Policy to understand how we collect, use, and protect your personal information and data.",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331aa4",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -122,7 +122,7 @@
   "request-demo": {
     "title": "Request A Demo - Wristband",
     "description": "Streamline multi-tenant auth, cut dev time, and enhance security with Wristband. Request a demo to see the ROI and talk directly with our developers.",
-    "ogImage": "",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331aa1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body-2",
@@ -131,8 +131,8 @@
   },
   "terms": {
     "title": "Terms of Service - Wristband",
-    "description": "Read Wristband&#x27;s Terms of Service to understand the legal terms and conditions governing your use of our authentication and identity platform.",
-    "ogImage": "",
+    "description": "Read Wristband's Terms of Service to understand the legal terms and conditions governing your use of our authentication and identity platform.",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "64fe246a6c52fe1a51c2ce64",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
@@ -141,8 +141,8 @@
   },
   "the-team": {
     "title": "The Team",
-    "description": "Meet the team behind wristband.dev - the world&#x27;s first truly multi-tenant B2B authentication platform",
-    "ogImage": "",
+    "description": "Meet the team behind wristband.dev - the world's first truly multi-tenant B2B authentication platform",
+    "ogImage": "/images/hero_background.webp",
     "wfPage": "66209d9e5846aab05a226c13",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body-3",

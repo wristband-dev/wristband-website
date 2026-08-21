@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.wristband.dev/sitemap-index.xml
+
+# Optional source-of-truth for answer engines:
+# https://www.wristband.dev/llms.txt

@@ -1,6 +1,8 @@
 ---
 import WebflowLayout from '../layouts/WebflowLayout.astro';
+import SdkMatrix from '../components/SdkMatrix.astro';
 import { getWebflowMeta } from '../lib/webflow';
+import { softwareApplicationNode } from '../lib/seo';
 import bodyHtml from '../webflow/home.html?raw';
 
 const meta = getWebflowMeta('home');
@@ -10,9 +12,11 @@ const meta = getWebflowMeta('home');
   title={meta.title}
   description={meta.description || undefined}
   ogImage={meta.ogImage || undefined}
+  jsonLd={[softwareApplicationNode()]}
   wfPage={meta.wfPage}
   wfSite={meta.wfSite}
   bodyClass={meta.bodyClass}
 >
   <Fragment set:html={bodyHtml} />
+  <SdkMatrix />
 </WebflowLayout>

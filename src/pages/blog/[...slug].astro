@@ -4,6 +4,8 @@ import WebflowLayout from '../../layouts/WebflowLayout.astro';
 import BlogArticleLayout from '../../layouts/BlogArticleLayout.astro';
 import { getWebflowMeta, type WebflowPageMeta } from '../../lib/webflow';
 import { getWebflowBlogSlugs } from '../../lib/blog';
+import { SITE } from '../../lib/constants';
+import { blogPostingNode, breadcrumbNode } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -32,22 +34,49 @@ const modules = import.meta.glob('../../webflow/blog-*.html', {
   eager: true,
 });
 
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+
+function articleJsonLd(entry: CollectionEntry<'blog'>, image?: string, description?: string) {
+  return [
+    blogPostingNode({
+      url: canonical,
+      headline: entry.data.title,
+      description: description || entry.data.summary || undefined,
+      image: image || entry.data.coverImage,
+      datePublished: entry.data.pubDate,
+      authorName: entry.data.author,
+    }),
+    breadcrumbNode([
+      { name: 'Home', path: '/' },
+      { name: 'Blog', path: '/blog' },
+      { name: entry.data.title, path: Astro.url.pathname },
+    ]),
+  ];
+}
+
 let webflowMeta: WebflowPageMeta | undefined;
 let webflowHtml: string | undefined;
 let entry: CollectionEntry<'blog'> | undefined;
 let Content: Awaited<ReturnType<typeof render>>['Content'] | undefined;
 let ogImage: string | undefined;
+let jsonLd = post ? articleJsonLd(post, post.data.coverImage, post.data.summary) : [];
+let publishedTime: Date | undefined = post?.data.pubDate;
 
 if (webflowKey) {
   webflowMeta = getWebflowMeta(webflowKey);
   webflowHtml = modules[`../../webflow/${webflowKey}.html`] as string;
+  ogImage = webflowMeta.ogImage || post?.data.coverImage;
+  if (post) {
+    jsonLd = articleJsonLd(post, ogImage, webflowMeta.description || post.data.summary);
+  }
 } else if (post) {
   entry = post;
   ({ Content } = await render(post));
   const cover = post.data.coverImage;
   ogImage = cover.startsWith('http')
     ? cover
-    : new URL(cover, Astro.site ?? 'https://www.wristband.dev').href;
+    : new URL(cover, Astro.site ?? SITE.url).href;
+  jsonLd = articleJsonLd(post, cover, post.data.summary);
 } else {
   throw new Error(`No Webflow HTML or content entry for blog slug "${Astro.params.slug}"`);
 }
@@ -58,7 +87,10 @@ if (webflowKey) {
     <WebflowLayout
       title={webflowMeta.title}
       description={webflowMeta.description || undefined}
-      ogImage={webflowMeta.ogImage || undefined}
+      ogImage={ogImage}
+      ogType="article"
+      publishedTime={publishedTime}
+      jsonLd={jsonLd}
       wfPage={webflowMeta.wfPage}
       wfSite={webflowMeta.wfSite}
       bodyClass={webflowMeta.bodyClass}
@@ -72,6 +104,8 @@ if (webflowKey) {
       category={entry.data.category}
       coverImage={entry.data.coverImage}
       ogImage={ogImage}
+      publishedTime={publishedTime}
+      jsonLd={jsonLd}
     >
       <Content />
     </BlogArticleLayout>

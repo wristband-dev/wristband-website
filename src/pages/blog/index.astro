@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import WebflowLayout from '../../layouts/WebflowLayout.astro';
 import { getWebflowMeta } from '../../lib/webflow';
 import { getWebflowBlogSlugs, injectContentPostsIntoIndex } from '../../lib/blog';
+import { breadcrumbNode } from '../../lib/seo';
 import bodyHtml from '../../webflow/blog.html?raw';
 
 const meta = getWebflowMeta('blog');
@@ -15,6 +16,12 @@ const html = injectContentPostsIntoIndex(bodyHtml, extraPosts);
   title={meta.title}
   description={meta.description || undefined}
   ogImage={meta.ogImage || undefined}
+  jsonLd={[
+    breadcrumbNode([
+      { name: 'Home', path: '/' },
+      { name: 'Blog', path: '/blog' },
+    ]),
+  ]}
   wfPage={meta.wfPage}
   wfSite={meta.wfSite}
   bodyClass={meta.bodyClass}

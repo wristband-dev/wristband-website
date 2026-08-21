@@ -3,15 +3,19 @@ import WebflowLayout from './WebflowLayout.astro';
 import { BLOG_POST_WF_PAGE } from '../lib/blog';
 import chromeSource from '../webflow/blog-wristband-launches-public-beta.html?raw';
 
+import type { JsonLdNode } from '../lib/seo';
+
 interface Props {
   title: string;
   summary?: string;
   category: string;
   coverImage: string;
   ogImage?: string;
+  jsonLd?: JsonLdNode[];
+  publishedTime?: Date | string;
 }
 
-const { title, summary, category, coverImage, ogImage } = Astro.props;
+const { title, summary, category, coverImage, ogImage, jsonLd, publishedTime } = Astro.props;
 
 const wrapperOpen = '<div class="page-wrapper">';
 const headerStart = chromeSource.indexOf(wrapperOpen);
@@ -31,6 +35,9 @@ const footerHtml = chromeSource.slice(footerStart, commentsStart).replace(/<\/di
   title={title}
   description={summary || undefined}
   ogImage={ogImage}
+  ogType="article"
+  publishedTime={publishedTime}
+  jsonLd={jsonLd}
   wfPage={BLOG_POST_WF_PAGE}
   bodyClass="body"
 >
@@ -53,7 +60,7 @@ const footerHtml = chromeSource.slice(footerStart, commentsStart).replace(/<\/di
             }
           </div>
           <div class="image-wrapper basic-frame---large mg-top-large-80px">
-            <img src={coverImage} alt="" class="image post-hero" />
+            <img src={coverImage} alt={title} class="image post-hero" />
           </div>
         </div>
       </div>

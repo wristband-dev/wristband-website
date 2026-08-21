@@ -1,6 +1,6 @@
 ---
 title: "How to Test Tenant Subdomains on macOS with Dnsmasq"
-summary: ""
+summary: "Learn why tenant subdomains are useful and how to use Dnsmasq on macOS to route them locally for production-like testing."
 category: "Engineering"
 pubDate: 2025-01-08
 author: "Wristband Team"

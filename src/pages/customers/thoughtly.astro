@@ -1,15 +1,32 @@
 ---
 import WebflowLayout from '../../layouts/WebflowLayout.astro';
 import { getWebflowMeta } from '../../lib/webflow';
+import { SITE } from '../../lib/constants';
+import { articleNode, breadcrumbNode } from '../../lib/seo';
 import bodyHtml from '../../webflow/customers-thoughtly.html?raw';
 
 const meta = getWebflowMeta('customers-thoughtly');
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
 ---
 
 <WebflowLayout
   title={meta.title}
   description={meta.description || undefined}
   ogImage={meta.ogImage || undefined}
+  ogType="article"
+  jsonLd={[
+    articleNode({
+      url: canonical,
+      headline: meta.title,
+      description: meta.description,
+      image: meta.ogImage,
+    }),
+    breadcrumbNode([
+      { name: 'Home', path: '/' },
+      { name: 'Case Studies', path: '/customers/thoughtly' },
+      { name: 'Thoughtly', path: Astro.url.pathname },
+    ]),
+  ]}
   wfPage={meta.wfPage}
   wfSite={meta.wfSite}
   bodyClass={meta.bodyClass}

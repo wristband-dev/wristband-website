@@ -1,6 +1,6 @@
 ---
 title: "Multi-tenant B2B Authentication Explained: Key Concepts & Components"
-summary: ""
+summary: "Building B2B authentication is complex. Learn about multi-tenancy, SSO, user provisioning, and RBAC – essential components for secure B2B SaaS applications."
 category: "Engineering"
 pubDate: 2025-01-15
 author: "Wristband Team"

@@ -1,18 +1,30 @@
 ---
-/**
- * Mounts the existing Wristband SDK matrix widget.
- * Script remains on assets.wristband.dev until R2 cutover.
- */
+import { codeToHtml } from 'shiki';
+import { ENDPOINT_IDS, SDK_FRAMEWORKS } from '../data/sdk-matrix';
+import SdkMatrixWidget, { type HighlightedFramework } from './react/SdkMatrix';
+
+const frameworks: HighlightedFramework[] = await Promise.all(
+  SDK_FRAMEWORKS.map(async (framework) => {
+    const samples = {} as HighlightedFramework['samples'];
+    for (const id of ENDPOINT_IDS) {
+      const sample = framework.samples[id];
+      samples[id] = {
+        ...sample,
+        html: await codeToHtml(sample.code.trimEnd(), {
+          lang: sample.language,
+          theme: 'night-owl',
+        }),
+      };
+    }
+    return { id: framework.id, name: framework.name, samples };
+  }),
+);
 ---
 
-<section class="section" id="sdk-matrix-section">
-  <div class="container">
-    <div class="section-header" style="text-align:center;margin-bottom:32px;">
-      <p class="eyebrow">How To Integrate</p>
-      <h2 class="section-title">Use Our Developer Friendly SDKs</h2>
-    </div>
-    <div id="wristband-sdk-matrix"></div>
-  </div>
-</section>
+<SdkMatrixWidget client:load frameworks={frameworks} />
 
-<script is:inline src="https://assets.wristband.dev/sdk-matrix/wristband-sdk-matrix.js"></script>
+<style is:global>
+  #wristband-sdk-matrix {
+    width: 100%;
+  }
+</style>

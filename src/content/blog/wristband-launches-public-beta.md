@@ -1,6 +1,6 @@
 ---
 title: "Wristband Launches Public Beta"
-summary: ""
+summary: "Wristband, a developer-first authentication platform designed for B2B SaaS, today announced the public beta launch of its highly anticipated platform."
 category: "Press"
 pubDate: 2024-04-01
 author: "Wristband Team"

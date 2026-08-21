@@ -43,7 +43,7 @@ Workflow: write Markdown or MDX → open PR → preview deploy → merge to `mai
 
 ## Assets
 
-Site images are in [`public/images`](public/images) and served by Cloudflare Pages. The SDK matrix script still loads from `assets.wristband.dev` (AWS) until that hostname is moved to R2.
+Site images are in [`public/images`](public/images) and served by Cloudflare Pages.
 
 ## CI/CD
 
@@ -73,7 +73,7 @@ Create a Pages project named `wristband-website` (or change `--project-name` in 
 4. Point `www.wristband.dev` (and apex) DNS to Cloudflare Pages.
 5. Verify redirects: `/login`, `/signup` → dashboard.
 6. Monitor analytics + form submissions for 48h.
-7. Unpublish Webflow; migrate remaining `assets.wristband.dev` objects to R2 if desired.
+7. Unpublish Webflow.
 
 ## Project layout
 

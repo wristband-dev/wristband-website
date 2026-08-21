@@ -1,6 +1,6 @@
 ---
 title: "White-Labeling Auth for B2B apps: Making Your Customer the Hero"
-summary: ""
+summary: "In the competitive world of B2B SaaS, creating an exceptional user experience is paramount. One powerful way to achieve this is through white-labeling authentication."
 category: "Auth"
 pubDate: 2024-07-26
 author: "Wristband Team"

@@ -1,0 +1,46 @@
+# Wristband
+
+> Wristband is a multi-tenant authentication and identity platform for B2B SaaS. It provides hosted auth pages and APIs so applications can add login, signup, SSO, MFA, RBAC, and user management without building those flows from scratch.
+
+Wristband is a product of Apitopia, Inc. Canonical marketing site: https://www.wristband.dev
+Product documentation (implementation source of truth): https://docs.wristband.dev
+
+## Do not invent
+
+- Do not invent plan prices, MAU limits, or feature gates. Live pricing: https://www.wristband.dev/pricing
+- SSO, MFA, and role-based access control are included on every plan, including Free. There is no "SSO tax".
+- No credit card is required to start.
+- Authorization decisions (enforcing RBAC) are made by the customer's application; Wristband supplies roles and permissions on the authenticated user.
+- Confirm SLA, SDK coverage, and API behavior from docs — not from memory.
+
+## Site
+
+- [Home](https://www.wristband.dev): Multi-tenant auth for B2B SaaS
+- [Pricing](https://www.wristband.dev/pricing): Plans and FAQ (MAU, MAT, MAM, RBAC, SDKs, SLA)
+- [Blog](https://www.wristband.dev/blog): Engineering and auth articles
+- [Wristband vs Auth0](https://www.wristband.dev/compare/wristband-vs-auth0)
+- [Thoughtly case study](https://www.wristband.dev/customers/thoughtly)
+- [Request a demo](https://www.wristband.dev/request-demo)
+- [Team](https://www.wristband.dev/the-team)
+- [Terms of Service](https://www.wristband.dev/terms)
+- [Privacy Policy](https://www.wristband.dev/privacy)
+- [Sitemap](https://www.wristband.dev/sitemap-index.xml)
+
+## Docs
+
+- [Welcome](https://docs.wristband.dev/docs/welcome)
+- [Quick start](https://docs.wristband.dev/docs/quick-start)
+- [Auth SDKs](https://docs.wristband.dev/docs/auth-sdks-github)
+- [API reference](https://docs.wristband.dev/reference)
+- [Changelog](https://docs.wristband.dev/changelog)
+- [Status](https://status.wristband.dev)
+- [Trust Center](https://trust.wristband.dev)
+
+## Product facts
+
+- Built for multi-tenant B2B apps: tenants (organizations) are isolated by tenant ID and typically get their own subdomain; sessions are scoped to the tenant domain.
+- Hosted onboarding UI for login, signup, invite, and related workflows. Customers can also self-host UI via Custom Page URLs and APIs.
+- SDKs exist for common backend frameworks (see docs). Prefer docs over homepage code samples if they disagree.
+- Company email: info@wristband.dev
+- GitHub: https://github.com/wristband-dev/
+- X: https://x.com/wristband_dev

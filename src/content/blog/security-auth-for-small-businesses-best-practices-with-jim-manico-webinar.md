@@ -1,6 +1,6 @@
 ---
 title: "Security & Auth for Small Businesses: Best Practices with Jim Manico [Webinar]"
-summary: ""
+summary: "Don’t miss this opportunity to improve your security practices with insights from one of the leading experts in the field."
 category: "Auth"
 pubDate: 2024-08-01
 author: "Wristband Team"

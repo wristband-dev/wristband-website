@@ -1,6 +1,6 @@
 ---
 title: "The SSO Tax: When Better Security Comes with a Steep Price"
-summary: ""
+summary: "The “SSO tax” is a hidden cost many businesses face when trying to implement secure authentication practices."
 category: "Auth"
 pubDate: 2025-01-03
 author: "Wristband Team"

@@ -17,10 +17,10 @@
 
 1. In Cloudflare DNS, point `www` (and apex) to the Pages project.
 2. Keep Webflow as fallback until traffic and forms look healthy (~48h).
-3. Validate sitemap at `/sitemap-index.xml` and `robots.txt`.
+3. Validate sitemap at `/sitemap-index.xml`, `robots.txt`, and `/llms.txt`.
+4. Spot-check JSON-LD (view-source) on `/`, `/pricing`, and one blog post.
 
 ## After cutover
 
 1. Unpublish / disconnect Webflow hosting.
-2. Optionally migrate `assets.wristband.dev` (SDK matrix) from AWS → R2 and update [`SdkMatrix.astro`](../src/components/SdkMatrix.astro).
-3. Remove unused Webflow CDN references if any remain.
+2. Remove unused Webflow CDN references if any remain.
