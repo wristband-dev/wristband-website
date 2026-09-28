@@ -1,5 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 import {
   DEFAULT_FRAMEWORK_ID,
   ENDPOINT_IDS,
@@ -21,21 +20,22 @@ type Props = {
   frameworks: HighlightedFramework[];
 };
 
-const ICONS: Record<string, (selected: boolean) => ReactNode> = {
-  next: (selected) => <NextIcon selected={selected} />,
-  express: (selected) => <NodeIcon selected={selected} />,
-  django: (selected) => <PythonIcon selected={selected} />,
-  nest: (selected) => <NestIcon selected={selected} />,
-  dotnet: (selected) => <DotNetIcon selected={selected} />,
+const ICONS: Record<string, React.ComponentType<{ selected: boolean }>> = {
+  next: NextIcon,
+  express: NodeIcon,
+  django: PythonIcon,
+  nest: NestIcon,
+  dotnet: DotNetIcon,
 };
 
 function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = useState(false); 
 
   useEffect(() => {
     const media = window.matchMedia(query);
     const onChange = () => setMatches(media.matches);
-    onChange();
+    
+    setMatches(media.matches);
     media.addEventListener('change', onChange);
     return () => media.removeEventListener('change', onChange);
   }, [query]);
@@ -43,19 +43,23 @@ function useMediaQuery(query: string) {
   return matches;
 }
 
-function SdkMatrixWidget({ frameworks }: Props) {
+export default function SdkMatrix({ frameworks }: Props) {
+  if (!frameworks || frameworks.length === 0) return null;
+
   const [frameworkId, setFrameworkId] = useState(DEFAULT_FRAMEWORK_ID);
   const [endpoint, setEndpoint] = useState<EndpointId>('login');
   const compact = useMediaQuery('(max-width: 767px)');
 
   const framework = frameworks.find((item) => item.id === frameworkId) ?? frameworks[0];
-  const sample = framework.samples[endpoint];
+  const sample = framework?.samples?.[endpoint];
 
   return (
     <div className="sdk-matrix">
       <div className="sdk-matrix-rail" role="tablist" aria-label="SDK frameworks" aria-orientation="vertical">
         {frameworks.map((item) => {
           const selected = item.id === framework.id;
+          const IconComponent = ICONS[item.id];
+
           return (
             <button
               key={item.id}
@@ -66,7 +70,7 @@ function SdkMatrixWidget({ frameworks }: Props) {
               aria-label={item.name}
               onClick={() => setFrameworkId(item.id)}
             >
-              {ICONS[item.id]?.(selected)}
+              {IconComponent && <IconComponent selected={selected} />}
             </button>
           );
         })}
@@ -76,9 +80,12 @@ function SdkMatrixWidget({ frameworks }: Props) {
         <div className="sdk-matrix-tabs" role="tablist" aria-label="Auth endpoints">
           {ENDPOINT_IDS.map((id) => {
             const selected = id === endpoint;
-            const label = compact
-              ? framework.samples[id].name.replace(' Endpoint', '')
-              : framework.samples[id].name;
+            
+            const currentSample = framework?.samples?.[id];
+            const label = currentSample
+              ? (compact ? currentSample.name.replace(' Endpoint', '') : currentSample.name)
+              : id;
+
             return (
               <button
                 key={id}
@@ -93,24 +100,14 @@ function SdkMatrixWidget({ frameworks }: Props) {
             );
           })}
         </div>
+        
         <div
           className="sdk-matrix-code"
           role="tabpanel"
-          aria-label={sample.name}
-          dangerouslySetInnerHTML={{ __html: sample.html }}
+          aria-label={sample?.name ?? 'Code sample'}
+          dangerouslySetInnerHTML={{ __html: sample?.html ?? '' }}
         />
       </div>
     </div>
   );
-}
-
-export default function SdkMatrix({ frameworks }: Props) {
-  const [target, setTarget] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setTarget(document.getElementById('wristband-sdk-matrix'));
-  }, []);
-
-  if (!target) return null;
-  return createPortal(<SdkMatrixWidget frameworks={frameworks} />, target);
 }
