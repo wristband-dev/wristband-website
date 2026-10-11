@@ -1,5 +1,6 @@
 ---
 import JsonLd from '../components/JsonLd.astro';
+import CalendlyPopup from '../components/CalendlyPopup.astro';
 import {
   TWITTER_HANDLE,
   absoluteUrl,
@@ -36,7 +37,8 @@ const {
 
 const pageTitle = decodeHtmlEntities(title);
 const pageDescription = decodeHtmlEntities(description);
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+// No trailing slash (trailingSlash: 'never'), so the home page matches the sitemap URL.
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href.replace(/\/$/, '');
 const ogImageAbs = absoluteUrl(resolveOgImage(ogImage), Astro.site?.href ?? SITE.url);
 const publishedIso =
   publishedTime instanceof Date
@@ -56,6 +58,14 @@ const publishedIso =
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Termly: must stay the first script in <head> so it can block other scripts until consent -->
+    <script
+      is:inline
+      type="text/javascript"
+      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
+    ></script>
+
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonical} />
@@ -198,6 +208,9 @@ const publishedIso =
     <script is:inline src="/js/webflow.schunk.2.js" type="text/javascript"></script>
     <script is:inline src="/js/webflow.js" type="text/javascript"></script>
 
+    <!-- Calendly pop-up + demo_click / generate_lead tracking -->
+    <CalendlyPopup />
+
     <!-- Crisp -->
     <script is:inline>
       window.$crisp = [];
@@ -211,12 +224,7 @@ const publishedIso =
       })();
     </script>
 
-    <!-- Termly -->
-    <script
-      is:inline
-      type="text/javascript"
-      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
-    ></script>
+    <!-- Termly policy embed (the resource blocker is the first script in <head>) -->
     <script is:inline type="text/javascript" src="https://app.termly.io/embed-policy.min.js"></script>
   </body>
 </html>

@@ -87,4 +87,4 @@ The SSO tax highlights a critical gap in cybersecurity accessibility, disproport
 ‍
 
 If you want to learn more about how Wristband can help please reach out to [info@wristband.dev](mailto:info@wristband.dev) or grab time [here](/request-demo).
-[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/team/jim-verducci)[Jim VerducciCEO / Co-founder](/team/jim-verducci)[](https://www.linkedin.com/in/jim-verducci/)
+[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/the-team)[Jim VerducciCEO / Co-founder](/the-team)[](https://www.linkedin.com/in/jim-verducci/)

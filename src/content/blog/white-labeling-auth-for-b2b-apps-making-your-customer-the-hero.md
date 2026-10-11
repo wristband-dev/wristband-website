@@ -34,4 +34,4 @@ Wristband makes it easy to implement white-labeling for authentication in your B
 In the B2B SaaS world, making your customer the hero through white-labeling auth can drive significant benefits. From enhancing trust and satisfaction to increasing user adoption and boosting conversion rates, the power of a seamless brand experience cannot be underestimated. By leveraging tools like Wristband, you can easily implement white-labeling and take your customer experience to the next level.
 
 By prioritizing your customer’s brand identity, you not only improve their experience but also create a stronger, more loyal customer base. If you want to learn more about how Wristband can help please reach out to [info@wristband.dev](mailto:info@wristband.dev) or grab time [here](/request-demo).
-[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/team/jim-verducci)[Jim VerducciCEO / Co-founder](/team/jim-verducci)[](https://www.linkedin.com/in/jim-verducci/)
+[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/the-team)[Jim VerducciCEO / Co-founder](/the-team)[](https://www.linkedin.com/in/jim-verducci/)
