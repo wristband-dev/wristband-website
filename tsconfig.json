@@ -6,7 +6,8 @@
   ],
   "exclude": [
     "dist",
-    "functions"
+    "functions",
+    "public"
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
