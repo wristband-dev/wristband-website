@@ -17,6 +17,24 @@ const meta = getWebflowMeta('home');
   wfSite={meta.wfSite}
   bodyClass={meta.bodyClass}
 >
+  <!-- The hero background is a CSS background-image, so without a preload the browser
+       only finds it after webflow.css is parsed. On phones it is the LCP element. -->
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    fetchpriority="high"
+    media="(max-width: 479px)"
+    href="https://cdn.prod.website-files.com/64d01a3671d020746e331a42/67cca2a2c5839fca18c84583_hero-background-conic-gradient.svg"
+  />
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    fetchpriority="high"
+    media="(min-width: 480px)"
+    href="https://cdn.prod.website-files.com/64d01a3671d020746e331a42/67e63012d18f7f9092cdd846_Hero-Background-linear-grad-adjusted-2.svg"
+  />
   <Fragment set:html={bodyHtml} />
   <SdkMatrix />
 </WebflowLayout>

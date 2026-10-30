@@ -1,6 +1,7 @@
 ---
 import JsonLd from '../components/JsonLd.astro';
 import CalendlyPopup from '../components/CalendlyPopup.astro';
+import Fonts from '../components/Fonts.astro';
 import {
   TWITTER_HANDLE,
   absoluteUrl,
@@ -22,6 +23,9 @@ interface Props {
   wfPage: string;
   wfSite?: string;
   bodyClass?: string;
+  noIndex?: boolean;
+  /** Load Termly's policy embed script (only pages with a `termly-embed` div need it). */
+  termlyPolicyEmbed?: boolean;
 }
 
 const {
@@ -34,6 +38,8 @@ const {
   wfPage,
   wfSite = '64d01a3671d020746e331a42',
   bodyClass = 'body',
+  noIndex = false,
+  termlyPolicyEmbed = false,
 } = Astro.props;
 
 const pageTitle = decodeHtmlEntities(title);
@@ -69,6 +75,7 @@ const publishedIso =
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
+    {noIndex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />
@@ -89,15 +96,13 @@ const publishedIso =
 
     <link rel="stylesheet" href="/css/webflow.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Plain stylesheets, not Webflow's WebFont.js loader: Termly's auto-blocker
+    <!-- Self-hosted @font-face rules, not Webflow's WebFont.js loader: Termly's auto-blocker
          strips that script, which left Material Icons rendering as ligature text. -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;600;700&display=swap"
-    />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" />
+    <Fonts />
+
+    <!-- Per-page preloads (e.g. the home hero background, the mobile LCP image) -->
+    <slot name="head" />
+
     <script is:inline>
       !(function (o, c) {
         var n = c.documentElement,
@@ -219,7 +224,8 @@ const publishedIso =
       })();
     </script>
 
-    <!-- Termly policy embed (the resource blocker is the first script in <head>) -->
-    <script is:inline type="text/javascript" src="https://app.termly.io/embed-policy.min.js"></script>
+    <!-- Termly policy embed (the resource blocker is the first script in <head>).
+         Only /privacy and /terms embed a policy, so other pages skip this 67 KB script. -->
+    {termlyPolicyEmbed && <script is:inline type="text/javascript" src="https://app.termly.io/embed-policy.min.js"></script>}
   </body>
 </html>
