@@ -1,0 +1,39 @@
+---
+// Emitted as dist/404.html. With this file present, Cloudflare Pages answers unknown URLs
+// with a real 404 instead of serving the home page with a 200 (single-page-app fallback).
+// That fallback made /.well-known/ai-catalog.json return HTML, which Lighthouse's Agentic
+// Browsing check reported as an invalid ARD manifest.
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import { BLOG_POST_WF_PAGE } from '../lib/blog';
+import { getWebflowChrome } from '../lib/webflow';
+
+const { headerHtml, footerHtml } = getWebflowChrome();
+---
+
+<WebflowLayout
+  title="Page not found | Wristband"
+  description="The page you are looking for does not exist."
+  wfPage={BLOG_POST_WF_PAGE}
+  bodyClass="body"
+  noIndex
+>
+  <div class="page-wrapper">
+    <Fragment set:html={headerHtml} />
+    <div class="section blog-post">
+      <div class="container-header w-container">
+        <div class="inner-container-1020px">
+          <div class="text-center">
+            <h1 class="heading-10">Page not found</h1>
+            <div class="inner-container-600px align-center">
+              <p>The page you are looking for does not exist or has moved.</p>
+            </div>
+            <div class="mg-top-large-80px">
+              <a href="/" class="butt w-button">Back to home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <Fragment set:html={footerHtml} />
+</WebflowLayout>
