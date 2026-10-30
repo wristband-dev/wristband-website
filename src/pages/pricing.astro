@@ -2,11 +2,11 @@
 import WebflowLayout from '../layouts/WebflowLayout.astro';
 import { getWebflowMeta } from '../lib/webflow';
 import { SITE } from '../lib/constants';
-import { faqPageNode } from '../lib/seo';
+import { faqPageNode, pagePath } from '../lib/seo';
 import bodyHtml from '../webflow/pricing.html?raw';
 
 const meta = getWebflowMeta('pricing');
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
 ---
 
 <WebflowLayout

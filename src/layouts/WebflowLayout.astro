@@ -6,6 +6,7 @@ import {
   absoluteUrl,
   decodeHtmlEntities,
   jsonLdGraph,
+  pagePath,
   resolveOgImage,
   type JsonLdNode,
 } from '../lib/seo';
@@ -38,7 +39,7 @@ const {
 const pageTitle = decodeHtmlEntities(title);
 const pageDescription = decodeHtmlEntities(description);
 // No trailing slash (trailingSlash: 'never'), so the home page matches the sitemap URL.
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href.replace(/\/$/, '');
+const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href.replace(/\/$/, '');
 const ogImageAbs = absoluteUrl(resolveOgImage(ogImage), Astro.site?.href ?? SITE.url);
 const publishedIso =
   publishedTime instanceof Date
@@ -90,19 +91,13 @@ const publishedIso =
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script is:inline src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    <script is:inline>
-      WebFont.load({
-        google: {
-          families: [
-            'Inter:300,400,500,600,700',
-            'JetBrains Mono:300,400,500,600,700',
-            'Material Icons:300,400,500,600,700',
-            'Roboto:300,400,500,600,700',
-          ],
-        },
-      });
-    </script>
+    <!-- Plain stylesheets, not Webflow's WebFont.js loader: Termly's auto-blocker
+         strips that script, which left Material Icons rendering as ligature text. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" />
     <script is:inline>
       !(function (o, c) {
         var n = c.documentElement,
