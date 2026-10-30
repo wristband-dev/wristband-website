@@ -8,3 +8,7 @@
 
 /images/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Keep the Cloudflare production address out of search; only www.wristband.dev should be indexed.
+https://wristband-website.pages.dev/*
+  X-Robots-Tag: noindex

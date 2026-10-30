@@ -1,10 +1,12 @@
 ---
 import JsonLd from '../components/JsonLd.astro';
+import CalendlyPopup from '../components/CalendlyPopup.astro';
 import {
   TWITTER_HANDLE,
   absoluteUrl,
   decodeHtmlEntities,
   jsonLdGraph,
+  pagePath,
   resolveOgImage,
   type JsonLdNode,
 } from '../lib/seo';
@@ -36,7 +38,8 @@ const {
 
 const pageTitle = decodeHtmlEntities(title);
 const pageDescription = decodeHtmlEntities(description);
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+// No trailing slash (trailingSlash: 'never'), so the home page matches the sitemap URL.
+const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href.replace(/\/$/, '');
 const ogImageAbs = absoluteUrl(resolveOgImage(ogImage), Astro.site?.href ?? SITE.url);
 const publishedIso =
   publishedTime instanceof Date
@@ -56,6 +59,14 @@ const publishedIso =
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Termly: must stay the first script in <head> so it can block other scripts until consent -->
+    <script
+      is:inline
+      type="text/javascript"
+      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
+    ></script>
+
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonical} />
@@ -80,19 +91,13 @@ const publishedIso =
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script is:inline src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    <script is:inline>
-      WebFont.load({
-        google: {
-          families: [
-            'Inter:300,400,500,600,700',
-            'JetBrains Mono:300,400,500,600,700',
-            'Material Icons:300,400,500,600,700',
-            'Roboto:300,400,500,600,700',
-          ],
-        },
-      });
-    </script>
+    <!-- Plain stylesheets, not Webflow's WebFont.js loader: Termly's auto-blocker
+         strips that script, which left Material Icons rendering as ligature text. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" />
     <script is:inline>
       !(function (o, c) {
         var n = c.documentElement,
@@ -198,6 +203,9 @@ const publishedIso =
     <script is:inline src="/js/webflow.schunk.2.js" type="text/javascript"></script>
     <script is:inline src="/js/webflow.js" type="text/javascript"></script>
 
+    <!-- Calendly pop-up + demo_click / generate_lead tracking -->
+    <CalendlyPopup />
+
     <!-- Crisp -->
     <script is:inline>
       window.$crisp = [];
@@ -211,12 +219,7 @@ const publishedIso =
       })();
     </script>
 
-    <!-- Termly -->
-    <script
-      is:inline
-      type="text/javascript"
-      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
-    ></script>
+    <!-- Termly policy embed (the resource blocker is the first script in <head>) -->
     <script is:inline type="text/javascript" src="https://app.termly.io/embed-policy.min.js"></script>
   </body>
 </html>

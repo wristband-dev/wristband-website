@@ -43,4 +43,4 @@ Don’t miss this opportunity to improve your security practices with insights f
 We look forward to seeing you there!
 
 Feel free to share this announcement with your colleagues and friends who might benefit from this valuable session.
-[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/team/jim-verducci)[Jim VerducciCEO / Co-founder](/team/jim-verducci)[](https://www.linkedin.com/in/jim-verducci/)
+[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/the-team)[Jim VerducciCEO / Co-founder](/the-team)[](https://www.linkedin.com/in/jim-verducci/)

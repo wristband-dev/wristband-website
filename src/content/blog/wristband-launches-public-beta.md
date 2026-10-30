@@ -34,4 +34,4 @@ To learn more about Wristband and sign up for the public beta, visit [https://wr
 Wristband is a developer-first authentication platform designed specifically for B2B SaaS companies. Founded by a team of experienced engineers and security experts, Wristband's mission is to simplify B2B authentication, making it more secure, customizable, and accessible for businesses of all sizes. The company is headquartered in Berkeley, CA.
 
 ‍
-[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/team/jim-verducci)[Jim VerducciCEO / Co-founder](/team/jim-verducci)[](https://www.linkedin.com/in/jim-verducci/)
+[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/the-team)[Jim VerducciCEO / Co-founder](/the-team)[](https://www.linkedin.com/in/jim-verducci/)

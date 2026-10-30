@@ -9,6 +9,11 @@ export default defineConfig({
   site: 'https://www.wristband.dev',
   output: 'static',
   trailingSlash: 'never',
+  // Emit /pricing.html rather than /pricing/index.html so Cloudflare Pages
+  // serves /pricing directly instead of 308-redirecting to /pricing/.
+  build: {
+    format: 'file',
+  },
   integrations: [mdx(), react(), sitemap()],
   compressHTML: true,
   markdown: {

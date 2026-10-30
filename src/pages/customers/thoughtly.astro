@@ -2,11 +2,11 @@
 import WebflowLayout from '../../layouts/WebflowLayout.astro';
 import { getWebflowMeta } from '../../lib/webflow';
 import { SITE } from '../../lib/constants';
-import { articleNode, breadcrumbNode } from '../../lib/seo';
+import { articleNode, breadcrumbNode, pagePath } from '../../lib/seo';
 import bodyHtml from '../../webflow/customers-thoughtly.html?raw';
 
 const meta = getWebflowMeta('customers-thoughtly');
-const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
 ---
 
 <WebflowLayout
@@ -24,7 +24,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
     breadcrumbNode([
       { name: 'Home', path: '/' },
       { name: 'Case Studies', path: '/customers/thoughtly' },
-      { name: 'Thoughtly', path: Astro.url.pathname },
+      { name: 'Thoughtly', path: pagePath(Astro.url.pathname) },
     ]),
   ]}
   wfPage={meta.wfPage}

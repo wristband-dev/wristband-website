@@ -20,6 +20,11 @@ export function decodeHtmlEntities(value: string): string {
     .replaceAll('&nbsp;', ' ');
 }
 
+/** Public URL path for a page. With build.format 'file', Astro.url.pathname ends in .html. */
+export function pagePath(pathname: string): string {
+  return pathname.replace(/(\/index)?\.html$/, '') || '/';
+}
+
 export function absoluteUrl(pathOrUrl: string, site: string = SITE.url): string {
   if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
     return pathOrUrl;

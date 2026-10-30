@@ -1,7 +1,7 @@
 ---
 import { codeToHtml } from 'shiki';
 import { ENDPOINT_IDS, SDK_FRAMEWORKS } from '../data/sdk-matrix';
-import SdkMatrixWidget, { type HighlightedFramework } from './react/SdkMatrix';
+import SdkMatrix, { type HighlightedFramework } from './react/SdkMatrix';
 
 const frameworks: HighlightedFramework[] = await Promise.all(
   SDK_FRAMEWORKS.map(async (framework) => {
@@ -21,10 +21,26 @@ const frameworks: HighlightedFramework[] = await Promise.all(
 );
 ---
 
-<SdkMatrixWidget client:load frameworks={frameworks} />
+{/* 1. Astro outputs this on the server side into the source code for perfect SEO ranking */}
+<div id="seo-matrix-source">
+  <SdkMatrix client:load frameworks={frameworks} />
+</div>
 
-<style is:global>
-  #wristband-sdk-matrix {
+{/* 2. This tiny vanilla client script relocates the element cleanly on page bootup */}
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const target = document.getElementById('wristband-sdk-matrix');
+    const source = document.getElementById('seo-matrix-source');
+    
+    if (target && source) {
+      // Teleports the built DOM element directly into Webflow's layout target
+      target.appendChild(source);
+    }
+  });
+</script>
+
+<style>
+  #seo-matrix-source {
     width: 100%;
   }
 </style>

@@ -197,4 +197,4 @@ Using tenant subdomains is a common pattern in multi-tenant SaaS applications, o
 Wristband is an authentication platform explicitly designed for multi-tenant SaaS applications. It offers out-of-the-box support for tenant subdomains and other common multi-tenant auth use cases.
 
 Drop us a line at [info@wristband.dev](mailto:info@wristband.dev) or [grab time here](https://calendly.com/wristband/meet-up) to talk to our devs.
-[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/team/jim-verducci)[Jim VerducciCEO / Co-founder](/team/jim-verducci)[](https://www.linkedin.com/in/jim-verducci/)
+[![](/images/misc/663bc0b036a866af2914be89_jim.png)](/the-team)[Jim VerducciCEO / Co-founder](/the-team)[](https://www.linkedin.com/in/jim-verducci/)
