@@ -17,7 +17,7 @@
   },
   {
     "question": "What is a Monthly Active Tenant (MAT)?",
-    "answer": "A tenant is considered active when there is at least one active user or at least one active machine within that tenant in a given month. Machines created at the application-level (not under a specific tenant) do not affect the active tenant count."
+    "answer": "A tenant is considered active when there is at least one active user or at least one active machine within that tenant in a given month. Machines created at the application-level (not under a specific tenant) do not affect the active tenant count. Additionally, a tenant is considered active when a user successfully authenticates through an external identity provider associated with the tenant, regardless of whether the user is provisioned within Wristband or not."
   },
   {
     "question": "How many access tokens can each machine issue for Machine-to-Machine Auth?",
@@ -26,6 +26,10 @@
   {
     "question": "Who enforces authorization (RBAC) decisions?",
     "answer": "Wristband manages the association between users, roles, and permissions, but the actual authorization decision is handled by your application. Wristband is responsible for providing the roles and permissions of the authenticated user to your application, but your application is responsible for using those roles and permissions to enforce authorization."
+  },
+  {
+    "question": "What is Disposable Email Blocking?",
+    "answer": "Disposable Email Blocking prevents users from signing up with temporary or disposable email addresses, which are often used to avoid providing a permanent email address. Enabling this feature helps reduce spam account creation in your application."
   },
   {
     "question": "Do you provide custom components that we can embed?",
