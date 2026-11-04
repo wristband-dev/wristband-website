@@ -148,5 +148,15 @@
     "bodyClass": "body-3",
     "file": "src/webflow/the-team.html",
     "bytes": 14900
+  },
+  "cookie-policy": {
+    "title": "Cookie Policy",
+    "description": "Learn how Wristband uses cookies to enhance your browsing experience, analyze site traffic, and improve our authentication services.",
+    "ogImage": "/images/hero_background.webp",
+    "wfPage": "6a2b94714b38363d6d8db5a6",
+    "wfSite": "64d01a3671d020746e331a42",
+    "bodyClass": "body",
+    "file": "src/webflow/cookie-policy.html",
+    "bytes": 12702
   }
 }
