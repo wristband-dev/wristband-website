@@ -5,7 +5,8 @@
     "ogImage": "/images/misc/6875eecb9b754e8136411d26_image02.webp",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-07-16T04:42:11.090Z",
     "file": "src/webflow/blog-how-to-test-tenant-subdomains-on-macos-with-dnsmasq.html",
     "bytes": 29973
   },
@@ -15,7 +16,8 @@
     "ogImage": "/images/misc/6875e9c4b12b50f5845b756a_image01.webp",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2026-01-15T19:39:43.681Z",
     "file": "src/webflow/blog-multi-tenant-b2b-authentication-explained-key-concepts-components.html",
     "bytes": 26495
   },
@@ -25,7 +27,8 @@
     "ogImage": "/images/misc/66aafda19f5d25de053832f8_wristband-webinar---jim-manico-cover.jpg",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-03-28T03:36:16.856Z",
     "file": "src/webflow/blog-security-auth-for-small-businesses-best-practices-with-jim-manico-webinar.html",
     "bytes": 16423
   },
@@ -35,7 +38,8 @@
     "ogImage": "/images/misc/677b279da40b89e5879e5560_677b2780046e98b547549215_sso-tax-pricing.png",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-07-15T08:01:58.806Z",
     "file": "src/webflow/blog-the-sso-tax-when-better-security-comes-with-a-steep-price.html",
     "bytes": 24742
   },
@@ -45,7 +49,8 @@
     "ogImage": "/images/misc/66a40dc3e1f8c8d87a0eeaad_screenshot-2024-07-26-at-1.57.06-pm.png",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-03-28T03:36:16.856Z",
     "file": "src/webflow/blog-white-labeling-auth-for-b2b-apps-making-your-customer-the-hero.html",
     "bytes": 17514
   },
@@ -55,7 +60,8 @@
     "ogImage": "/images/misc/66aaf17b8dbfff780c904d2a_ph-main.png",
     "wfPage": "64d01a3771d020746e331ab1",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-03-28T03:36:16.856Z",
     "file": "src/webflow/blog-wristband-launches-public-beta.html",
     "bytes": 17056
   },
@@ -65,7 +71,8 @@
     "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331aa5",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-07-16T04:36:48.754Z",
     "file": "src/webflow/blog.html",
     "bytes": 25512
   },
@@ -75,7 +82,8 @@
     "ogImage": "/images/hero_background.webp",
     "wfPage": "67cd451dc6708f96ebc3c5e7",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2025-05-08T03:26:45.175Z",
     "file": "src/webflow/compare-wristband-vs-auth0.html",
     "bytes": 28673
   },
@@ -86,6 +94,7 @@
     "wfPage": "680d8f80fc716f3fc0ed998c",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body-4",
+    "lastmod": "2025-05-21T06:41:46.622Z",
     "file": "src/webflow/customers-thoughtly.html",
     "bytes": 24248
   },
@@ -96,6 +105,7 @@
     "wfPage": "64d01a3771d020746e331ac0",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body",
+    "lastmod": "2026-10-28T17:40:33.879Z",
     "file": "src/webflow/home.html",
     "bytes": 92622
   },
@@ -105,7 +115,8 @@
     "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331abf",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2026-10-15T18:04:28.030Z",
     "file": "src/webflow/pricing.html",
     "bytes": 44384
   },
@@ -115,7 +126,8 @@
     "ogImage": "/images/hero_background.webp",
     "wfPage": "64d01a3771d020746e331aa4",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2026-06-12T06:25:06.962Z",
     "file": "src/webflow/privacy.html",
     "bytes": 12563
   },
@@ -126,6 +138,7 @@
     "wfPage": "64d01a3771d020746e331aa1",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body-2",
+    "lastmod": "2025-04-28T18:41:15.391Z",
     "file": "src/webflow/request-demo.html",
     "bytes": 13450
   },
@@ -135,7 +148,8 @@
     "ogImage": "/images/hero_background.webp",
     "wfPage": "64fe246a6c52fe1a51c2ce64",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2026-07-29T04:14:40.100Z",
     "file": "src/webflow/terms.html",
     "bytes": 7417
   },
@@ -146,6 +160,7 @@
     "wfPage": "66209d9e5846aab05a226c13",
     "wfSite": "64d01a3671d020746e331a42",
     "bodyClass": "body-3",
+    "lastmod": "2025-05-01T06:22:01.016Z",
     "file": "src/webflow/the-team.html",
     "bytes": 14900
   },
@@ -155,7 +170,8 @@
     "ogImage": "/images/hero_background.webp",
     "wfPage": "6a2b94714b38363d6d8db5a6",
     "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body",
+    "bodyClass": "",
+    "lastmod": "2026-06-12T05:33:50.693Z",
     "file": "src/webflow/cookie-policy.html",
     "bytes": 12702
   }
