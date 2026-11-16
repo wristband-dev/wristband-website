@@ -1,0 +1,19 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import { getWebflowMeta } from '../lib/webflow';
+import bodyHtml from '../webflow/cookie-policy.html?raw';
+
+const meta = getWebflowMeta('cookie-policy');
+---
+
+<WebflowLayout
+  title={meta.title}
+  description={meta.description || undefined}
+  ogImage={meta.ogImage || undefined}
+  wfPage={meta.wfPage}
+  wfSite={meta.wfSite}
+  bodyClass={meta.bodyClass}
+  termlyPolicyEmbed
+>
+  <Fragment set:html={bodyHtml} />
+</WebflowLayout>
