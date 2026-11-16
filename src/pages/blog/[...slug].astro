@@ -27,7 +27,7 @@ interface Props {
   post?: CollectionEntry<'blog'>;
 }
 
-const { webflowKey, post } = Astro.props;
+const { webflowKey, post } = Astro.props as Props;
 const modules = import.meta.glob('../../webflow/blog-*.html', {
   query: '?raw',
   import: 'default',
@@ -73,41 +73,37 @@ if (webflowKey) {
   entry = post;
   ({ Content } = await render(post));
   const cover = post.data.coverImage;
-  ogImage = cover.startsWith('http')
-    ? cover
-    : new URL(cover, Astro.site ?? SITE.url).href;
+  ogImage = cover.startsWith('http') ? cover : new URL(cover, Astro.site ?? SITE.url).href;
   jsonLd = articleJsonLd(post, cover, post.data.summary);
 } else {
   throw new Error(`No Webflow HTML or content entry for blog slug "${Astro.params.slug}"`);
 }
 ---
 
-{
-  webflowMeta && webflowHtml ? (
-    <WebflowLayout
-      title={webflowMeta.title}
-      description={webflowMeta.description || undefined}
-      ogImage={ogImage}
-      ogType="article"
-      publishedTime={publishedTime}
-      jsonLd={jsonLd}
-      wfPage={webflowMeta.wfPage}
-      wfSite={webflowMeta.wfSite}
-      bodyClass={webflowMeta.bodyClass}
-    >
-      <Fragment set:html={webflowHtml} />
-    </WebflowLayout>
-  ) : entry && Content ? (
-    <BlogArticleLayout
-      title={entry.data.title}
-      summary={entry.data.summary}
-      category={entry.data.category}
-      coverImage={entry.data.coverImage}
-      ogImage={ogImage}
-      publishedTime={publishedTime}
-      jsonLd={jsonLd}
-    >
-      <Content />
-    </BlogArticleLayout>
-  ) : null
-}
+{webflowMeta && webflowHtml ? (
+  <WebflowLayout
+    title={webflowMeta.title}
+    description={webflowMeta.description || undefined}
+    ogImage={ogImage}
+    ogType="article"
+    publishedTime={publishedTime}
+    jsonLd={jsonLd}
+    wfPage={webflowMeta.wfPage}
+    wfSite={webflowMeta.wfSite}
+    bodyClass={webflowMeta.bodyClass}
+  >
+    <Fragment set:html={webflowHtml} />
+  </WebflowLayout>
+) : entry && Content ? (
+  <BlogArticleLayout
+    title={entry.data.title}
+    summary={entry.data.summary}
+    category={entry.data.category}
+    coverImage={entry.data.coverImage}
+    ogImage={ogImage}
+    publishedTime={publishedTime}
+    jsonLd={jsonLd}
+  >
+    <Content />
+  </BlogArticleLayout>
+) : null}

@@ -1,0 +1,9 @@
+# Build output and generated files
+dist/
+.astro/
+node_modules/
+package-lock.json
+
+# Copied Webflow files: minified on purpose, removed as pages are rebuilt
+src/webflow/
+public/
