@@ -1,7 +1,15 @@
 {
   "name": "wristband-website",
-  "type": "module",
+  "description": "Marketing site for wristband.dev",
   "version": "0.0.1",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "homepage": "https://www.wristband.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wristband-dev/wristband-website.git"
+  },
   "engines": {
     "node": ">=22.12.0"
   },
@@ -10,18 +18,37 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.10",
     "@astrojs/mdx": "^7.0.5",
     "@astrojs/react": "^6.0.2",
     "@astrojs/sitemap": "^3.7.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
     "astro": "^7.2.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "typescript": "^6.0.3"
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^10.15.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.1",
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0"
+  },
+  "lint-staged": {
+    "*.{js,mjs,ts,tsx,astro}": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{json,md,mdx,css}": "prettier --write"
   }
 }

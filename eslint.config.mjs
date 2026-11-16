@@ -1,0 +1,27 @@
+// @ts-check
+import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
+import astro from 'eslint-plugin-astro';
+import globals from 'globals';
+
+export default defineConfig(
+  {
+    ignores: [
+      'dist/',
+      '.astro/',
+      'node_modules/',
+      // Copied Webflow files: not hand-written code, removed as pages are rebuilt
+      'src/webflow/',
+      'public/',
+    ],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...astro.configs.recommended,
+  {
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+    },
+  },
+);

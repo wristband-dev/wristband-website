@@ -10,6 +10,7 @@ const SITE = 'https://www.wristband.dev';
 // Sitemap <lastmod> dates by URL path.
 // Copied Webflow pages: the `lastmod` field in src/webflow/meta.json.
 // Markdown-only blog posts: the post's `pubDate` frontmatter.
+/** @param {string} key */
 function webflowPath(key) {
   if (key === 'home') return '';
   if (key.startsWith('blog-')) return `/blog/${key.slice('blog-'.length)}`;
