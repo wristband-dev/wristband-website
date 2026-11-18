@@ -8,7 +8,7 @@ Marketing site for [wristband.dev](https://www.wristband.dev), migrated from Web
 - Page bodies live in [`src/webflow/*.html`](src/webflow) (scraped from production Webflow)
 - Styles: [`public/css/webflow.css`](public/css/webflow.css); interactions: [`public/js/webflow*.js`](public/js)
 - Existing blog posts are static HTML exports (same slugs). New posts can be added as Markdown or MDX under `src/content/blog/`
-- Cloudflare Pages + Pages Function for `/api/request-demo`
+- Cloudflare Pages
 
 ## Develop
 
@@ -51,28 +51,21 @@ Site images are in [`public/images`](public/images) and served by Cloudflare Pag
 
 Required GitHub secrets:
 
-| Secret | Purpose |
-|--------|---------|
-| `CLOUDFLARE_API_TOKEN` | Pages deploy token |
+| Secret                  | Purpose               |
+| ----------------------- | --------------------- |
+| `CLOUDFLARE_API_TOKEN`  | Pages deploy token    |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
 
 Create a Pages project named `wristband-website` (or change `--project-name` in the workflow).
-
-### Demo form secrets (Cloudflare Pages → Settings → Environment variables)
-
-| Variable | Purpose |
-|----------|---------|
-| `DEMO_FORM_WEBHOOK_URL` | Zapier / Make / Slack webhook for `/api/request-demo` |
-| `DEMO_FORM_TO_EMAIL` | Optional routing hint |
 
 ## Cutover checklist
 
 1. Deploy to a Cloudflare Pages preview / staging custom domain.
 2. Visual QA against production Webflow (home, pricing, blog, compare, team, case study).
-3. Confirm GTM, Crisp, Termly, and form webhook in staging.
+3. Confirm GTM, Crisp, and Termly in staging.
 4. Point `www.wristband.dev` (and apex) DNS to Cloudflare Pages.
 5. Verify redirects: `/login`, `/signup` → dashboard.
-6. Monitor analytics + form submissions for 48h.
+6. Monitor analytics for 48h.
 7. Unpublish Webflow.
 
 ## Project layout
@@ -85,6 +78,5 @@ src/
   lib/
   pages/
   styles/
-functions/api/         # Cloudflare Pages Functions
 public/images/         # Migrated Webflow assets
 ```
