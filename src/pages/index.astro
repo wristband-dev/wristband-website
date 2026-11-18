@@ -6,6 +6,16 @@ import { softwareApplicationNode } from '../lib/seo';
 import bodyHtml from '../webflow/home.html?raw';
 
 const meta = getWebflowMeta('home');
+
+// Render the SDK matrix inside the empty placeholder div from the Webflow export, so it is in the right spot in the HTML.
+const MATRIX_PLACEHOLDER = '<div id="wristband-sdk-matrix" class="sdk-matrix-container">';
+const placeholderStart = bodyHtml.indexOf(MATRIX_PLACEHOLDER);
+if (placeholderStart === -1 || bodyHtml.indexOf(MATRIX_PLACEHOLDER, placeholderStart + 1) !== -1) {
+  throw new Error('home.html must contain exactly one SDK matrix placeholder');
+}
+const splitAt = placeholderStart + MATRIX_PLACEHOLDER.length;
+const beforeMatrix = bodyHtml.slice(0, splitAt);
+const afterMatrix = bodyHtml.slice(splitAt);
 ---
 
 <WebflowLayout
@@ -35,6 +45,7 @@ const meta = getWebflowMeta('home');
     media="(min-width: 480px)"
     href="/images/misc/67e63012d18f7f9092cdd846_hero-background-linear-grad-adjusted-2.svg"
   />
-  <Fragment set:html={bodyHtml} />
+  <Fragment set:html={beforeMatrix} />
   <SdkMatrix />
+  <Fragment set:html={afterMatrix} />
 </WebflowLayout>
