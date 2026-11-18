@@ -26,19 +26,6 @@ const frameworks: HighlightedFramework[] = await Promise.all(
   <SdkMatrix client:load frameworks={frameworks} />
 </div>
 
-{/* 2. This tiny vanilla client script relocates the element cleanly on page bootup */}
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const target = document.getElementById('wristband-sdk-matrix');
-    const source = document.getElementById('seo-matrix-source');
-    
-    if (target && source) {
-      // Teleports the built DOM element directly into Webflow's layout target
-      target.appendChild(source);
-    }
-  });
-</script>
-
 <style>
   #seo-matrix-source {
     width: 100%;
