@@ -1,0 +1,315 @@
+/*
+  Base styles for rebuilt pages (BaseLayout.astro): a reset plus element defaults from tokens.css.
+  The reset matches the one in webflow.css (normalize.css v3 plus Webflow's base rules), except:
+  - Focus outlines are kept on links, for keyboard users.
+  - Webflow-only rules (.w-* classes, w-mod-touch) are left out.
+  - blockquote, figure, figcaption and label are styled in the components that use them.
+  Sizes and spacing match webflow.css. Colors match what the copied pages show on screen.
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+[hidden],
+template {
+  display: none;
+}
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+}
+
+h1 {
+  margin-bottom: 24px;
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-h1);
+}
+
+h2 {
+  margin-bottom: 16px;
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-heading);
+}
+
+h3 {
+  margin-bottom: 12px;
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-heading);
+}
+
+h4 {
+  margin-bottom: 16px;
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-heading);
+}
+
+h5 {
+  margin-bottom: 16px;
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h5);
+}
+
+h6 {
+  margin-bottom: 10px;
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-heading);
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 20px;
+  line-height: var(--line-height-paragraph);
+}
+
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding-left: 40px;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: underline;
+  transition: color 0.35s;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+b,
+strong {
+  font-weight: var(--font-weight-bold);
+}
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+dfn {
+  font-style: italic;
+}
+
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  position: relative;
+  font-size: 75%;
+  line-height: 0;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+pre {
+  overflow: auto;
+}
+
+img {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+  border: 0;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+[type='button'],
+[type='reset'] {
+  -webkit-appearance: button;
+  appearance: button;
+  border: 0;
+  cursor: pointer;
+}
+
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+input {
+  line-height: normal;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  height: auto;
+}
+
+input[type='search'] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+textarea {
+  overflow: auto;
+}
+
+optgroup {
+  font-weight: var(--font-weight-bold);
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  padding: 0;
+  border: 0;
+}
+
+/*
+  Zoom-in reveal, matching Webflow's "Zoom In" interaction on copied pages:
+  starts at 97% size and invisible, then grows and fades in over 350ms when scrolled into view.
+  Use data-reveal (200ms delay) or data-reveal="300" (custom delay in ms). The script is in BaseLayout.astro.
+  Only applies once that script has run (the js-reveal class), and never for visitors who prefer reduced motion.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-reveal] {
+    opacity: 0;
+    transform: scale(0.97);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
+    transition-delay: var(--reveal-delay, 200ms);
+  }
+
+  .js-reveal [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  h1 {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  h1 {
+    margin-bottom: 16px;
+  }
+
+  h6 {
+    margin-bottom: 8px;
+  }
+}

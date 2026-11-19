@@ -1,0 +1,246 @@
+---
+// Card slider for the team page. Replaces Webflow's slider (w-slider) with no jQuery.
+// Shows 3 cards per page on desktop, 2 on tablet and 1 on phones, with dots to move between pages.
+// Matches the live slider's sizes, timing (500ms ease) and looping.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Member {
+  name: string;
+  role: string;
+  bio: string;
+  photo: ImageMetadata;
+}
+
+interface Props {
+  members: Member[];
+  label: string;
+}
+
+const { members, label } = Astro.props;
+---
+
+<div class="team-slider" data-team-slider role="region" aria-roledescription="carousel" aria-label={label}>
+  <div class="team-slider__mask">
+    <div class="team-slider__track">
+      {members.map((member) => (
+        <div class="team-slider__slide">
+          <div class="team-slider__card">
+            <Image
+              src={member.photo}
+              alt={member.name}
+              widths={[360, 720]}
+              sizes="(max-width: 479px) 100vw, 360px"
+              loading="lazy"
+              class="team-slider__photo"
+            />
+            <div class="team-slider__info">
+              <h3 class="team-slider__name">
+                <strong>{member.name}</strong>
+              </h3>
+              <div class="team-slider__role">{member.role}</div>
+              <p class="team-slider__bio">{member.bio}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="team-slider__dots"></div>
+</div>
+
+<script>
+  const DURATION_MS = 500;
+
+  for (const slider of document.querySelectorAll<HTMLElement>('[data-team-slider]')) {
+    const mask = slider.querySelector<HTMLElement>('.team-slider__mask');
+    const track = slider.querySelector<HTMLElement>('.team-slider__track');
+    const dotsContainer = slider.querySelector<HTMLElement>('.team-slider__dots');
+    if (!mask || !track || !dotsContainer) continue;
+    const slides = [...track.querySelectorAll<HTMLElement>('.team-slider__slide')];
+
+    let pageOffsets: number[] = [0];
+    let page = 0;
+
+    // A new page starts at the first slide that does not fully fit on the current page, like Webflow.
+    const measurePages = () => {
+      const maskWidth = mask.getBoundingClientRect().width;
+      const trackLeft = track.getBoundingClientRect().left;
+      const offsets = [0];
+      for (const slide of slides) {
+        const rect = slide.getBoundingClientRect();
+        const left = rect.left - trackLeft;
+        const start = offsets[offsets.length - 1];
+        // 2px of slack absorbs sub-pixel rounding of the percentage widths.
+        if (left + rect.width > start + maskWidth + 2) offsets.push(left);
+      }
+      return offsets;
+    };
+
+    const goTo = (index: number, animate = true) => {
+      page = (index + pageOffsets.length) % pageOffsets.length;
+      track.style.transition = animate ? `transform ${DURATION_MS}ms ease` : 'none';
+      track.style.transform = `translateX(${-pageOffsets[page]}px)`;
+      dotsContainer.querySelectorAll('button').forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === page);
+        dot.setAttribute('aria-pressed', String(i === page));
+      });
+    };
+
+    const buildDots = () => {
+      pageOffsets = measurePages();
+      dotsContainer.replaceChildren(
+        ...pageOffsets.map((_, i) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'team-slider__dot';
+          dot.setAttribute('aria-label', `Show slide ${i + 1} of ${pageOffsets.length}`);
+          dot.addEventListener('click', () => goTo(i));
+          return dot;
+        }),
+      );
+      goTo(Math.min(page, pageOffsets.length - 1), false);
+    };
+
+    // Swipe left or right to change pages. Loops at either end, like the live slider.
+    let startX: number | null = null;
+    mask.addEventListener('pointerdown', (event) => {
+      // Stops a mouse drag from selecting text, which would cancel the swipe.
+      if (event.pointerType === 'mouse') event.preventDefault();
+      startX = event.clientX;
+    });
+    mask.addEventListener('pointerup', (event) => {
+      if (startX === null) return;
+      const distance = event.clientX - startX;
+      startX = null;
+      if (Math.abs(distance) > 40) goTo(page + (distance < 0 ? 1 : -1));
+    });
+    mask.addEventListener('pointercancel', () => {
+      startX = null;
+    });
+
+    let resizeTimer: number | undefined;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(buildDots, 100);
+    });
+
+    buildDots();
+  }
+</script>
+
+<style>
+  .team-slider {
+    position: relative;
+    margin-top: 50px;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .team-slider__mask {
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-y;
+  }
+
+  .team-slider__track {
+    white-space: nowrap;
+  }
+
+  .team-slider__slide {
+    display: inline-block;
+    width: 30%;
+    margin-right: 5%;
+    vertical-align: top;
+    white-space: normal;
+    text-align: left;
+  }
+
+  .team-slider__card {
+    padding-bottom: 24px;
+    background-color: var(--palette-white);
+  }
+
+  .team-slider__photo {
+    width: 100%;
+    height: auto;
+    margin-bottom: 18px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .team-slider__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .team-slider__name {
+    margin-bottom: 12px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .team-slider__name strong {
+    color: var(--color-text);
+  }
+
+  .team-slider__role {
+    color: #1a1b1f;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .team-slider__bio {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
+  .team-slider__dots {
+    height: 40px;
+    margin-top: 24px;
+    padding-top: 10px;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  /* The dots are created by the script, so their styles must be global to reach them. */
+  .team-slider__dots :global(.team-slider__dot) {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin: 0 12px 0.5em;
+    padding: 0;
+    border-radius: 100%;
+    background-color: #2226;
+    vertical-align: top;
+    transition:
+      background-color 0.1s,
+      color 0.1s;
+  }
+
+  .team-slider__dots :global(.team-slider__dot.is-active) {
+    background-color: #222;
+  }
+
+  .team-slider__dots :global(.team-slider__dot:focus-visible) {
+    outline: 2px solid #222;
+    outline-offset: 2px;
+  }
+
+  @media screen and (max-width: 991px) {
+    .team-slider__slide {
+      width: 47%;
+      margin-right: 6%;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .team-slider__slide {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+</style>

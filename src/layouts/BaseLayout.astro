@@ -1,27 +1,58 @@
 ---
-import '../styles/global.css';
+// Layout for rebuilt pages: same <head> and third-party setup as WebflowLayout.astro,
+// without webflow.css, jQuery or the Webflow scripts.
+import '../styles/tokens.css';
+import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import CalendlyPopup from '../components/CalendlyPopup.astro';
+import Fonts from '../components/Fonts.astro';
+import {
+  TWITTER_HANDLE,
+  absoluteUrl,
+  decodeHtmlEntities,
+  jsonLdGraph,
+  pagePath,
+  resolveOgImage,
+  type JsonLdNode,
+} from '../lib/seo';
 import { SITE } from '../lib/constants';
-import { pagePath } from '../lib/seo';
 
 interface Props {
-  title?: string;
+  title: string;
   description?: string;
-  image?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  publishedTime?: Date | string;
+  jsonLd?: JsonLdNode[];
   noIndex?: boolean;
+  /** Load Termly's policy embed script (only pages with a `termly-embed` div need it). */
+  termlyPolicyEmbed?: boolean;
 }
 
 const {
-  title = SITE.name,
+  title,
   description = SITE.description,
-  image = '/images/hero_background.webp',
+  ogImage,
+  ogType = 'website',
+  publishedTime,
+  jsonLd = [],
   noIndex = false,
+  termlyPolicyEmbed = false,
 } = Astro.props;
 
-const pageTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
-const canonical = new URL(pagePath(Astro.url.pathname), Astro.site).href;
-const ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).href;
+const pageTitle = decodeHtmlEntities(title);
+const pageDescription = decodeHtmlEntities(description);
+// No trailing slash (trailingSlash: 'never'), so the home page matches the sitemap URL.
+const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href.replace(/\/$/, '');
+const ogImageAbs = absoluteUrl(resolveOgImage(ogImage), Astro.site?.href ?? SITE.url);
+const publishedIso =
+  publishedTime instanceof Date
+    ? publishedTime.toISOString()
+    : publishedTime
+      ? new Date(publishedTime).toISOString()
+      : undefined;
 ---
 
 <!doctype html>
@@ -29,28 +60,47 @@ const ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).hr
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
+
+    <!-- Termly: must stay the first script in <head> so it can block other scripts until consent -->
+    <script
+      is:inline
+      type="text/javascript"
+      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
+    ></script>
+
     <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     {noIndex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/png" href="/favicon-32x32.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageAbs} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={TWITTER_HANDLE} />
+    <meta name="twitter:creator" content={TWITTER_HANDLE} />
     <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImageAbs} />
+    {publishedIso && <meta property="article:published_time" content={publishedIso} />}
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <Fonts />
+
+    <!-- Lets elements with data-reveal start hidden before first paint (see base.css) -->
+    <script is:inline>
+      document.documentElement.classList.add('js-reveal');
+    </script>
+
+    <!-- Per-page preloads (e.g. a hero image) -->
+    <slot name="head" />
+
     <!-- Google Tag Manager -->
     <script is:inline>
       /* eslint-disable no-var -- Google Tag Manager vendor snippet, kept as written */
@@ -65,6 +115,8 @@ const ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).hr
         f.parentNode.insertBefore(j, f);
       })(window, document, 'script', 'dataLayer', 'GTM-KQNQ4T3V');
     </script>
+
+    <JsonLd data={jsonLdGraph(jsonLd)} />
   </head>
   <body>
     <noscript>
@@ -75,11 +127,38 @@ const ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).hr
         style="display:none;visibility:hidden"
       ></iframe>
     </noscript>
+
     <Header />
     <main>
       <slot />
     </main>
     <Footer />
+
+    <!-- Zoom-in reveal for elements with data-reveal (see base.css) -->
+    <script>
+      const revealItems = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reveal = (item: HTMLElement) => item.classList.add('is-revealed');
+      for (const item of revealItems) {
+        const delay = Number(item.dataset.reveal);
+        if (delay > 0) item.style.setProperty('--reveal-delay', `${delay}ms`);
+      }
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            reveal(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach(reveal);
+      }
+    </script>
+
+    <!-- Calendly pop-up + demo_click / generate_lead tracking -->
+    <CalendlyPopup />
+
     <!-- Crisp -->
     <script is:inline>
       window.$crisp = [];
@@ -92,11 +171,11 @@ const ogImage = image.startsWith('http') ? image : new URL(image, Astro.site).hr
         d.getElementsByTagName('head')[0].appendChild(s);
       })();
     </script>
-    <!-- Termly cookie consent -->
-    <script
-      is:inline
-      type="text/javascript"
-      src="https://app.termly.io/resource-blocker/f2dcecf0-7035-44c5-bf2c-cfd99f36bc09?autoBlock=on"
-    ></script>
+
+    <!-- Termly policy embed (the resource blocker is the first script in <head>).
+         Only pages that embed a policy need this 67 KB script. -->
+    {termlyPolicyEmbed && (
+      <script is:inline type="text/javascript" src="https://app.termly.io/embed-policy.min.js"></script>
+    )}
   </body>
 </html>
