@@ -31,6 +31,7 @@
   --palette-aquamarine: #00ffc1; /* --aquamarine */
   --palette-medium-aquamarine: #00cc9a; /* --medium-aquamarine */
   --palette-blue: #2754f1; /* hard-coded on the header Sign Up button */
+  --palette-pink: #e61eac; /* --pink */
 
   /* Meaning: light theme (default) */
   --color-bg: var(--palette-white);

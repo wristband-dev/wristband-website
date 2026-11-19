@@ -1,18 +1,228 @@
 ---
-import WebflowLayout from '../../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../../lib/webflow';
-import bodyHtml from '../../webflow/compare-wristband-vs-auth0.html?raw';
+// Wristband vs Auth0, rebuilt without Webflow. Content and layout match live Webflow,
+// except the top title is now the page's h1 (it was an h2, with the h1 near the bottom).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComparisonTable, { type ComparisonRow } from '../../components/ComparisonTable.astro';
+import CompareCtas from '../../components/compare/CompareCtas.astro';
+import CaseStudyCta from '../../components/compare/CaseStudyCta.astro';
+import torreyLeonard from '../../assets/testimonials/torrey-leonard.webp';
 
-const meta = getWebflowMeta('compare-wristband-vs-auth0');
+const columns = ['Wristband', 'Auth0'];
+const yes = { check: true } as const;
+const yesOn = (plan: string) => ({ check: true, label: `(${plan})` }) as const;
+const text = (value: string, footnote?: string) => ({ text: value, footnote });
+
+const platform: ComparisonRow[] = [
+  { feature: 'Easy Organization Management at Scale', footnote: '*', cells: [yes, text('No')] },
+  { feature: 'Custom Domain per Organization', footnote: '*', cells: [yesOn('Pro'), text('No')] },
+  { feature: 'Organization Configuration Inheritance', footnote: '*', cells: [yes, text('No')] },
+  { feature: 'Organizations', footnote: '*', cells: [text('5 Free'), text('5 Free')] },
+  { feature: 'Organization Discovery', cells: [yes, text('API Only')] },
+  { feature: 'Multiple Environments', cells: [yes, yesOn('Essential')] },
+  { feature: 'Switch Organizations without Logout', footnote: '*', cells: [yes, text('No')] },
+  { feature: 'Okta Connections (OIDC)', cells: [yes, yes] },
+  { feature: 'OIDC Connections', cells: [yes, yesOn('Essential')] },
+  { feature: 'Self Service SSO', cells: [yes, yesOn('Pro')] },
+];
+
+const authentication: ComparisonRow[] = [
+  { feature: 'Machine to Machine Auth Tokens', cells: [text('Unlimited', '**'), text('5000 max (+ Add-Ons)')] },
+  { feature: 'Private Key JWT', cells: [yes, yesOn('Essential')] },
+  { feature: 'Role Based Access Controls (RBAC)', cells: [yes, yesOn('Essential')] },
+  { feature: 'Fine Grained Access Controls (FGAC)', cells: [yes, text('Add-On')] },
+  { feature: 'Just In Time Provisioning (JIT)', cells: [yes, yes] },
+  { feature: 'Long Lived Sessions', cells: [yes, yesOn('Enterprise')] },
+];
+
+const userManagement: ComparisonRow[] = [
+  { feature: 'Strict User Data Isolation', cells: [yes, text('Limited')] },
+  { feature: 'User Import', cells: [yes, yes] },
+  { feature: 'Custom Attributes', cells: [yes, yes] },
+];
+
+const security: ComparisonRow[] = [
+  { feature: 'SOC2 Type 2 Compliance', cells: [yes, yes] },
+  { feature: 'Bot Detection', cells: [yes, yesOn('Pro')] },
+  { feature: 'Basic Breached Password Protection', cells: [yes, yesOn('Pro')] },
+  { feature: 'Multi Factor Authentication (MFA)', cells: [yes, yesOn('Essential')] },
+  { feature: 'Pro MFA Factors', cells: [yes, yesOn('Essential')] },
+  { feature: 'Enhanced password protection', cells: [yes, yesOn('Pro')] },
+];
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
+<BaseLayout
+  title="Wristband vs Auth0"
+  description="Get enterprise-level auth without the high cost. Wristband’s API-first, multi-tenant auth platform delivers powerful features — even on the Free tier."
+  ogImage="/images/hero_background.webp"
 >
-  <Fragment set:html={bodyHtml} />
-</WebflowLayout>
+  <section class="compare">
+    <div class="compare__container">
+      <div class="compare__inner">
+        <div class="compare__intro" data-reveal>
+          <h1 class="compare__title">Wristband vs Auth0</h1>
+          <div class="compare__intro-text">
+            <p>
+              If your customers need enterprise level auth features but you are not an enterprise sized company, then
+              Wristband is for you.
+            </p>
+            <p>
+              Wristband is an API-first, true multi-tenant auth platform offering enterprise features starting at the
+              Free tier.
+            </p>
+          </div>
+          <CompareCtas reveal />
+        </div>
+
+        <div class="compare__table" data-reveal>
+          <ComparisonTable title="Platform" columns={columns} rows={platform} spaceAfter />
+          <CompareCtas reveal />
+          <ComparisonTable title="Authentication" columns={columns} rows={authentication} spaceBefore spaceAfter />
+          <ComparisonTable title="User Management" columns={columns} rows={userManagement} spaceAfter />
+          <ComparisonTable title="Security" columns={columns} rows={security} spaceAfter />
+          <CompareCtas reveal />
+          <p class="compare__footnotes" data-reveal>
+            <span class="compare__footnote-mark">*</span> While Auth0’s organizations and Wristband tenants are
+            comparable concepts, they are distinct in terms of functionality and implementation.
+            <br />
+            <span class="compare__footnote-mark">**</span> Subject to system limitations on machines, not tokens (total
+            active machine limit can be raised through support).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CaseStudyCta
+    title="Multi-Tenant Auth, Solved"
+    quote={{
+      before:
+        "Initially, we considered looking into Auth0's multi-tenancy options, but it seemed so complex that we didn't even seriously pursue that avenue. It was ",
+      highlight: 'stressful just thinking about implementing it',
+      after: '.',
+    }}
+    author={{ name: 'Torrey Leonard', role: 'Founder and CEO at Thoughtly', photo: torreyLeonard }}
+    description="Learn how Thoughtly solved authentication for their product-led growth and enterprise sales initiatives by switching from Auth0 to Wristband."
+    cta={{ label: 'Read the Case Study', href: '/customers/thoughtly' }}
+  />
+</BaseLayout>
+
+<style>
+  .compare {
+    padding-top: var(--space-page-top);
+    padding-bottom: 0;
+    background-color: var(--color-bg);
+    text-align: center;
+  }
+
+  .compare__container {
+    max-width: var(--container-header-max);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .compare__inner {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .compare__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  /* Was an h2 on live Webflow; now the page's h1 with the same look. */
+  .compare__title {
+    margin-bottom: 0;
+    font-size: 48px;
+    line-height: var(--line-height-heading);
+  }
+
+  .compare__intro-text {
+    margin: 20px auto;
+    color: var(--color-text);
+  }
+
+  /* Live Webflow used one block with a blank line between; one blank line = one line height. */
+  .compare__intro-text p {
+    margin-bottom: 1.6em;
+    line-height: var(--line-height-body);
+  }
+
+  .compare__intro-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .compare__table {
+    position: relative;
+    padding: 80px;
+    border-radius: var(--radius-24);
+    background-color: var(--color-bg);
+  }
+
+  .compare__footnotes {
+    margin-top: 40px;
+    color: var(--color-text);
+    font-size: 14px;
+    line-height: 32px;
+    text-align: left;
+  }
+
+  .compare__footnote-mark {
+    color: var(--palette-pink);
+  }
+
+  @media screen and (min-width: 1440px) {
+    .compare__container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .compare {
+      padding-bottom: 100px;
+    }
+
+    .compare__intro {
+      margin-bottom: 10px;
+    }
+
+    .compare__table {
+      padding: 64px 40px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .compare {
+      padding-bottom: 80px;
+    }
+
+    .compare__intro {
+      margin-bottom: 60px;
+    }
+
+    .compare__table {
+      padding: 0;
+      border-radius: 0;
+      background-color: transparent;
+      text-align: center;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .compare__container {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+
+    .compare__intro {
+      margin-bottom: 32px;
+    }
+  }
+</style>

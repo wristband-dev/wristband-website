@@ -1,0 +1,109 @@
+---
+// "Start for Free" and "Request Demo" buttons used on competitor pages. Matches Webflow's .competitorctablock.
+import { LINKS } from '../../lib/constants';
+
+interface Props {
+  /** Zoom in when scrolled into view, like live Webflow. */
+  reveal?: boolean;
+}
+
+const { reveal = false } = Astro.props;
+---
+
+<div class="compare-ctas" data-reveal={reveal ? '' : undefined}>
+  <a href={LINKS.signup} class="compare-ctas__signup">
+    Start for Free
+  </a>
+  <a href={LINKS.calendly} target="_blank" class="compare-ctas__demo">
+    Request Demo
+  </a>
+</div>
+
+<style>
+  .compare-ctas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .compare-ctas__signup,
+  .compare-ctas__demo {
+    display: inline-block;
+    padding: 16px 32px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    color: var(--color-text);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transform-style: preserve-3d;
+  }
+
+  .compare-ctas__signup {
+    background-color: var(--color-brand-bright);
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s,
+      color 0.35s;
+  }
+
+  .compare-ctas__signup:hover {
+    border-color: var(--palette-charcoal);
+    color: var(--color-text);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  .compare-ctas__demo {
+    border-color: var(--palette-lavender);
+    background-color: var(--palette-lavender);
+    box-shadow: 0 4px 10px #14142b0a;
+    transition:
+      border-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s,
+      background-color 0.3s,
+      color 0.3s;
+  }
+
+  .compare-ctas__demo:hover {
+    background-color: var(--palette-charcoal);
+    color: var(--palette-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+    box-shadow: var(--shadow-button-hover);
+  }
+
+  @media screen and (max-width: 767px) {
+    .compare-ctas {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .compare-ctas {
+      flex-flow: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+    }
+
+    .compare-ctas__signup,
+    .compare-ctas__demo {
+      width: 100%;
+      padding: 12px 20px;
+    }
+
+    .compare-ctas__signup {
+      margin-bottom: 10px;
+    }
+  }
+</style>
