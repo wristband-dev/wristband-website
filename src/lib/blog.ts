@@ -26,11 +26,7 @@ export function readingTimeMinutes(body: string | undefined): number {
 }
 
 function escapeHtml(value: string): string {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
+  return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 }
 
 export function blogIndexCardHtml(post: CollectionEntry<'blog'>): string {
@@ -47,18 +43,17 @@ export function blogIndexCardHtml(post: CollectionEntry<'blog'>): string {
 
 const LATEST_LIST_MARKER = 'class="non-featured-blog-post-main-wrapper w-dyn-items">';
 
-export function injectContentPostsIntoIndex(
-  html: string,
-  posts: CollectionEntry<'blog'>[],
-): string {
+export function injectContentPostsIntoIndex(html: string, posts: CollectionEntry<'blog'>[]): string {
   if (posts.length === 0) return html;
   const idx = html.indexOf(LATEST_LIST_MARKER);
   if (idx === -1) {
     throw new Error('Could not find latest-posts list in blog index HTML');
   }
   const insertAt = idx + LATEST_LIST_MARKER.length;
+  // Posts converted from Webflow to Markdown/MDX keep their original card in the copied index HTML,
+  // in its original position. Only add cards for posts the index does not already link to.
   const cards = posts
-    .slice()
+    .filter((post) => !html.includes(`href="/blog/${post.id}"`))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
     .map(blogIndexCardHtml)
     .join('');

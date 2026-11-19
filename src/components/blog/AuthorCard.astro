@@ -1,0 +1,228 @@
+---
+// Author box shown at the end of blog posts. Matches Webflow's .card.author-card.
+import { Image } from 'astro:assets';
+import type { Author } from '../../data/blog/authors';
+
+interface Props {
+  author: Author;
+}
+
+const { author } = Astro.props;
+// LinkedIn glyph in the "Icons applay x template" icon font, the same as live Webflow.
+const LINKEDIN_GLYPH = '\ue803';
+---
+
+<div class="author-card" data-reveal>
+  <a href={author.profileUrl} class="author-card__photo">
+    <Image src={author.photo} alt={author.name} widths={[190, 380]} sizes="190px" loading="lazy" />
+  </a>
+  <div class="author-card__body">
+    <div class="author-card__top">
+      <a href={author.profileUrl} class="author-card__name-link">
+        <div class="author-card__name">{author.name}</div>
+        <div class="author-card__gap"></div>
+        <div class="author-card__role">{author.role}</div>
+      </a>
+      {author.linkedin && (
+        <div class="author-card__socials">
+          <a href={author.linkedin} class="author-card__social" aria-label={`${author.name} on LinkedIn`}>
+            <span aria-hidden="true">{LINKEDIN_GLYPH}</span>
+          </a>
+        </div>
+      )}
+    </div>
+    <p class="author-card__bio">{author.bio}</p>
+  </div>
+</div>
+
+<style>
+  @font-face {
+    font-family: 'Icons applay x template';
+    src: url('/fonts/64d01a3771d020746e331ae2_icons-applay-x-template.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .author-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-auto-flow: column;
+    align-items: center;
+    column-gap: 40px;
+    margin-top: 80px;
+    margin-bottom: 60px;
+    padding: 60px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-24);
+    background-color: var(--color-bg);
+    box-shadow: 0 6px 12px #14142b0a;
+    color: var(--color-text-subtle);
+  }
+
+  .author-card__photo {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 100%;
+    transform: translate(0);
+  }
+
+  .author-card__photo img {
+    display: block;
+    width: 190px;
+    max-width: 190px;
+    height: 190px;
+    max-height: 190px;
+    transition: transform 0.35s;
+  }
+
+  .author-card__photo img:hover {
+    transform: scale(1.05);
+  }
+
+  .author-card__body {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .author-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .author-card__name-link {
+    display: inline-block;
+    max-width: 100%;
+    color: var(--color-text-subtle);
+    text-decoration: none;
+  }
+
+  .author-card__name {
+    color: var(--color-text);
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1em;
+    transition: color 0.35s ease;
+  }
+
+  /* Live Webflow animates the name to this blue-purple on hover. */
+  .author-card__name-link:hover .author-card__name {
+    color: #524fff;
+  }
+
+  .author-card__gap {
+    width: 8px;
+    height: 8px;
+  }
+
+  .author-card__role {
+    color: var(--color-brand);
+  }
+
+  .author-card__socials {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: -10px;
+  }
+
+  .author-card__social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    margin: 10px;
+    border-radius: var(--radius-6);
+    background-color: var(--palette-white);
+    box-shadow:
+      0 1px 5px #0b0a3308,
+      0 1px 3px #524fff1a;
+    color: var(--color-brand);
+    font-family: 'Icons applay x template', sans-serif;
+    font-size: 16px;
+    line-height: 1em;
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition:
+      background-color 0.35s,
+      transform 0.35s,
+      color 0.35s;
+  }
+
+  .author-card__social:hover {
+    background-color: var(--color-brand);
+    color: var(--palette-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+    transition-property: none;
+  }
+
+  .author-card__bio {
+    margin: 0 auto;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5em;
+    text-align: left;
+  }
+
+  @media screen and (min-width: 1440px) {
+    .author-card {
+      background-color: transparent;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .author-card {
+      border-radius: var(--radius-16);
+    }
+
+    .author-card__photo img {
+      width: 160px;
+      max-width: 160px;
+      height: 160px;
+      max-height: 160px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .author-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 40px 32px;
+      border-radius: var(--radius-12);
+    }
+
+    .author-card__photo {
+      flex: none;
+      margin-bottom: 24px;
+    }
+
+    .author-card__photo img {
+      width: 120px;
+      max-width: 120px;
+      height: 120px;
+      max-height: 120px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .author-card {
+      margin-top: 64px;
+    }
+
+    .author-card__name-link {
+      margin-right: 16px;
+      margin-bottom: 16px;
+    }
+
+    .author-card__top {
+      flex-wrap: wrap;
+    }
+  }
+</style>

@@ -1,85 +1,320 @@
 ---
-import WebflowLayout from './WebflowLayout.astro';
-import { BLOG_POST_WF_PAGE } from '../lib/blog';
-import { getWebflowChrome } from '../lib/webflow';
-
+// Layout for blog posts written in Markdown or MDX (src/content/blog).
+// Built on BaseLayout, with no Webflow CSS or scripts. Matches the copied Webflow blog posts:
+// category badge, title, summary and cover image, then the article and the author card.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import AuthorCard from '../components/blog/AuthorCard.astro';
+import type { Author } from '../data/blog/authors';
 import type { JsonLdNode } from '../lib/seo';
 
 interface Props {
   title: string;
   summary?: string;
   category: string;
-  coverImage: string;
+  /** Cover image: an imported image (optimized by Astro) or a public URL. */
+  cover: ImageMetadata | string;
   ogImage?: string;
   jsonLd?: JsonLdNode[];
   publishedTime?: Date | string;
+  author?: Author;
 }
 
-const { title, summary, category, coverImage, ogImage, jsonLd, publishedTime } = Astro.props;
-
-const { headerHtml, footerHtml } = getWebflowChrome();
+const { title, summary, category, cover, ogImage, jsonLd, publishedTime, author } = Astro.props;
 ---
 
-<WebflowLayout
+<BaseLayout
   title={title}
   description={summary || undefined}
   ogImage={ogImage}
   ogType="article"
   publishedTime={publishedTime}
   jsonLd={jsonLd}
-  wfPage={BLOG_POST_WF_PAGE}
-  bodyClass=""
 >
-  <div class="page-wrapper">
-    <Fragment set:html={headerHtml} />
-    <div class="section blog-post">
-      <div class="container-header w-container">
-        <div class="inner-container-1020px">
-          <div class="text-center">
-            <div class="mg-bottom-16px">
-              <a href="/blog" class="badge w-inline-block"><div>{category}</div></a>
+  <div class="post-hero">
+    <div class="post-hero__container">
+      <div class="post-hero__inner">
+        <div class="post-hero__text">
+          <div class="post-hero__badge-wrap" data-reveal>
+            <a href="/blog" class="post-hero__badge">
+              {category}
+            </a>
+          </div>
+          <h1 class="post-hero__title" data-reveal="300">
+            {title}
+          </h1>
+          {summary && (
+            <div class="post-hero__summary-wrap">
+              <p class="post-hero__summary" data-reveal="400">
+                {summary}
+              </p>
             </div>
-            <h1 class="heading-10">{title}</h1>
-            {
-              summary && (
-                <div class="inner-container-600px align-center">
-                  <p class="mg-bottom-0px">{summary}</p>
-                </div>
-              )
-            }
-          </div>
-          <div class="image-wrapper basic-frame---large mg-top-large-80px">
-            <img src={coverImage} alt={title} class="image post-hero" />
-          </div>
+          )}
+        </div>
+        <div class="post-hero__cover">
+          {typeof cover === 'string' ? (
+            <img src={cover} alt={title} class="post-hero__cover-img" data-reveal="500" />
+          ) : (
+            <Image
+              src={cover}
+              alt={title}
+              widths={[500, 800, 1080, 1600, 2000]}
+              sizes="(max-width: 1059px) 100vw, 1020px"
+              loading="eager"
+              class="post-hero__cover-img"
+              data-reveal="500"
+            />
+          )}
         </div>
       </div>
     </div>
-    <div class="bg blog-post"></div>
   </div>
-  <div class="section blog-post">
-    <div class="container-medium w-container">
-      <div class="rich-text w-richtext mdx-article">
-        <slot />
+
+  <div class="post-body">
+    <div class="post-body__container">
+      <div data-reveal>
+        <div class="post-article">
+          <slot />
+        </div>
+        {author && <AuthorCard author={author} />}
       </div>
     </div>
   </div>
-  <Fragment set:html={footerHtml} />
-</WebflowLayout>
+</BaseLayout>
 
-<style is:global>
-  .mdx-article img {
+<style>
+  /* Header area: badge, title, summary and cover image */
+  .post-hero,
+  .post-body {
+    position: relative;
+    margin: 0 10px 20px;
+    padding-top: 100px;
+    padding-bottom: 0;
+    background-color: var(--color-bg);
+  }
+
+  .post-hero__container {
+    max-width: var(--container-header-max);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .post-hero__inner {
+    max-width: 1020px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .post-hero__text {
+    text-align: center;
+  }
+
+  .post-hero__badge-wrap {
+    margin-bottom: 16px;
+  }
+
+  .post-hero__badge {
+    display: inline-block;
+    padding: 16px 30px;
+    border-radius: var(--radius-12);
+    background-color: var(--color-brand);
+    color: var(--color-on-brand);
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition:
+      transform 0.35s,
+      background-color 0.35s;
+  }
+
+  .post-hero__badge:hover {
+    background-color: #3635c0;
+    color: var(--color-on-brand);
+    transform: scale3d(0.96, 0.96, 0.1);
+  }
+
+  .post-hero__summary-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  /* Left-aligned inside the centered column, like live Webflow. */
+  .post-hero__summary {
+    margin: 0 auto;
+    color: var(--color-text);
+    font-size: 15px;
+    line-height: 1.5em;
+    text-align: left;
+  }
+
+  .post-hero__cover {
+    position: relative;
+    margin-top: 80px;
+    overflow: hidden;
+    border-radius: var(--radius-24);
+    transform: translate(0);
+  }
+
+  .post-hero__cover-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 800px;
+    object-fit: cover;
+  }
+
+  /* Article */
+  /* flow-root keeps the author card's bottom margin inside, like Webflow's container. */
+  .post-body__container {
+    display: flow-root;
+    max-width: 848px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* flow-root keeps the last paragraph's bottom margin inside the article, like Webflow's rich text. */
+  .post-article {
+    display: flow-root;
+    color: var(--color-text);
+  }
+
+  .post-article :global(h1) {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .post-article :global(h2) {
+    margin-top: 40px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .post-article :global(h3) {
+    margin-top: 32px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Webflow's default h4, bold text and inline code color, which the copied posts show. */
+  .post-article :global(h4),
+  .post-article :global(strong),
+  .post-article :global(code) {
+    color: var(--color-text-emphasis);
+  }
+
+  .post-article :global(ul),
+  .post-article :global(ol) {
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+
+  .post-article :global(li) {
+    margin-bottom: 8px;
+  }
+
+  .post-article :global(img) {
     max-width: 100%;
     height: auto;
+    border-radius: 28px;
   }
 
-  .mdx-article pre {
+  .post-article :global(figure) {
+    margin-top: 48px;
+  }
+
+  .post-article :global(pre) {
     margin: 1.5em 0;
-    border-radius: 8px;
     overflow-x: auto;
+    border-radius: 8px;
   }
 
-  .mdx-article :not(pre) > code {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  .post-article :global(:not(pre) > code) {
+    font-family: var(--font-mono);
     font-size: 0.9em;
+  }
+
+  @media screen and (min-width: 1440px) {
+    .post-hero__container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .post-hero,
+    .post-body {
+      padding-top: 80px;
+    }
+
+    .post-hero__cover {
+      margin-top: 48px;
+      border-radius: var(--radius-16);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .post-hero,
+    .post-body {
+      padding-top: 56px;
+    }
+
+    .post-hero__badge {
+      padding: 10px 22px;
+      border-radius: 10px;
+    }
+
+    .post-hero__cover {
+      margin-top: 32px;
+      border-radius: var(--radius-12);
+    }
+
+    .post-hero__cover-img {
+      min-height: 26vh;
+    }
+
+    .post-article :global(ul),
+    .post-article :global(ol) {
+      padding-left: 24px;
+    }
+
+    .post-article :global(img) {
+      border-radius: 16px;
+    }
+
+    .post-article :global(figure) {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .post-article :global(h5),
+    .post-article :global(h6) {
+      margin-bottom: 8px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    /* Webflow's header adds 60px of space below itself at this width. */
+    .post-hero {
+      margin-top: 60px;
+    }
+
+    .post-hero__container {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+
+    .post-body__container {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .post-hero__cover-img {
+      min-height: 20vh;
+    }
   }
 </style>
