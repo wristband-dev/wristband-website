@@ -1,0 +1,39 @@
+---
+// Green check circle used in comparison tables (pricing, competitor pages). Matches Webflow's `.check`.
+// The tick is a glyph from the "Icons applay x template" icon font, the same as live Webflow.
+interface Props {
+  /** What the check means, for screen readers. */
+  label?: string;
+}
+
+const { label = 'Included' } = Astro.props;
+// Private-use code point for the tick in the icon font.
+const TICK = '\ue809';
+---
+
+<span class="check-icon" role="img" aria-label={label}>
+  <span aria-hidden="true">{TICK}</span>
+</span>
+
+<style>
+  @font-face {
+    font-family: 'Icons applay x template';
+    src: url('/fonts/64d01a3771d020746e331ae2_icons-applay-x-template.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .check-icon {
+    display: flex;
+    flex: none;
+    justify-content: center;
+    align-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 100%;
+    background-color: var(--color-brand);
+    color: var(--color-on-brand);
+    font-family: 'Icons applay x template', sans-serif;
+  }
+</style>

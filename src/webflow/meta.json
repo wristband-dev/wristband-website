@@ -76,17 +76,6 @@
     "file": "src/webflow/blog.html",
     "bytes": 25512
   },
-  "compare-wristband-vs-auth0": {
-    "title": "Wristband vs Auth0",
-    "description": "Get enterprise-level auth without the high cost. Wristband’s API-first, multi-tenant auth platform delivers powerful features — even on the Free tier.",
-    "ogImage": "/images/hero_background.webp",
-    "wfPage": "67cd451dc6708f96ebc3c5e7",
-    "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "",
-    "lastmod": "2025-05-08T03:26:45.175Z",
-    "file": "src/webflow/compare-wristband-vs-auth0.html",
-    "bytes": 28673
-  },
   "customers-thoughtly": {
     "title": "Thoughtly Found an Auth0 Alternative for Multi-Tenant Auth",
     "description": "Discover how Thoughtly unified auth for product-led growth and enterprise sales by moving from Auth0 to Wristband’s multi-tenant architecture.",

@@ -1,0 +1,193 @@
+---
+// One group of a comparison table (a title row with column names, then feature rows).
+// Shared by the pricing page (3 plan columns) and competitor pages (Wristband vs a competitor).
+// Matches Webflow's .card-plans-comparison-* styles. On phones the feature name sits above its values.
+import CheckIcon from './CheckIcon.astro';
+
+/** A table cell: a check (optionally with a label like "(Pro)"), or plain text. */
+export type ComparisonCell = { check: true; label?: string } | { text: string; footnote?: string };
+
+export interface ComparisonRow {
+  feature: string;
+  /** Footnote marker shown after the feature name, like "*". */
+  footnote?: string;
+  cells: ComparisonCell[];
+}
+
+interface Props {
+  title: string;
+  columns: string[];
+  rows: ComparisonRow[];
+  /** Adds empty space above the group, like Webflow's spacer rows. */
+  spaceBefore?: boolean;
+  /** Adds empty space below the group. */
+  spaceAfter?: boolean;
+}
+
+const { title, columns, rows, spaceBefore = false, spaceAfter = false } = Astro.props;
+const gridStyle = `--comparison-columns: ${columns.length}`;
+---
+
+<div class="comparison">
+  {spaceBefore && <div class="comparison__spacer" aria-hidden="true" />}
+  <div class="comparison__row">
+    <div class="comparison__feature comparison__feature--title">
+      <h3 class="comparison__title">{title}</h3>
+    </div>
+    <div class="comparison__grid" style={gridStyle}>
+      {columns.map((column) => (
+        <div class="comparison__cell comparison__cell--column">{column}</div>
+      ))}
+    </div>
+  </div>
+  {rows.map((row) => (
+    <div class="comparison__row">
+      <div class="comparison__feature">
+        <div class="comparison__feature-text" data-footnote={row.footnote} set:text={row.feature} />
+      </div>
+      <div class="comparison__grid" style={gridStyle}>
+        {row.cells.map((cell) =>
+          'check' in cell ? (
+            <div class="comparison__cell">
+              <CheckIcon />
+              {cell.label && <div>{cell.label}</div>}
+            </div>
+          ) : (
+            <div class="comparison__cell">
+              <div class="comparison__text" data-footnote={cell.footnote} set:text={cell.text} />
+            </div>
+          ),
+        )}
+      </div>
+    </div>
+  ))}
+  {spaceAfter && <div class="comparison__spacer" aria-hidden="true" />}
+</div>
+
+<style>
+  .comparison__row {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .comparison__spacer {
+    height: 70px;
+  }
+
+  .comparison__feature {
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    align-items: center;
+    padding-right: 24px;
+  }
+
+  .comparison__title {
+    margin-bottom: 0;
+    color: var(--color-text);
+  }
+
+  .comparison__feature-text {
+    color: var(--color-text);
+    text-align: left;
+  }
+
+  /* Footnote markers ("*") come from data-footnote and the text from set:text, so no space sneaks in between. */
+  [data-footnote]::after {
+    content: attr(data-footnote);
+    color: var(--palette-pink);
+  }
+
+  .comparison__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--comparison-columns), 1fr);
+    width: 100%;
+    max-width: 64%;
+    margin-left: auto;
+  }
+
+  .comparison__cell {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    max-width: 250px;
+    min-height: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .comparison__cell.comparison__cell--column {
+    color: var(--color-brand);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+  }
+
+  @media screen and (max-width: 991px) {
+    .comparison__title {
+      margin-bottom: 16px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .comparison__row {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .comparison__spacer {
+      height: 40px;
+    }
+
+    .comparison__feature {
+      align-self: center;
+      padding-right: 0;
+    }
+
+    .comparison__feature--title {
+      order: -1;
+      margin-bottom: 20px;
+    }
+
+    .comparison__title {
+      font-size: 20px;
+    }
+
+    .comparison__feature-text {
+      margin-top: 20px;
+      margin-bottom: 16px;
+      font-size: 16px;
+      line-height: 1.6em;
+    }
+
+    .comparison__grid {
+      max-width: 100%;
+    }
+
+    .comparison__cell {
+      min-height: 40px;
+      padding-bottom: 24px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .comparison__grid {
+      column-gap: 8px;
+    }
+
+    .comparison__cell {
+      padding-left: 10px;
+      padding-right: 10px;
+      font-size: 14px;
+    }
+
+    .comparison__cell.comparison__cell--column {
+      line-height: 1.5em;
+    }
+  }
+</style>

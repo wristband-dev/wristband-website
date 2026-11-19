@@ -13,6 +13,7 @@ const SITE = 'https://www.wristband.dev';
 // Markdown-only blog posts: the post's `pubDate` frontmatter.
 const REBUILT_PAGE_LASTMOD = {
   '/the-team': '2026-11-18',
+  '/compare/wristband-vs-auth0': '2026-11-18',
 };
 
 /** @param {string} key */
