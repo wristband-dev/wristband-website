@@ -153,17 +153,6 @@
     "file": "src/webflow/terms.html",
     "bytes": 7417
   },
-  "the-team": {
-    "title": "The Team",
-    "description": "Meet the team behind wristband.dev - the world's first truly multi-tenant B2B authentication platform",
-    "ogImage": "/images/hero_background.webp",
-    "wfPage": "66209d9e5846aab05a226c13",
-    "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body-3",
-    "lastmod": "2025-05-01T06:22:01.016Z",
-    "file": "src/webflow/the-team.html",
-    "bytes": 14900
-  },
   "cookie-policy": {
     "title": "Cookie Policy",
     "description": "Learn how Wristband uses cookies to enhance your browsing experience, analyze site traffic, and improve our authentication services.",

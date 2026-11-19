@@ -9,7 +9,12 @@ const SITE = 'https://www.wristband.dev';
 
 // Sitemap <lastmod> dates by URL path.
 // Copied Webflow pages: the `lastmod` field in src/webflow/meta.json.
+// Rebuilt pages: REBUILT_PAGE_LASTMOD below. Update a page's date when its content changes.
 // Markdown-only blog posts: the post's `pubDate` frontmatter.
+const REBUILT_PAGE_LASTMOD = {
+  '/the-team': '2026-11-18',
+};
+
 /** @param {string} key */
 function webflowPath(key) {
   if (key === 'home') return '';
@@ -25,6 +30,10 @@ function buildLastmodByPath() {
   const meta = JSON.parse(readFileSync(new URL('./src/webflow/meta.json', import.meta.url), 'utf8'));
   for (const [key, page] of Object.entries(meta)) {
     if (page.lastmod) lastmodByPath.set(webflowPath(key), page.lastmod);
+  }
+
+  for (const [path, lastmod] of Object.entries(REBUILT_PAGE_LASTMOD)) {
+    lastmodByPath.set(path, new Date(lastmod).toISOString());
   }
 
   const blogDir = new URL('./src/content/blog/', import.meta.url);

@@ -1,18 +1,309 @@
 ---
-import WebflowLayout from '../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../lib/webflow';
-import bodyHtml from '../webflow/the-team.html?raw';
+// Team page, rebuilt without Webflow. Content and layout match live Webflow.
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TeamSlider from '../components/team/TeamSlider.astro';
+import jimVerducci from '../assets/team/jim-verducci.jpeg';
+import davidChu from '../assets/team/david-chu.jpeg';
+import bryanHsiao from '../assets/team/bryan-hsiao.jpeg';
+import jarodReyes from '../assets/team/jarod-reyes.jpeg';
+import jimManico from '../assets/team/jim-manico.jpeg';
+import jimAndDavid from '../assets/team/jim-and-david.jpg';
 
-const meta = getWebflowMeta('the-team');
+const founders = [
+  {
+    name: 'Jim Verducci',
+    role: 'CEO / Co-founder',
+    bio: 'A seasoned entrepreneur with a background in tech consulting and platform engineering. Jim co-founded Apitopia Consulting, specializing in designing and scaling distributed software architectures. His experience exposed the need for robust authentication frameworks, leading him to create Wristband.',
+    photo: jimVerducci,
+  },
+  {
+    name: 'David Chu',
+    role: 'CTO / Co-founder',
+    bio: "A technical leader with expertise in building highly scalable and reliable distributed systems. David led the development of AppDynamics' Business IQ platform, a crucial component in their acquisition by Cisco. His experience in identity and access management at Deem further strengthens Wristband's foundation.",
+    photo: davidChu,
+  },
+];
+
+const team = [
+  {
+    name: 'Bryan Hsiao',
+    role: 'VP of Engineering',
+    bio: "Bryan played a vital role in scaling Roku from 5 million to 65 million users. He brings extensive experience in building and managing high-scale distributed microservices, ensuring Wristband's infrastructure is robust and efficient.",
+    photo: bryanHsiao,
+  },
+  {
+    name: 'Jarod Reyes',
+    role: 'Advisor/Investor',
+    bio: "Software engineer turned marketer, Jarod previously led Developer Marketing at Auth0. His experience leading marketing efforts for companies like Twilio and PlanetScale is instrumental in driving Wristband's reach and impact.",
+    photo: jarodReyes,
+  },
+  {
+    name: 'Jim Manico',
+    role: 'Advisor/Investor',
+    bio: "A renowned security expert, OWASP board member and founder of Manicode Security. With over 20 years of experience in software development and security architecture, Jim's guidance ensures Wristband adheres to the highest security standards.",
+    photo: jimManico,
+  },
+];
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
+<BaseLayout
+  title="The Team"
+  description="Meet the team behind wristband.dev - the world's first truly multi-tenant B2B authentication platform"
+  ogImage="/images/hero_background.webp"
 >
-  <Fragment set:html={bodyHtml} />
-</WebflowLayout>
+  <section class="founders">
+    <div class="team-container">
+      <h1 class="founders__heading">Meet the team</h1>
+      <p class="founders__subheading">
+        With over 25 years of experience building authentication we care about making B2B Auth affordable.
+      </p>
+      <div class="founders__grid">
+        {founders.map((founder) => (
+          <div class="founder">
+            <Image
+              src={founder.photo}
+              alt={founder.name}
+              widths={[270, 540]}
+              sizes="270px"
+              loading="lazy"
+              class="founder__photo"
+            />
+            <div class="founder__text">
+              <div class="founder__name">{founder.name}</div>
+              <div class="founder__role">{founder.role}</div>
+              <p class="founder__bio">{founder.bio}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="team">
+    <div class="team-container">
+      <TeamSlider members={team} label="Team and advisors" />
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="team-container story__container">
+      <Image
+        src={jimAndDavid}
+        alt="Jim and David"
+        widths={[500, 800, 1080, 1600, 2000]}
+        sizes="(max-width: 1439px) 100vw, 1351px"
+        loading="lazy"
+        class="story__photo"
+      />
+      <h2 class="story__heading">The Story</h2>
+      <p class="story__text">
+        Wristband was born out of frustration with the state of B2B authentication. The founders, Jim, David, and Bryan,
+        witnessed the struggles companies face with building and maintaining secure auth frameworks, often leading to
+        instability, scalability issues, and developer burnout.
+      </p>
+      <p class="story__text">
+        They realized that existing solutions were either inadequate or overly complex and expensive, leaving many
+        companies without access to enterprise-level security. This "SSO tax" became the driving force behind
+        Wristband's mission: to democratize enterprise-level security and make it accessible to businesses of all sizes.
+      </p>
+      <p class="story__text">
+        The team dedicated themselves to building Wristband from the ground up, bootstrapping the company and investing
+        their own resources to create a truly multi-tenant B2B auth framework. They believe that secure authentication
+        should be the foundation of every application, not an afterthought.
+      </p>
+      <p class="story__text">
+        <em>
+          Wristband is committed to eliminating the SSO tax and empowering businesses to build secure applications from
+          day one.
+        </em>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .team-container {
+    width: 100%;
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Founders */
+  .founders {
+    position: relative;
+    padding: var(--space-page-top) 30px 80px;
+    border-bottom: 1px solid #e4ebf3;
+  }
+
+  .founders__heading {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .founders__subheading {
+    max-width: 530px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+  .founders__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 44px;
+    margin-top: 50px;
+  }
+
+  .founder {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+  }
+
+  .founder__photo {
+    width: 240px;
+    height: 240px;
+    margin-bottom: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .founder__text {
+    display: flex;
+    flex: 1;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-self: center;
+    gap: 11px;
+    margin-left: 30px;
+  }
+
+  .founder__name {
+    margin-bottom: 6px;
+    font-size: 24px;
+    font-weight: var(--font-weight-bold);
+    line-height: 32px;
+    text-align: left;
+  }
+
+  .founder__role {
+    flex: 1;
+    align-self: flex-start;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .founder__bio {
+    flex: 1;
+    text-align: left;
+  }
+
+  /* Team slider section */
+  .team {
+    position: relative;
+    padding: 40px 30px;
+    border-bottom: 1px solid #e4ebf3;
+    background-color: #f5f7fa;
+  }
+
+  /* Story */
+  .story {
+    margin-top: 60px;
+    margin-bottom: 40px;
+  }
+
+  .story__container {
+    margin-bottom: 100px;
+  }
+
+  .story__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  .story__heading {
+    margin-top: 24px;
+    font-size: 48px;
+  }
+
+  /* Live Webflow uses one paragraph with blank lines between; one blank line = one line height. */
+  .story__text {
+    margin-bottom: 1.66667em;
+  }
+
+  .story__text:last-child {
+    margin-bottom: 20px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    .founder__photo {
+      width: 270px;
+      height: 270px;
+    }
+  }
+
+  @media screen and (min-width: 1920px) {
+    .team-container {
+      margin-bottom: 35px;
+    }
+
+    .story__container {
+      margin-bottom: 100px;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .team-container {
+      max-width: 728px;
+    }
+
+    .founder__photo {
+      width: 190px;
+      height: 190px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .founders {
+      padding: var(--space-page-top) 15px 60px;
+    }
+
+    .team {
+      padding: 60px 15px;
+    }
+
+    .story {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .team-container {
+      max-width: none;
+    }
+
+    .founders__heading {
+      margin-bottom: 24px;
+    }
+
+    .founder {
+      flex-direction: column;
+    }
+
+    .story__text {
+      padding-left: 20px;
+      padding-right: 20px;
+      font-size: 14px;
+    }
+  }
+</style>

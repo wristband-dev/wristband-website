@@ -1,63 +1,429 @@
 ---
+// Site footer for rebuilt pages. Matches the footer on live Webflow (the same on every page).
+// Sizes, spacing and breakpoints come from webflow.css.
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/wristband-logo.svg';
+import soc2Badge from '../assets/badges/soc-2.webp';
+import ccpaBadge from '../assets/badges/ccpa.webp';
 import { LINKS, SITE } from '../lib/constants';
+import { pagePath } from '../lib/seo';
+
+type FooterLink = { label: string; href: string; newTab?: boolean };
+
+const columns: { title: string; links: FooterLink[] }[] = [
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Blog', href: '/blog' },
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'Support', href: 'https://docs.wristband.dev/docs/support' },
+      { label: 'Request Demo', href: LINKS.calendly, newTab: true },
+      { label: 'Wristband vs Auth0', href: '/compare/wristband-vs-auth0' },
+      { label: 'Case Studies', href: '/customers/thoughtly' },
+    ],
+  },
+  {
+    title: 'Developers',
+    links: [
+      { label: 'Quick Start', href: 'https://docs.wristband.dev/docs/auth-quick-start' },
+      { label: 'API Reference', href: 'https://docs.wristband.dev/reference/introduction-to-our-apis' },
+      { label: 'Changelog', href: LINKS.changelog },
+      { label: 'Status Page', href: LINKS.status, newTab: true },
+      { label: 'Community Slack', href: LINKS.slack, newTab: true },
+      { label: 'Password Generator', href: LINKS.passwordGenerator, newTab: true },
+      { label: 'JWT Validator', href: LINKS.jwtValidator, newTab: true },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Contact Us', href: `mailto:${SITE.email}?subject=Question%20About%20Wristband` },
+      { label: 'Team', href: '/the-team' },
+      { label: 'Terms of Service', href: '/terms' },
+      { label: 'Privacy', href: '/privacy' },
+      { label: 'Trust Center', href: LINKS.trust },
+      { label: 'Press and Media', href: LINKS.press, newTab: true },
+    ],
+  },
+];
+
+// Icons are glyphs from the Font Awesome Brands font, the same as live Webflow.
+const socials = [
+  { label: 'GitHub', href: LINKS.github, glyph: '' },
+  { label: 'LinkedIn', href: LINKS.linkedin, glyph: '' },
+  { label: 'X', href: LINKS.twitter, glyph: '' },
+  { label: 'Bluesky', href: LINKS.bluesky, glyph: '' },
+];
+
+const currentPath = pagePath(Astro.url.pathname);
+const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <img src="/images/wristband_white_logo.svg" alt="Wristband" width="160" height="28" />
-        <p>Authentication for multi-tenant apps. Build secure B2B auth flows with hosted pages and APIs.</p>
-        <div class="footer-badges" style="margin-top: 24px;">
-          <img src="/images/badges/soc2.webp" alt="SOC 2 Type II" />
-          <img src="/images/badges/ccpa.webp" alt="CCPA" />
+  <div class="site-footer__container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <a href="/" class="site-footer__logo">
+          <Image src={logo} alt="Wristband" width={215} />
+        </a>
+        <div class="site-footer__badges">
+          <div class="site-footer__badge">
+            <Image src={soc2Badge} alt="SOC 2 Type II badge" widths={[96, 192]} sizes="96px" loading="lazy" />
+          </div>
+          <div class="site-footer__badge site-footer__badge--ccpa">
+            <Image src={ccpaBadge} alt="CCPA badge" widths={[96, 192]} sizes="96px" loading="lazy" />
+          </div>
         </div>
       </div>
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <a href="/blog">Blog</a>
-        <a href="/pricing">Pricing</a>
-        <a href={LINKS.docs}>Support</a>
-        <a href={LINKS.calendly}>Request Demo</a>
-        <a href="/compare/wristband-vs-auth0">Wristband vs Auth0</a>
-        <a href="/customers/thoughtly">Case Studies</a>
-      </div>
-      <div class="footer-col">
-        <h4>Developers</h4>
-        <a href={LINKS.quickStart}>Quick Start</a>
-        <a href={LINKS.apiReference}>API Reference</a>
-        <a href={LINKS.changelog}>Changelog</a>
-        <a href={LINKS.status}>Status Page</a>
-        <a href={LINKS.slack}>Community Slack</a>
-        <a href={LINKS.passwordGenerator}>Password Generator</a>
-        <a href={LINKS.jwtValidator}>JWT Validator</a>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href={`mailto:${SITE.email}`}>Contact Us</a>
-        <a href="/the-team">Team</a>
-        <a href="/terms">Terms of Service</a>
-        <a href="/privacy">Privacy</a>
-        <a href={LINKS.trust}>Trust Center</a>
-        <a href={LINKS.press}>Press and Media</a>
+
+      <div class="site-footer__nav">
+        {columns.map((column, index) => (
+          <div class={index === 0 ? 'site-footer__column site-footer__column--first' : 'site-footer__column'}>
+            <div class="site-footer__title">{column.title}</div>
+            <ul class="site-footer__links" role="list">
+              {column.links.map((link) => (
+                <li class="site-footer__item">
+                  <a
+                    href={link.href}
+                    class="site-footer__link"
+                    aria-current={link.href === currentPath ? 'page' : undefined}
+                    {...(link.newTab ? { target: '_blank', rel: 'noopener' } : {})}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© {new Date().getFullYear()} Apitopia, Inc.</p>
-      <div class="socials">
-        <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
-          GitHub
-        </a>
-        <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-        <a href={LINKS.twitter} target="_blank" rel="noopener noreferrer">
-          X
-        </a>
-        <a href={LINKS.bluesky} target="_blank" rel="noopener noreferrer">
-          Bluesky
-        </a>
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__copyright">© {year} Apitopia, Inc.</div>
+      <div class="site-footer__socials">
+        {socials.map((social) => (
+          <a href={social.href} target="_blank" rel="noopener" class="site-footer__social" aria-label={social.label}>
+            <span aria-hidden="true">{social.glyph}</span>
+          </a>
+        ))}
       </div>
     </div>
   </div>
 </footer>
+
+<style>
+  @font-face {
+    font-family: 'Fa Brands 400';
+    src: url('/fonts/66675b3d99b9312076facc9b_fa-brands-400.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .site-footer {
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-bg-subtle);
+    font-family: var(--font-sans);
+  }
+
+  .site-footer__container {
+    max-width: var(--container-header-max);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: space-between;
+    align-items: start;
+    gap: 24px 40px;
+    width: 100%;
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
+
+  .site-footer__brand {
+    max-width: 340px;
+  }
+
+  .site-footer__logo {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .site-footer__logo img {
+    transform-style: preserve-3d;
+    transition: transform 0.35s;
+  }
+
+  .site-footer__logo img:hover {
+    transform: scale3d(0.95, 0.95, 0.01);
+  }
+
+  .site-footer__badges {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .site-footer__badge {
+    width: 96px;
+    max-width: 96px;
+  }
+
+  .site-footer__badge img {
+    height: auto;
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: flex-start;
+    justify-self: end;
+    gap: 16px 48px;
+  }
+
+  .site-footer__title {
+    margin-bottom: 32px;
+    color: var(--color-text);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 40px 0 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .site-footer__column:last-child .site-footer__links {
+    margin-right: 0;
+  }
+
+  .site-footer__item {
+    margin-bottom: 16px;
+    color: var(--palette-black);
+  }
+
+  .site-footer__link {
+    display: inline-block;
+    color: var(--color-text);
+    white-space: nowrap;
+    text-decoration: none;
+    opacity: 0.6;
+    transition:
+      transform 0.35s,
+      color 0.35s;
+  }
+
+  .site-footer__link:hover {
+    color: var(--color-brand);
+    transform: translate(2px);
+  }
+
+  .site-footer__link[aria-current='page'] {
+    color: var(--color-text-muted);
+    opacity: 1;
+  }
+
+  .site-footer__link[aria-current='page']:hover {
+    color: var(--color-brand);
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 32px 20px;
+    text-align: center;
+  }
+
+  .site-footer__copyright {
+    color: var(--color-text-muted);
+    font-size: 15px;
+    text-align: center;
+    opacity: 0.6;
+  }
+
+  .site-footer__socials {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .site-footer__social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    margin: 0 8px 0 0;
+    border-radius: var(--radius-6);
+    background-color: var(--palette-white);
+    box-shadow:
+      0 1px 5px #0b0a3308,
+      0 1px 3px #524fff1a;
+    color: var(--color-text-muted);
+    font-family: 'Fa Brands 400', sans-serif;
+    font-size: 20px;
+    line-height: 1em;
+    text-decoration: none;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition:
+      color 0.3s,
+      background-color 0.3s;
+  }
+
+  .site-footer__social:hover,
+  .site-footer__social:focus {
+    background-color: var(--color-brand);
+    color: var(--palette-white);
+  }
+
+  @media screen and (min-width: 1440px) {
+    .site-footer {
+      display: flex;
+      justify-content: center;
+    }
+
+    .site-footer__container {
+      flex: 1;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .site-footer__grid {
+      padding-left: 1.666vh;
+      padding-right: 1.666vw;
+    }
+  }
+
+  @media screen and (min-width: 1920px) {
+    .site-footer__grid {
+      max-width: var(--container-header-max);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+      row-gap: 40px;
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    .site-footer__brand {
+      max-width: 500px;
+    }
+
+    .site-footer__badges {
+      justify-content: flex-start;
+    }
+
+    .site-footer__badge--ccpa {
+      margin-left: 30px;
+    }
+
+    .site-footer__nav {
+      justify-self: auto;
+      column-gap: 21px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .site-footer__grid {
+      row-gap: 24px;
+      justify-items: start;
+    }
+
+    .site-footer__badge {
+      width: 84px;
+      max-width: 84px;
+    }
+
+    .site-footer__badge--ccpa {
+      margin-left: 25px;
+    }
+
+    .site-footer__nav {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px 40px;
+      justify-self: stretch;
+    }
+
+    .site-footer__column--first {
+      grid-column: span 2;
+    }
+
+    .site-footer__links {
+      flex: 1;
+      margin-right: 40px;
+    }
+
+    .site-footer__item {
+      margin-bottom: 14px;
+    }
+
+    .site-footer__bottom {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .site-footer__container {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+
+    .site-footer__grid {
+      justify-items: start;
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+
+    .site-footer__nav {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .site-footer__title {
+      margin-bottom: 18px;
+    }
+
+    .site-footer__item {
+      margin: 8px 0;
+    }
+
+    .site-footer__bottom {
+      flex-direction: column-reverse;
+      align-items: center;
+      padding-left: 0;
+      padding-right: 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .site-footer__copyright {
+      font-size: 14px;
+    }
+
+    .site-footer__socials {
+      margin-bottom: 20px;
+    }
+  }
+</style>
