@@ -6,6 +6,7 @@ import { getWebflowMeta, type WebflowPageMeta } from '../../lib/webflow';
 import { getWebflowBlogSlugs } from '../../lib/blog';
 import { SITE } from '../../lib/constants';
 import { blogPostingNode, breadcrumbNode, pagePath } from '../../lib/seo';
+import { AUTHORS, type Author } from '../../data/blog/authors';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -36,7 +37,18 @@ const modules = import.meta.glob('../../webflow/blog-*.html', {
 
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
 
+// The post's author from src/data/blog/authors.ts, if its frontmatter has an authorId.
+function postAuthor(entry: CollectionEntry<'blog'>): Author | undefined {
+  const { authorId } = entry.data;
+  if (!authorId) return undefined;
+  if (!(authorId in AUTHORS)) {
+    throw new Error(`Unknown authorId "${authorId}" in blog post "${entry.id}" (see src/data/blog/authors.ts)`);
+  }
+  return AUTHORS[authorId as keyof typeof AUTHORS];
+}
+
 function articleJsonLd(entry: CollectionEntry<'blog'>, image?: string, description?: string) {
+  const person = postAuthor(entry);
   return [
     blogPostingNode({
       url: canonical,
@@ -45,6 +57,11 @@ function articleJsonLd(entry: CollectionEntry<'blog'>, image?: string, descripti
       image: image || entry.data.coverImage,
       datePublished: entry.data.pubDate,
       authorName: entry.data.author,
+      authorPerson: person && {
+        name: person.name,
+        url: person.profileUrl,
+        sameAs: person.linkedin ? [person.linkedin] : undefined,
+      },
     }),
     breadcrumbNode([
       { name: 'Home', path: '/' },
@@ -59,6 +76,7 @@ let webflowHtml: string | undefined;
 let entry: CollectionEntry<'blog'> | undefined;
 let Content: Awaited<ReturnType<typeof render>>['Content'] | undefined;
 let ogImage: string | undefined;
+let author: Author | undefined;
 let jsonLd = post ? articleJsonLd(post, post.data.coverImage, post.data.summary) : [];
 let publishedTime: Date | undefined = post?.data.pubDate;
 
@@ -75,6 +93,7 @@ if (webflowKey) {
   const cover = post.data.coverImage;
   ogImage = cover.startsWith('http') ? cover : new URL(cover, Astro.site ?? SITE.url).href;
   jsonLd = articleJsonLd(post, cover, post.data.summary);
+  author = postAuthor(post);
 } else {
   throw new Error(`No Webflow HTML or content entry for blog slug "${Astro.params.slug}"`);
 }
@@ -99,10 +118,11 @@ if (webflowKey) {
     title={entry.data.title}
     summary={entry.data.summary}
     category={entry.data.category}
-    coverImage={entry.data.coverImage}
+    cover={entry.data.cover ?? entry.data.coverImage}
     ogImage={ogImage}
     publishedTime={publishedTime}
     jsonLd={jsonLd}
+    author={author}
   >
     <Content />
   </BlogArticleLayout>

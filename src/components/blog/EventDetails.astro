@@ -1,0 +1,27 @@
+---
+// Event details list for blog posts announcing an event (webinar, meetup, talk).
+// Renders a plain list so it picks up the article's list styles, like the live Webflow post.
+interface Props {
+  title: string;
+  dateTime: string;
+  registrationUrl: string;
+  registrationLabel?: string;
+}
+
+const { title, dateTime, registrationUrl, registrationLabel = 'Event Registration Link' } = Astro.props;
+
+// Each item is built as one string so no space can appear between the bold label and its colon.
+const escape = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const items = [
+  `<strong>Title</strong>: ${escape(title)}`,
+  `<strong>Date and Time</strong>: ${escape(dateTime)}`,
+  `<strong>Registration</strong>: <a href="${escape(registrationUrl)}">${escape(registrationLabel)}</a>`,
+];
+---
+
+<ul role="list">
+  {items.map((item) => (
+    <li set:html={item} />
+  ))}
+</ul>

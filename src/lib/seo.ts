@@ -106,9 +106,7 @@ export function faqPageNode(canonical: string): JsonLdNode {
   };
 }
 
-export function breadcrumbNode(
-  items: Array<{ name: string; path: string }>,
-): JsonLdNode {
+export function breadcrumbNode(items: Array<{ name: string; path: string }>): JsonLdNode {
   return {
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
@@ -128,6 +126,8 @@ export function blogPostingNode(input: {
   datePublished: Date | string;
   dateModified?: Date | string;
   authorName?: string;
+  /** A person author. Takes the place of authorName, which is published as an Organization. */
+  authorPerson?: { name: string; url?: string; sameAs?: string[] };
 }): JsonLdNode {
   const datePublished =
     input.datePublished instanceof Date
@@ -147,9 +147,16 @@ export function blogPostingNode(input: {
     image: input.image ? absoluteUrl(input.image) : absoluteUrl(DEFAULT_OG_IMAGE),
     datePublished,
     dateModified,
-    author: input.authorName
-      ? { '@type': 'Organization', name: input.authorName, url: SITE_ORIGIN }
-      : { '@id': `${SITE_ORIGIN}/#organization` },
+    author: input.authorPerson
+      ? {
+          '@type': 'Person',
+          name: input.authorPerson.name,
+          url: input.authorPerson.url ? absoluteUrl(input.authorPerson.url) : undefined,
+          sameAs: input.authorPerson.sameAs?.length ? input.authorPerson.sameAs : undefined,
+        }
+      : input.authorName
+        ? { '@type': 'Organization', name: input.authorName, url: SITE_ORIGIN }
+        : { '@id': `${SITE_ORIGIN}/#organization` },
     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': input.url },
     url: input.url,

@@ -21,17 +21,6 @@
     "file": "src/webflow/blog-multi-tenant-b2b-authentication-explained-key-concepts-components.html",
     "bytes": 26495
   },
-  "blog-security-auth-for-small-businesses-best-practices-with-jim-manico-webinar": {
-    "title": "Security & Auth for Small Businesses: Best Practices with Jim Manico [Webinar]",
-    "description": "Don’t miss this opportunity to improve your security practices with insights from one of the leading experts in the field.",
-    "ogImage": "/images/misc/66aafda19f5d25de053832f8_wristband-webinar---jim-manico-cover.jpg",
-    "wfPage": "64d01a3771d020746e331ab1",
-    "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "",
-    "lastmod": "2025-03-28T03:36:16.856Z",
-    "file": "src/webflow/blog-security-auth-for-small-businesses-best-practices-with-jim-manico-webinar.html",
-    "bytes": 16423
-  },
   "blog-the-sso-tax-when-better-security-comes-with-a-steep-price": {
     "title": "The SSO Tax: When Better Security Comes with a Steep Price",
     "description": "The “SSO tax” is a hidden cost many businesses face when trying to implement secure authentication practices.",
