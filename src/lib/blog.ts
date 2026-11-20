@@ -35,7 +35,7 @@ export function blogIndexCardHtml(post: CollectionEntry<'blog'>): string {
   const summary = escapeHtml(post.data.summary);
   const category = escapeHtml(post.data.category);
   const cover = escapeHtml(post.data.coverImage);
-  const date = escapeHtml(formatBlogDate(post.data.pubDate));
+  const date = escapeHtml(formatBlogDate(post.data.datePublished));
   const minutes = readingTimeMinutes(post.body);
 
   return `<div role="listitem" class="collection-item w-dyn-item"><a href="${href}" class="card non-featured-blog-post-card w-inline-block"><div class="image-wrapper featured-blog-post"><img height="Auto" alt="${title}" width="Auto" src="${cover}" class="image full-image"/></div><div class="split-content featured-blog-post-main-container"><div class="inner-container-450px"><div fs-cmsfilter-element="Category" class="blog-category">${category}</div><h2 class="title h3-size">${title}</h2><p class="paragraph-13">${summary}</p><div class="blog-post-content-bottom"><div class="blog-post-about-wrapper"><div class="about-blog-post-icon"></div><div>${date}</div></div><div class="blog-post-about-wrapper last"><div class="about-blog-post-icon"></div><div>${minutes}</div><div>&nbsp;min read</div></div></div></div></div></a></div>`;
@@ -54,7 +54,7 @@ export function injectContentPostsIntoIndex(html: string, posts: CollectionEntry
   // in its original position. Only add cards for posts the index does not already link to.
   const cards = posts
     .filter((post) => !html.includes(`href="/blog/${post.id}"`))
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .sort((a, b) => b.data.datePublished.valueOf() - a.data.datePublished.valueOf())
     .map(blogIndexCardHtml)
     .join('');
   return html.slice(0, insertAt) + cards + html.slice(insertAt);

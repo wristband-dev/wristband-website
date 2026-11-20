@@ -7,14 +7,17 @@ import sitemap from '@astrojs/sitemap';
 
 const SITE = 'https://www.wristband.dev';
 
-// Sitemap <lastmod> dates by URL path.
+// Each page's last modified date, written to the sitemap as <lastmod>.
 // Copied Webflow pages: the `lastmod` field in src/webflow/meta.json.
-// Rebuilt pages: REBUILT_PAGE_LASTMOD below. Update a page's date when its content changes.
-// Markdown/MDX blog posts: the post's `pubDate` frontmatter (a `slug.md(x)` file or a `slug/index.mdx` folder).
-const REBUILT_PAGE_LASTMOD = {
+// Rebuilt pages: PAGE_DATE_MODIFIED below. Update a page's date when its content changes.
+// Blog posts: the post's `dateModified` frontmatter, or `datePublished` if it has none
+// (a `slug.md(x)` file or a `slug/index.mdx` folder).
+const PAGE_DATE_MODIFIED = {
   '/the-team': '2026-11-18',
   '/compare/wristband-vs-auth0': '2026-11-18',
-  '/blog/security-auth-for-small-businesses-best-practices-with-jim-manico-webinar': '2026-11-19',
+  '/terms': '2026-11-19',
+  '/privacy': '2026-11-19',
+  '/cookie-policy': '2026-11-19',
 };
 
 /** @param {string} key */
@@ -26,16 +29,16 @@ function webflowPath(key) {
   return `/${key}`;
 }
 
-function buildLastmodByPath() {
-  const lastmodByPath = new Map();
+function buildDateModifiedByPath() {
+  const dateModifiedByPath = new Map();
 
   const meta = JSON.parse(readFileSync(new URL('./src/webflow/meta.json', import.meta.url), 'utf8'));
   for (const [key, page] of Object.entries(meta)) {
-    if (page.lastmod) lastmodByPath.set(webflowPath(key), page.lastmod);
+    if (page.lastmod) dateModifiedByPath.set(webflowPath(key), page.lastmod);
   }
 
-  for (const [path, lastmod] of Object.entries(REBUILT_PAGE_LASTMOD)) {
-    lastmodByPath.set(path, new Date(lastmod).toISOString());
+  for (const [path, dateModified] of Object.entries(PAGE_DATE_MODIFIED)) {
+    dateModifiedByPath.set(path, new Date(dateModified).toISOString());
   }
 
   const blogDir = new URL('./src/content/blog/', import.meta.url);
@@ -54,16 +57,26 @@ function buildLastmodByPath() {
       file = entry.name;
     }
     const path = `/blog/${slug}`;
-    if (lastmodByPath.has(path)) continue;
+    if (dateModifiedByPath.has(path)) continue;
     const source = readFileSync(new URL(file, blogDir), 'utf8');
-    const pubDate = source.match(/^pubDate:\s*["']?([^"'\n]+)["']?\s*$/m);
-    if (pubDate) lastmodByPath.set(path, new Date(pubDate[1].trim()).toISOString());
+    const date = frontmatterDate(source, 'dateModified') ?? frontmatterDate(source, 'datePublished');
+    if (date) dateModifiedByPath.set(path, date);
   }
 
-  return lastmodByPath;
+  return dateModifiedByPath;
 }
 
-const lastmodByPath = buildLastmodByPath();
+/**
+ * A date field from a post's frontmatter, as an ISO string.
+ * @param {string} source
+ * @param {string} field
+ */
+function frontmatterDate(source, field) {
+  const match = source.match(new RegExp(`^${field}:\\s*["']?([^"'\\n]+)["']?\\s*$`, 'm'));
+  return match ? new Date(match[1].trim()).toISOString() : undefined;
+}
+
+const dateModifiedByPath = buildDateModifiedByPath();
 
 // https://astro.build/config
 export default defineConfig({
@@ -81,13 +94,20 @@ export default defineConfig({
     sitemap({
       serialize(item) {
         const path = new URL(item.url).pathname.replace(/\/$/, '');
-        const lastmod = lastmodByPath.get(path);
-        if (lastmod) item.lastmod = lastmod;
+        const dateModified = dateModifiedByPath.get(path);
+        if (dateModified) item.lastmod = dateModified;
         return item;
       },
     }),
   ],
   compressHTML: true,
+  // Rewrites newer CSS, such as nested rules, into a form these browsers understand. Build only; source files and the dev server are unchanged.
+  // Same browsers as Vite 8's default 'baseline-widely-available' target.
+  vite: {
+    build: {
+      cssTarget: ['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4'],
+    },
+  },
   markdown: {
     shikiConfig: {
       theme: 'github-dark',

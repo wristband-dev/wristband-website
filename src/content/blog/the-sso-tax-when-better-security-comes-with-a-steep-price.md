@@ -1,10 +1,10 @@
 ---
-title: "The SSO Tax: When Better Security Comes with a Steep Price"
-summary: "The “SSO tax” is a hidden cost many businesses face when trying to implement secure authentication practices."
-category: "Auth"
-pubDate: 2025-01-03
-author: "Wristband Team"
-coverImage: "/images/misc/677b279da40b89e5879e5560_677b2780046e98b547549215_sso-tax-pricing.png"
+title: 'The SSO Tax: When Better Security Comes with a Steep Price'
+summary: 'The “SSO tax” is a hidden cost many businesses face when trying to implement secure authentication practices.'
+category: 'Auth'
+datePublished: 2025-01-03
+author: 'Wristband Team'
+coverImage: '/images/misc/677b279da40b89e5879e5560_677b2780046e98b547549215_sso-tax-pricing.png'
 ---
 
 The “SSO tax” is a hidden cost many businesses face when implementing secure authentication practices. Despite being a critical tool for improving security and streamlining user management, Single Sign-On (SSO) is often locked behind prohibitively expensive pricing tiers, making it inaccessible to many organizations. This article explores why SSO is essential, how the SSO tax impacts businesses, and what is being done to tackle the problem.
@@ -18,9 +18,10 @@ Single Sign-On (SSO) is a system that allows you to log in once and access multi
 SSO relies on underlying technologies like OpenID Connect (OIDC) and SAML to securely exchange authentication data between the identity provider and applications. These protocols handle the "handshake" that verifies users and grants them access without needing to share passwords directly.
 
 There are two main ways end users access their SSO-enabled apps:
+
 - Service Provider-Initiated Flow (SP-Initiated):This is when the user starts at the login page of the application (Service Provider, or SP) and clicks a "Login with SSO" button. This redirects them to the Identity Provider (IdP) like Okta or Microsoft to authenticate. Once verified, they’re sent back to the app, now securely logged in.
-![](/images/misc/677b1e023c3b9cb10c6cffa3_677b1decdc3715c48137918d_fakesaas-login.png)User starts the "SP-Initiated" SSO login flow from the SaaS vendor's login page.- Identity Provider-Initiated Flow (IdP-Initiated):The user logs in directly to the IdP’s dashboard, which serves as a central hub for all their SSO-enabled apps. From there, they simply click the app they want (e.g., Slack), and the IdP seamlessly logs them in without requiring additional credentials.
-![](/images/misc/677b20f4dc3715c481396390_677b20e71a7b90bbbe8db573_iam-apps-dashboard.png)User starts the "IdP-Initiated" SSO login flow from the IdP’s dashboard.
+  ![](/images/misc/677b1e023c3b9cb10c6cffa3_677b1decdc3715c48137918d_fakesaas-login.png)User starts the "SP-Initiated" SSO login flow from the SaaS vendor's login page.- Identity Provider-Initiated Flow (IdP-Initiated):The user logs in directly to the IdP’s dashboard, which serves as a central hub for all their SSO-enabled apps. From there, they simply click the app they want (e.g., Slack), and the IdP seamlessly logs them in without requiring additional credentials.
+  ![](/images/misc/677b20f4dc3715c481396390_677b20e71a7b90bbbe8db573_iam-apps-dashboard.png)User starts the "IdP-Initiated" SSO login flow from the IdP’s dashboard.
 
 ‍
 
@@ -43,6 +44,7 @@ The "SSO tax" refers to the extra fees that SaaS providers charge their customer
 In this scenario, SSO is locked behind the Enterprise plan, drastically increasing the costs a customer would have to pay for a FakeSaaS subscription. To illustrate these cost differences, let’s consider a customer needing FakeSaaS for ten users: they’d pay $100/month on the Basic plan, $200/month on the Pro plan, but a much higher $800/month on the Enterprise plan just to enable SSO. While the Enterprise plan may also come with additional features, oftentimes those features are nice to have, whereas SSO is required.
 
 Companies that implement an SSO tax usually do so for the following reasons:
+
 - To Cover Operational Costs: Integrating and maintaining SSO for different customers can require significant engineering effort and support infrastructure. Charging extra for SSO helps offset these costs.‍
 - To Optimize Revenue Gains From Enterprise Customers: Most enterprise companies need SSO to meet security and compliance requirements. Therefore, having SSO as a feature in the enterprise tier forces enterprise customers to upgrade to the most expensive plans. This allows companies to extract optimal revenue from their enterprise customers.
 
@@ -55,7 +57,7 @@ While it’s true that implementing SSO can be a difficult task, over time the p
 By charging an SSO Tax, vendors create a significant barrier for organizations to properly secure their workforce identities. As a result, many businesses are not able to adopt SSO and instead rely on proliferating employee credentials across their internal applications. As companies scale up, managing accounts for each employee across numerous applications becomes a maintenance nightmare. Also, the sprawl of passwords increases the attack surface for password-related breaches. According to Verizon's [2024 Data Breach Investigations Report](https://www.verizon.com/business/resources/reports/2024-dbir-data-breach-investigations-report.pdf), roughly 80% of web application attacks are due to stolen passwords.
 
 Making matters worse, companies continue to increase their usage of SaaS applications. According to BetterCloud's [State of SaaSOps 2024 Report](https://www.bettercloud.com/resources/state-of-saasops/), organizations now use an average of 112 SaaS applications. Paying the SSO tax for such a large number of applications becomes challenging even for larger companies. As such, companies typically only choose a subset of applications to utilize SSO - leaving a significant set of applications without SSO. This dramatically weakens a company’s security posture, as each app without SSO becomes a potential weak point for password-based breaches.
-![](/images/misc/67788ed86eedf50292b88a27_67788eab8f023e7f827784c2_screenshot-202025-01-03-20at-205.22.45-e2-80-afpm.png)The average number of SaaS applications at companies over time. [*Source: BetterCloud*]
+![](/images/misc/67788ed86eedf50292b88a27_67788eab8f023e7f827784c2_screenshot-202025-01-03-20at-205.22.45-e2-80-afpm.png)The average number of SaaS applications at companies over time. [_Source: BetterCloud_]
 
 ‍
 

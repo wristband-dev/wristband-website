@@ -1,10 +1,10 @@
 ---
-title: "How to Test Tenant Subdomains on macOS with Dnsmasq"
-summary: "Learn why tenant subdomains are useful and how to use Dnsmasq on macOS to route them locally for production-like testing."
-category: "Engineering"
-pubDate: 2025-01-08
-author: "Wristband Team"
-coverImage: "/images/misc/6875eecb9b754e8136411d26_image02.webp"
+title: 'How to Test Tenant Subdomains on macOS with Dnsmasq'
+summary: 'Learn why tenant subdomains are useful and how to use Dnsmasq on macOS to route them locally for production-like testing.'
+category: 'Engineering'
+datePublished: 2025-01-08
+author: 'Wristband Team'
+coverImage: '/images/misc/6875eecb9b754e8136411d26_image02.webp'
 ---
 
 Testing tenant subdomains locally is a common challenge for developers building multi-tenant SaaS applications. Standard local setups don’t support wildcard subdomains, which makes it difficult to accurately simulate production environments during development. This article explains why tenant subdomains are useful and how to use Dnsmasq on macOS to route them locally for production-like testing.
@@ -14,12 +14,13 @@ Testing tenant subdomains locally is a common challenge for developers building 
 ## Why Use Tenant Subdomains
 
 In multi-tenant applications, it’s common to assign each tenant its own subdomain. For example, `acme.yourapp.ai`, `globex.yourapp.ai`, and so on. This pattern is widely used in SaaS applications for the following reasons:
+
 - Session isolation: Session cookies can be associated with each tenant’s domain, ensuring they remain isolated and don’t interfere with other tenants’ sessions.
 - Brand reinforcement: Gives customers a greater sense of ownership within your app.
 - Easier navigation: Subdomains are more memorable and user-friendly than tenant IDs in paths or query parameters.
 - Custom domain support: Provides a logical path to per-tenant custom domains, allowing for full white-labeling.
 - Flexible infrastructure: Allows routing specific tenants to dedicated infrastructure if needed.
-![](/images/misc/6875e9c4b12b50f5845b756a_image01.webp)*A diagram showing how different organizations use unique subdomains to connect to a shared application.*
+  ![](/images/misc/6875e9c4b12b50f5845b756a_image01.webp)_A diagram showing how different organizations use unique subdomains to connect to a shared application._
 
 ‍
 
@@ -32,6 +33,7 @@ While using tenant subdomains offers many benefits, it requires some extra work 
 ## How to Support Wildcard Domains Locally
 
 To efficiently test tenant subdomains locally, you’ll need to add support for resolving wildcard domains (i.e., `*.yourapp.ai`) to your local machine.  There are a few options to solve this:
+
 - ‍Hosted Tunneling Solutions: Services like [ngrok](https://ngrok.com/) and [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) can expose wildcard domain endpoints that can route requests to your local machine. However, wildcard domain support typically requires a paid plan, and they can introduce extra network latency since requests need to first hit the external endpoint (hosted by the 3rd-party provider) before being redirected to your local machine.‍
 - Local DNS with Dnsmasq: A DNS forwarder like [Dnsmasq](https://dnsmasq.org/doc.html) can run locally and be configured to resolve all tenant subdomains to your loopback address.  You can then update your local DNS resolvers to query Dnsmasq for domains ending with your application’s root domain.
 
@@ -44,6 +46,7 @@ For macOS users, using a local DNS forwarder such as Dnsmasq is ideal for develo
 Before we dive into setting up Dnsmasq, let's walk through how DNS resolution normally works on macOS. This will help you understand exactly where Dnsmasq fits into the process and how it solves the wildcard domain problem.
 
 In the following example we’ll go through what happens when you try to navigate to `acme.yourapp.ai` on your local machine, and no public record exists for the domain:
+
 - Browser Request: Your browser asks "What is the IP address for acme.yourapp.ai?" and sends the request to your macOS System DNS Resolver.
 - ‍Cache Check: The System DNS Resolver checks its local cache (stored in memory) for an existing mapping.
 - /etc/hosts File Lookup: Finding no cached record, the System DNS Resolver checks /etc/hosts for manual DNS overrides.
@@ -51,7 +54,7 @@ In the following example we’ll go through what happens when you try to navigat
 - Public DNS Query: With no files found under the /etc/resolver directory corresponding to the acme.yourapp.ai domain, the System DNS Resolver forwards the request to your configured public DNS server.‍
 - DNS Failure: The public DNS server responds with NXDOMAIN (domain not found) since no public record exists for acme.yourapp.ai.
 - ‍Browser Error: The System DNS Resolver passes this failure back to the browser, which displays a "server not found" error.
-![](/images/misc/6875eecb9b754e8136411d26_image02.webp)*DNS resolution process on macOS. In this case, the DNS lookup of acme.yourapp.ai fails because no public records exist for the domain.*
+  ![](/images/misc/6875eecb9b754e8136411d26_image02.webp)_DNS resolution process on macOS. In this case, the DNS lookup of acme.yourapp.ai fails because no public records exist for the domain._
 
 ‍
 
@@ -92,7 +95,7 @@ sudo brew services start dnsmasq
 address=/yourapp.ai/127.0.0.1
 ```
 
-**5.** Restart Dnsmasq to load the new configurations using the following commands: 
+**5.** Restart Dnsmasq to load the new configurations using the following commands:
 
 ```
 sudo launchctl stop homebrew.mxcl.dnsmasq
@@ -167,6 +170,7 @@ PING testing.yourapp.ai (127.0.0.1): 56 data bytes
 ## DNS Resolution With Dnsmasq Configured
 
 Now that Dnsmasq is configured, let's revisit the DNS resolution example from above, where we want to resolve the the domain `acme.yourapp.ai`:
+
 - Browser Request: Your browser asks "What is the IP address for acme.yourapp.ai?" and sends the request to your macOS System DNS Resolver.
 - ‍Cache Check: The System DNS Resolver checks its local cache (stored in memory) for an existing mapping.
 - ‍/etc/hosts File Lookup: Finding no cached record, the System DNS Resolver checks /etc/hosts for manual DNS overrides.
@@ -175,7 +179,7 @@ Now that Dnsmasq is configured, let's revisit the DNS resolution example from ab
 - Matching Domain Found: Dnsmasq checks its configuration, finds the address=/yourapp.ai/127.0.0.1 rule that matches any *.yourapp.ai subdomain, and responds with 127.0.0.1.
 - ‍Return to Browser: The System DNS Resolver receives Dnsmasq's response and passes the IP address 127.0.0.1 back to the browser, completing the DNS lookup.‍
 - Browser Connects to the Local Server: With the IP resolved, the browser makes an HTTP request using IP address 127.0.0.1 with the Host: acme.yourapp.ai header.
-![](/images/misc/6876052e8fc06f03ff7ae6d1_image03.webp)*DNS resolution process on macOS with Dnsmasq configured. In this case, Dnsmasq resolves the acme.yourapp.ai domain and returns the IP address of 127.0.0.1.*
+  ![](/images/misc/6876052e8fc06f03ff7ae6d1_image03.webp)_DNS resolution process on macOS with Dnsmasq configured. In this case, Dnsmasq resolves the acme.yourapp.ai domain and returns the IP address of 127.0.0.1._
 
 With Dnsmasq now routing any request ending in `.yourapp.ai` to your loopback address, you can spin up your application server locally and make HTTP requests to it using tenant subdomains.  For example, if your application server was using port 3000, you could make HTTP requests to the Acme and Globex tenants as follows:
 

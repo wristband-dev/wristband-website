@@ -1,10 +1,10 @@
 ---
-title: "Multi-tenant B2B Authentication Explained: Key Concepts & Components"
-summary: "Building B2B authentication is complex. Learn about multi-tenancy, SSO, user provisioning, and RBAC – essential components for secure B2B SaaS applications."
-category: "Engineering"
-pubDate: 2025-01-15
-author: "Wristband Team"
-coverImage: "/images/misc/6875e9c4b12b50f5845b756a_image01.webp"
+title: 'Multi-tenant B2B Authentication Explained: Key Concepts & Components'
+summary: 'Building B2B authentication is complex. Learn about multi-tenancy, SSO, user provisioning, and RBAC – essential components for secure B2B SaaS applications.'
+category: 'Engineering'
+datePublished: 2025-01-15
+author: 'Wristband Team'
+coverImage: '/images/misc/6875e9c4b12b50f5845b756a_image01.webp'
 ---
 
 Building B2B authentication can be a daunting task. Unlike B2C applications, where users authenticate with their personal identities, B2B applications require that users log in using an organization-managed identity. While this might seem like a minor semantic difference, it significantly impacts how we design authentication. For B2B applications, unique requirements such as multi-tenancy, SSO, JIT provisioning, SCIM, and RBAC need to be considered. If some of those terms aren't entirely familiar to you, don't worry. In this article, we'll give a high-level overview of each of the main components of B2B auth - so you'll understand what they are and why they are needed.
@@ -93,6 +93,7 @@ A more scalable method involves linking specific permissions—defined by action
 ### Role Assignment
 
 The final topic to address regarding roles is their assignment process. Roles can be assigned in several ways:
+
 - Admin Provisioning: Directly by admins during user setup
 - Self-Registration: Users can self-register and be automatically assigned default roles.
 - SSO and JIT/SCIM Provisioning: Roles are assigned based on attributes provided by the identity provider (IdP), like group memberships, during SSO login processes. This automatic synchronization is particularly valuable in multi-application landscapes, ensuring users have appropriate access rights across all platforms.

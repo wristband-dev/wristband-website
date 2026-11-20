@@ -7,7 +7,7 @@ Marketing site for [wristband.dev](https://www.wristband.dev), migrated from Web
 - Astro (SSG) hosting **exported Webflow HTML + CSS + JS** for visual 1:1 parity
 - Page bodies live in [`src/webflow/*.html`](src/webflow) (scraped from production Webflow)
 - Styles: [`public/css/webflow.css`](public/css/webflow.css); interactions: [`public/js/webflow*.js`](public/js)
-- Existing blog posts are static HTML exports (same slugs). New posts can be added as Markdown or MDX under `src/content/blog/`
+- Blog posts are MDX in `src/content/blog/`. Posts not yet converted are still copied Webflow HTML in `src/webflow/blog-*.html`.
 - Cloudflare Pages
 
 ## Develop
@@ -24,22 +24,7 @@ npm run preview
 
 ## Blog (no CMS)
 
-Posts live in [`src/content/blog/`](src/content/blog) as `.md` or `.mdx`. Frontmatter:
-
-```md
----
-title: "…"
-summary: "…"
-category: "Auth" | "Engineering" | "Press"
-pubDate: 2025-01-15
-author: "Wristband Team"
-coverImage: "/images/…"
----
-```
-
-MDX can import Astro or React components. Existing Webflow-exported posts keep their HTML; a new `.md` / `.mdx` file with a slug that is not already exported is rendered from the collection.
-
-Workflow: write Markdown or MDX → open PR → preview deploy → merge to `main`.
+Posts are MDX files in [`src/content/blog/`](src/content/blog), one folder per post. See [`docs/blog-posts.md`](docs/blog-posts.md) for how to write and add a post.
 
 ## Assets
 
