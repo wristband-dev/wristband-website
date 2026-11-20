@@ -1,0 +1,76 @@
+---
+// A policy page body: Termly's embedded policy. The page supplies its own h1.
+interface Props {
+  /** The policy's Termly embed ID. */
+  embedId: string;
+  /** Show the "Manage Consent Preferences" link above the policy (cookie policy page). */
+  consentLink?: boolean;
+}
+
+const { embedId, consentLink = false } = Astro.props;
+---
+
+<section class="termly-policy">
+  {consentLink && (
+    <div class="termly-policy__consent">
+      <div class="termly-policy__consent-text">
+        📋 <a href="#" class="termly-display-preferences" set:text="Manage Consent Preferences" />
+      </div>
+    </div>
+  )}
+  <div class="termly-policy__container">
+    <div {...{ name: 'termly-embed' }} data-id={embedId}></div>
+  </div>
+</section>
+
+<style>
+  /* Space above the footer, the same as the team page. */
+  .termly-policy {
+    padding-bottom: 80px;
+    background-color: var(--color-bg);
+  }
+
+  /* The link's click is handled by Termly's script, which looks for the termly-display-preferences class. */
+  .termly-policy__consent {
+    display: flex;
+    justify-content: center;
+    max-width: 940px;
+    margin: 20px auto 40px;
+  }
+
+  .termly-policy__consent-text {
+    font-size: 20px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .termly-policy__container {
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media screen and (max-width: 991px) {
+    .termly-policy__consent,
+    .termly-policy__container {
+      max-width: 728px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .termly-policy {
+      padding-bottom: 60px;
+    }
+
+    .termly-policy__consent,
+    .termly-policy__container {
+      max-width: none;
+    }
+  }
+
+  /* Webflow's header adds 60px of space below itself at this width. */
+  @media screen and (max-width: 479px) {
+    .termly-policy {
+      margin-top: 60px;
+    }
+  }
+</style>

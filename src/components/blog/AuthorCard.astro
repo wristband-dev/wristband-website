@@ -13,9 +13,9 @@ const LINKEDIN_GLYPH = '\ue803';
 ---
 
 <div class="author-card" data-reveal>
-  <a href={author.profileUrl} class="author-card__photo">
+  <div class="author-card__photo">
     <Image src={author.photo} alt={author.name} widths={[190, 380]} sizes="190px" loading="lazy" />
-  </a>
+  </div>
   <div class="author-card__body">
     <div class="author-card__top">
       <a href={author.profileUrl} class="author-card__name-link">
@@ -75,11 +75,6 @@ const LINKEDIN_GLYPH = '\ue803';
     max-width: 190px;
     height: 190px;
     max-height: 190px;
-    transition: transform 0.35s;
-  }
-
-  .author-card__photo img:hover {
-    transform: scale(1.05);
   }
 
   .author-card__body {

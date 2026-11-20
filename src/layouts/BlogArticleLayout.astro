@@ -17,11 +17,11 @@ interface Props {
   cover: ImageMetadata | string;
   ogImage?: string;
   jsonLd?: JsonLdNode[];
-  publishedTime?: Date | string;
+  datePublished?: Date | string;
   author?: Author;
 }
 
-const { title, summary, category, cover, ogImage, jsonLd, publishedTime, author } = Astro.props;
+const { title, summary, category, cover, ogImage, jsonLd, datePublished, author } = Astro.props;
 ---
 
 <BaseLayout
@@ -29,7 +29,7 @@ const { title, summary, category, cover, ogImage, jsonLd, publishedTime, author 
   description={summary || undefined}
   ogImage={ogImage}
   ogType="article"
-  publishedTime={publishedTime}
+  datePublished={datePublished}
   jsonLd={jsonLd}
 >
   <div class="post-hero">

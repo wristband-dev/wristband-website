@@ -55,7 +55,8 @@ function articleJsonLd(entry: CollectionEntry<'blog'>, image?: string, descripti
       headline: entry.data.title,
       description: description || entry.data.summary || undefined,
       image: image || entry.data.coverImage,
-      datePublished: entry.data.pubDate,
+      datePublished: entry.data.datePublished,
+      dateModified: entry.data.dateModified,
       authorName: entry.data.author,
       authorPerson: person && {
         name: person.name,
@@ -78,7 +79,7 @@ let Content: Awaited<ReturnType<typeof render>>['Content'] | undefined;
 let ogImage: string | undefined;
 let author: Author | undefined;
 let jsonLd = post ? articleJsonLd(post, post.data.coverImage, post.data.summary) : [];
-let publishedTime: Date | undefined = post?.data.pubDate;
+const datePublished: Date | undefined = post?.data.datePublished;
 
 if (webflowKey) {
   webflowMeta = getWebflowMeta(webflowKey);
@@ -105,7 +106,7 @@ if (webflowKey) {
     description={webflowMeta.description || undefined}
     ogImage={ogImage}
     ogType="article"
-    publishedTime={publishedTime}
+    datePublished={datePublished}
     jsonLd={jsonLd}
     wfPage={webflowMeta.wfPage}
     wfSite={webflowMeta.wfSite}
@@ -120,7 +121,7 @@ if (webflowKey) {
     category={entry.data.category}
     cover={entry.data.cover ?? entry.data.coverImage}
     ogImage={ogImage}
-    publishedTime={publishedTime}
+    datePublished={datePublished}
     jsonLd={jsonLd}
     author={author}
   >

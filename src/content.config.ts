@@ -9,7 +9,10 @@ const blog = defineCollection({
       title: z.string(),
       summary: z.string(),
       category: z.enum(['Auth', 'Engineering', 'Press']),
-      pubDate: z.coerce.date(),
+      /** Date the post was first published. */
+      datePublished: z.coerce.date(),
+      /** Date of the post's last meaningful edit, if any. Used for the sitemap and JSON-LD instead of datePublished. */
+      dateModified: z.coerce.date().optional(),
       author: z.string().default('Wristband Team'),
       /** Key in src/data/blog/authors.ts. Shows the author card at the end of the post. */
       authorId: z.string().optional(),

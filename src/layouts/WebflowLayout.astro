@@ -18,7 +18,7 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
-  publishedTime?: Date | string;
+  datePublished?: Date | string;
   jsonLd?: JsonLdNode[];
   wfPage: string;
   wfSite?: string;
@@ -33,7 +33,7 @@ const {
   description = SITE.description,
   ogImage,
   ogType = 'website',
-  publishedTime,
+  datePublished,
   jsonLd = [],
   wfPage,
   wfSite = '64d01a3671d020746e331a42',
@@ -47,11 +47,11 @@ const pageDescription = decodeHtmlEntities(description);
 // No trailing slash (trailingSlash: 'never'), so the home page matches the sitemap URL.
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href.replace(/\/$/, '');
 const ogImageAbs = absoluteUrl(resolveOgImage(ogImage), Astro.site?.href ?? SITE.url);
-const publishedIso =
-  publishedTime instanceof Date
-    ? publishedTime.toISOString()
-    : publishedTime
-      ? new Date(publishedTime).toISOString()
+const datePublishedIso =
+  datePublished instanceof Date
+    ? datePublished.toISOString()
+    : datePublished
+      ? new Date(datePublished).toISOString()
       : undefined;
 ---
 
@@ -85,7 +85,7 @@ const publishedIso =
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImageAbs} />
-    {publishedIso && <meta property="article:published_time" content={publishedIso} />}
+    {datePublishedIso && <meta property="article:published_time" content={datePublishedIso} />}
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
@@ -128,11 +128,6 @@ const publishedIso =
     <JsonLd data={jsonLdGraph(jsonLd)} />
 
     <style is:global>
-      /* Preserve Webflow look; hide Webflow badge if injected */
-      .w-webflow-badge {
-        display: none !important;
-      }
-
       /*
         Extra homepage/case-study h1s were demoted to h2 for a single H1 per page.
         These classes relied on Webflow's element-level h1 type scale.

@@ -45,7 +45,7 @@ Images used by only one post stay in that post's folder. Images also used elsewh
 title: 'Short, clear title'
 summary: 'One or two sentences. Shown under the title, on the blog index card, and as the search and share description.'
 category: 'Engineering'
-pubDate: 2026-11-19
+datePublished: 2026-11-19
 author: 'Jim Verducci'
 authorId: 'jim-verducci'
 coverImage: '/images/blog/my-new-post/cover.jpg'
@@ -53,16 +53,17 @@ cover: './cover.jpg'
 ---
 ```
 
-| Field        | Required | What it does                                                                                                                                                  |
-| ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`      | Yes      | Page title, heading, share title and index card title.                                                                                                        |
-| `summary`    | Yes      | Text under the title, index card text and meta description.                                                                                                   |
-| `category`   | Yes      | One of `Auth`, `Engineering` or `Press`. Shown as the badge above the title.                                                                                  |
-| `pubDate`    | Yes      | Publish date as `YYYY-MM-DD`. Sets the date on the index card, the structured data and the sitemap.                                                           |
-| `author`     | No       | Author name used in structured data when there is no `authorId`. Defaults to `Wristband Team`.                                                                |
-| `authorId`   | No       | Key from `src/data/blog/authors.ts`. Adds the author card at the end of the post. An unknown key fails the build.                                             |
-| `coverImage` | Yes      | Public URL of the cover image. Used for the share image and the blog index card.                                                                              |
-| `cover`      | No       | Path to the cover image in the post's folder. Shown at the top of the post, resized and compressed by Astro. If missing, the post shows `coverImage` instead. |
+| Field           | Required | What it does                                                                                                                                                  |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`         | Yes      | Page title, heading, share title and index card title.                                                                                                        |
+| `summary`       | Yes      | Text under the title, index card text and meta description.                                                                                                   |
+| `category`      | Yes      | One of `Auth`, `Engineering` or `Press`. Shown as the badge above the title.                                                                                  |
+| `datePublished` | Yes      | Publish date as `YYYY-MM-DD`. Sets the date on the index card, the JSON-LD and the sitemap.                                                                   |
+| `dateModified`  | No       | Date of the last meaningful edit, as `YYYY-MM-DD`. Used for the sitemap and the JSON-LD's modified date in place of `datePublished`.                          |
+| `author`        | No       | Author name used in JSON-LD when there is no `authorId`. Defaults to `Wristband Team`.                                                                        |
+| `authorId`      | No       | Key from `src/data/blog/authors.ts`. Adds the author card at the end of the post. An unknown key fails the build.                                             |
+| `coverImage`    | Yes      | Public URL of the cover image. Used for the share image and the blog index card.                                                                              |
+| `cover`         | No       | Path to the cover image in the post's folder. Shown at the top of the post, resized and compressed by Astro. If missing, the post shows `coverImage` instead. |
 
 Wrap text values in single quotes. This avoids problems with colons and apostrophes in titles.
 
@@ -161,12 +162,12 @@ npm run build
 
 - **Post page:** built at `/blog/<slug>` with the blog layout, header and footer.
 - **Blog index:** a card for the post is added at the top of the latest posts list on `/blog`. New posts are sorted newest first.
-- **Sitemap:** the post is listed, with `pubDate` as its last updated date.
-- **Search and sharing:** title, description, share image, canonical URL and structured data are generated from the frontmatter.
+- **Sitemap:** the post is listed, with `dateModified` (or `datePublished` if there is none) as its last updated date.
+- **Search and sharing:** title, description, share image, canonical URL and JSON-LD are generated from the frontmatter.
 
 ## Things to know
 
 - There are no drafts. A merged post is live. Keep unfinished posts on a branch.
-- Editing a published post does not change its sitemap date. To show a newer date, add the post's path and the date to `REBUILT_PAGE_LASTMOD` in `astro.config.mjs`.
+- When you make a meaningful edit to a published post, set `dateModified` to that day.
 - Some older posts are still copied Webflow pages in `src/webflow/blog-*.html`. A copied page wins over a Markdown or MDX file with the same slug. These are being converted to MDX one at a time.
 - `src/content/blog/security-auth-for-small-businesses-best-practices-with-jim-manico-webinar/` is a complete example of a post.

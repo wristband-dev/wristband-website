@@ -1,19 +1,30 @@
 ---
-import WebflowLayout from '../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../lib/webflow';
-import bodyHtml from '../webflow/terms.html?raw';
-
-const meta = getWebflowMeta('terms');
+// Terms of Service page, rebuilt without Webflow. The policy text comes from Termly's embed.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TermlyPolicy from '../components/TermlyPolicy.astro';
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
+<BaseLayout
+  title="Terms of Service - Wristband"
+  description="Read Wristband's Terms of Service to understand the legal terms and conditions governing your use of our authentication and identity platform."
+  ogImage="/images/hero_background.webp"
   termlyPolicyEmbed
 >
-  <Fragment set:html={bodyHtml} />
-</WebflowLayout>
+  <h1 class="visually-hidden">Terms of Service</h1>
+  <TermlyPolicy embedId="d4159bce-0605-42e3-882c-626dc8e76ee9" />
+</BaseLayout>
+
+<style>
+  /* Hidden on screen, since Termly shows its own title, but read by search engines and screen readers. */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

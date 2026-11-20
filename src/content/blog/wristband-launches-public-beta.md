@@ -1,13 +1,13 @@
 ---
-title: "Wristband Launches Public Beta"
-summary: "Wristband, a developer-first authentication platform designed for B2B SaaS, today announced the public beta launch of its highly anticipated platform."
-category: "Press"
-pubDate: 2024-04-01
-author: "Wristband Team"
-coverImage: "/images/misc/66aaf17b8dbfff780c904d2a_ph-main.png"
+title: 'Wristband Launches Public Beta'
+summary: 'Wristband, a developer-first authentication platform designed for B2B SaaS, today announced the public beta launch of its highly anticipated platform.'
+category: 'Press'
+datePublished: 2024-04-01
+author: 'Wristband Team'
+coverImage: '/images/misc/66aaf17b8dbfff780c904d2a_ph-main.png'
 ---
 
-*This article was originally published on*[Yahoo Finance](https://finance.yahoo.com/news/prediction-2-artificial-intelligence-ai-122100967.html)*.*
+_This article was originally published on_[Yahoo Finance](https://finance.yahoo.com/news/prediction-2-artificial-intelligence-ai-122100967.html)_._
 
 **‍SAN FRANCISCO, CA – August 1, 2024** - Wristband, a developer-first authentication platform designed for B2B SaaS, today announced the public beta launch of its highly anticipated platform. Wristband empowers startups and scale-ups to implement secure and customizable authentication solutions, saving development time and resources while providing a superior user experience.
 
@@ -18,6 +18,7 @@ Wristband aims to do this all while unlocking enterprise-grade auth for millions
 Early customers of Wristband's platform are already seeing significant benefits. Daniel Paik, CEO of CuroWork, emphasizes, "The user authentication experience is critical in SaaS. With Wristband, I know it's taken care of and I can focus on my actual business." Kai Russo, CTO of CuroWork, highlights the platform's efficiency: "As a young startup, there's so much to do. With Wristband, we were up and running in an afternoon with all the bells and whistles and compliance required for high-level authentication." Both executives praised Wristband's native multi-tenant architecture as a key selling point, with Russo noting, "Wristband's multi-tenant design from the start makes it more stable and safer than add-ons to existing platforms.
 
 Wristband offers a comprehensive suite of features and benefits, including:
+
 - Enterprise-Grade Security: Built-in security features and compliance certifications ensure data isolation and protection, adhering to industry standards.
 - Deep Customization: Unparalleled flexibility allows developers to tailor authentication flows, user interfaces, and integrations to match their unique brand and customer needs.
 - Cost-Effective Scaling: Transparent pricing with no hidden fees or "SSO tax" makes enterprise-level authentication accessible to businesses of all sizes.
