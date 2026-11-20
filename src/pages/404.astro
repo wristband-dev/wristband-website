@@ -3,37 +3,134 @@
 // with a real 404 instead of serving the home page with a 200 (single-page-app fallback).
 // That fallback made /.well-known/ai-catalog.json return HTML, which Lighthouse's Agentic
 // Browsing check reported as an invalid ARD manifest.
-import WebflowLayout from '../layouts/WebflowLayout.astro';
-import { BLOG_POST_WF_PAGE } from '../lib/blog';
-import { getWebflowChrome } from '../lib/webflow';
-
-const { headerHtml, footerHtml } = getWebflowChrome();
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<WebflowLayout
-  title="Page not found | Wristband"
-  description="The page you are looking for does not exist."
-  wfPage={BLOG_POST_WF_PAGE}
-  bodyClass="body-5"
-  noIndex
->
-  <div class="page-wrapper">
-    <Fragment set:html={headerHtml} />
-    <div class="section blog-post">
-      <div class="container-header w-container">
-        <div class="inner-container-1020px">
-          <div class="text-center">
-            <h1 class="heading-10">Page not found</h1>
-            <div class="inner-container-600px align-center">
-              <p>The page you are looking for does not exist or has moved.</p>
-            </div>
-            <div class="mg-top-large-80px">
-              <a href="/" class="butt w-button">Back to home</a>
-            </div>
-          </div>
+<BaseLayout title="Page not found | Wristband" description="The page you are looking for does not exist." noIndex>
+  <section class="not-found">
+    <div class="not-found__container">
+      <div class="not-found__inner">
+        <h1 class="not-found__title">Page not found</h1>
+        <div class="not-found__text-wrap">
+          <p class="not-found__text">The page you are looking for does not exist or has moved.</p>
+        </div>
+        <div class="not-found__action">
+          <a href="/" class="not-found__button" set:text="Back to home" />
         </div>
       </div>
     </div>
-  </div>
-  <Fragment set:html={footerHtml} />
-</WebflowLayout>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Bottom padding gives the same space above the footer as the team and policy pages. */
+  .not-found {
+    margin: 0 10px 20px;
+    padding-top: 100px;
+    padding-bottom: 80px;
+    background-color: var(--color-bg);
+    text-align: center;
+  }
+
+  .not-found__container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .not-found__inner {
+    max-width: 1020px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .not-found__title {
+    color: var(--color-text);
+  }
+
+  /* A column that shrinks to the text's width, like Webflow's centered 600px container. */
+  .not-found__text-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .not-found__text {
+    color: var(--color-text-subtle);
+  }
+
+  .not-found__action {
+    margin-top: 80px;
+  }
+
+  .not-found__button {
+    display: inline-block;
+    padding: 26px 38px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-12);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-lavender);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition:
+      color 0.35s,
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
+  }
+
+  .not-found__button:hover {
+    border-color: var(--palette-charcoal);
+    color: var(--palette-off-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  @media screen and (max-width: 991px) {
+    .not-found {
+      padding-top: 80px;
+    }
+
+    .not-found__action {
+      margin-top: 64px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .not-found {
+      padding-top: 56px;
+      padding-bottom: 60px;
+    }
+
+    .not-found__action {
+      margin-top: 40px;
+    }
+
+    .not-found__button {
+      padding: 20px 28px;
+      border-radius: 8px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    /* Webflow's header adds 60px of space below itself at this width. */
+    .not-found {
+      margin-top: 60px;
+    }
+
+    .not-found__container {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+
+    .not-found__button {
+      display: block;
+      width: 100%;
+    }
+  }
+</style>

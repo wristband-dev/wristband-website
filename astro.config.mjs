@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import { codeTheme } from './src/lib/code-theme.mjs';
 
 const SITE = 'https://www.wristband.dev';
 
@@ -18,6 +19,7 @@ const PAGE_DATE_MODIFIED = {
   '/terms': '2026-11-19',
   '/privacy': '2026-11-19',
   '/cookie-policy': '2026-11-19',
+  '/blog': '2026-11-19',
 };
 
 /** @param {string} key */
@@ -109,8 +111,10 @@ export default defineConfig({
     },
   },
   markdown: {
+    // Show quotes exactly as typed: straight, not curly.
+    smartypants: false,
     shikiConfig: {
-      theme: 'github-dark',
+      theme: codeTheme,
     },
   },
 });

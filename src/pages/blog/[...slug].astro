@@ -1,39 +1,22 @@
 ---
+// One page per blog post in src/content/blog, rendered with BlogArticleLayout.
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import WebflowLayout from '../../layouts/WebflowLayout.astro';
 import BlogArticleLayout from '../../layouts/BlogArticleLayout.astro';
-import { getWebflowMeta, type WebflowPageMeta } from '../../lib/webflow';
-import { getWebflowBlogSlugs } from '../../lib/blog';
 import { SITE } from '../../lib/constants';
 import { blogPostingNode, breadcrumbNode, pagePath } from '../../lib/seo';
 import { AUTHORS, type Author } from '../../data/blog/authors';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  const postById = new Map(posts.map((entry) => [entry.id, entry]));
-  const webflowSlugs = getWebflowBlogSlugs();
-  const slugs = new Set([...webflowSlugs, ...postById.keys()]);
-
-  return [...slugs].map((slug) => ({
-    params: { slug },
-    props: {
-      webflowKey: webflowSlugs.has(slug) ? `blog-${slug}` : undefined,
-      post: postById.get(slug),
-    },
-  }));
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
 interface Props {
-  webflowKey?: string;
-  post?: CollectionEntry<'blog'>;
+  post: CollectionEntry<'blog'>;
 }
 
-const { webflowKey, post } = Astro.props as Props;
-const modules = import.meta.glob('../../webflow/blog-*.html', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-});
+const { post } = Astro.props;
+const { Content } = await render(post);
 
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
 
@@ -47,84 +30,42 @@ function postAuthor(entry: CollectionEntry<'blog'>): Author | undefined {
   return AUTHORS[authorId as keyof typeof AUTHORS];
 }
 
-function articleJsonLd(entry: CollectionEntry<'blog'>, image?: string, description?: string) {
-  const person = postAuthor(entry);
-  return [
-    blogPostingNode({
-      url: canonical,
-      headline: entry.data.title,
-      description: description || entry.data.summary || undefined,
-      image: image || entry.data.coverImage,
-      datePublished: entry.data.datePublished,
-      dateModified: entry.data.dateModified,
-      authorName: entry.data.author,
-      authorPerson: person && {
-        name: person.name,
-        url: person.profileUrl,
-        sameAs: person.linkedin ? [person.linkedin] : undefined,
-      },
-    }),
-    breadcrumbNode([
-      { name: 'Home', path: '/' },
-      { name: 'Blog', path: '/blog' },
-      { name: entry.data.title, path: pagePath(Astro.url.pathname) },
-    ]),
-  ];
-}
+const author = postAuthor(post);
+const { coverImage } = post.data;
+const ogImage = coverImage.startsWith('http') ? coverImage : new URL(coverImage, Astro.site ?? SITE.url).href;
 
-let webflowMeta: WebflowPageMeta | undefined;
-let webflowHtml: string | undefined;
-let entry: CollectionEntry<'blog'> | undefined;
-let Content: Awaited<ReturnType<typeof render>>['Content'] | undefined;
-let ogImage: string | undefined;
-let author: Author | undefined;
-let jsonLd = post ? articleJsonLd(post, post.data.coverImage, post.data.summary) : [];
-const datePublished: Date | undefined = post?.data.datePublished;
-
-if (webflowKey) {
-  webflowMeta = getWebflowMeta(webflowKey);
-  webflowHtml = modules[`../../webflow/${webflowKey}.html`] as string;
-  ogImage = webflowMeta.ogImage || post?.data.coverImage;
-  if (post) {
-    jsonLd = articleJsonLd(post, ogImage, webflowMeta.description || post.data.summary);
-  }
-} else if (post) {
-  entry = post;
-  ({ Content } = await render(post));
-  const cover = post.data.coverImage;
-  ogImage = cover.startsWith('http') ? cover : new URL(cover, Astro.site ?? SITE.url).href;
-  jsonLd = articleJsonLd(post, cover, post.data.summary);
-  author = postAuthor(post);
-} else {
-  throw new Error(`No Webflow HTML or content entry for blog slug "${Astro.params.slug}"`);
-}
+const jsonLd = [
+  blogPostingNode({
+    url: canonical,
+    headline: post.data.title,
+    description: post.data.summary || undefined,
+    image: coverImage,
+    datePublished: post.data.datePublished,
+    dateModified: post.data.dateModified,
+    authorName: post.data.author,
+    authorPerson: author && {
+      name: author.name,
+      url: author.profileUrl,
+      sameAs: author.linkedin ? [author.linkedin] : undefined,
+    },
+  }),
+  breadcrumbNode([
+    { name: 'Home', path: '/' },
+    { name: 'Blog', path: '/blog' },
+    { name: post.data.title, path: pagePath(Astro.url.pathname) },
+  ]),
+];
 ---
 
-{webflowMeta && webflowHtml ? (
-  <WebflowLayout
-    title={webflowMeta.title}
-    description={webflowMeta.description || undefined}
-    ogImage={ogImage}
-    ogType="article"
-    datePublished={datePublished}
-    jsonLd={jsonLd}
-    wfPage={webflowMeta.wfPage}
-    wfSite={webflowMeta.wfSite}
-    bodyClass={webflowMeta.bodyClass}
-  >
-    <Fragment set:html={webflowHtml} />
-  </WebflowLayout>
-) : entry && Content ? (
-  <BlogArticleLayout
-    title={entry.data.title}
-    summary={entry.data.summary}
-    category={entry.data.category}
-    cover={entry.data.cover ?? entry.data.coverImage}
-    ogImage={ogImage}
-    datePublished={datePublished}
-    jsonLd={jsonLd}
-    author={author}
-  >
-    <Content />
-  </BlogArticleLayout>
-) : null}
+<BlogArticleLayout
+  title={post.data.title}
+  summary={post.data.summary}
+  category={post.data.category}
+  cover={post.data.cover ?? coverImage}
+  ogImage={ogImage}
+  datePublished={post.data.datePublished}
+  jsonLd={jsonLd}
+  author={author}
+>
+  <Content />
+</BlogArticleLayout>

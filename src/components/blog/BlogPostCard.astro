@@ -1,0 +1,278 @@
+---
+// A post card on the blog index. Matches Webflow's blog cards: cover, category, title, summary, date and read time.
+// The featured variant lays the cover and text side by side on wide screens.
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { formatBlogDate, readingTimeMinutes } from '../../lib/blog';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const { title, summary, category, datePublished, cover, coverImage } = post.data;
+const minutes = readingTimeMinutes(post.body);
+// Icons in the "Icons applay x template" icon font, the same as live Webflow.
+const CALENDAR_GLYPH = '\ue806';
+const CLOCK_GLYPH = '\ue807';
+---
+
+<a href={`/blog/${post.id}`} class:list={['post-card', featured && 'post-card--featured']}>
+  <div class="post-card__image">
+    {cover ? (
+      <Image
+        src={cover}
+        alt={title}
+        widths={[500, 800, 1080]}
+        sizes={featured ? '(max-width: 991px) 100vw, 640px' : '(max-width: 767px) 100vw, 620px'}
+        class="post-card__img"
+      />
+    ) : (
+      <img src={coverImage} alt={title} class="post-card__img" loading="lazy" />
+    )}
+  </div>
+  <div class="post-card__body">
+    <div class="post-card__text">
+      <div class="post-card__category">{category}</div>
+      <h2 class="post-card__title">{title}</h2>
+      <p class="post-card__summary">{summary}</p>
+      <div class="post-card__meta">
+        <div class="post-card__meta-item">
+          <span class="post-card__icon" aria-hidden="true">
+            {CALENDAR_GLYPH}
+          </span>
+          <span>{formatBlogDate(datePublished)}</span>
+        </div>
+        <div class="post-card__meta-item post-card__meta-item--last">
+          <span class="post-card__icon" aria-hidden="true">
+            {CLOCK_GLYPH}
+          </span>
+          <span set:text={`${minutes} min read`} />
+        </div>
+      </div>
+    </div>
+  </div>
+</a>
+
+<style>
+  @font-face {
+    font-family: 'Icons applay x template';
+    src: url('/fonts/64d01a3771d020746e331ae2_icons-applay-x-template.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .post-card {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 100%;
+    min-height: 400px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-24);
+    background-color: var(--color-bg);
+    box-shadow: 0 1px 12px 0 #0f086a0a;
+    color: var(--color-text-subtle);
+    text-decoration: none;
+    transition: transform 0.35s;
+  }
+
+  /* Like Webflow, the date and read time turn navy on hover. */
+  .post-card:hover {
+    color: var(--color-link-hover);
+    transform: scale(0.96);
+  }
+
+  .post-card__image {
+    flex: none;
+    height: 300px;
+    overflow: hidden;
+    transform: translate(0);
+  }
+
+  .post-card__img {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-card__body {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 56px;
+  }
+
+  .post-card__text {
+    max-width: 450px;
+  }
+
+  .post-card__category {
+    margin-bottom: 16px;
+    color: var(--color-brand);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .post-card__title {
+    margin-bottom: 16px;
+    color: var(--color-text);
+    font-size: 26px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.4em;
+    transition: color 0.35s ease;
+  }
+
+  /* Like live Webflow, card titles turn blue-purple on hover. */
+  .post-card:hover .post-card__title {
+    color: #524fff;
+  }
+
+  .post-card__summary {
+    color: var(--color-text);
+  }
+
+  .post-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: -8px;
+  }
+
+  .post-card__meta-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-right: 30px;
+    margin-bottom: 8px;
+  }
+
+  .post-card__meta-item--last {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  .post-card__icon {
+    margin-right: 12px;
+    font-family: 'Icons applay x template', sans-serif;
+    font-size: 22px;
+  }
+
+  /* Featured: cover on the left half, text on the right. */
+  .post-card--featured {
+    flex-flow: row;
+    height: auto;
+    transform-style: preserve-3d;
+  }
+
+  .post-card--featured:hover {
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  .post-card--featured .post-card__image {
+    flex: 0 auto;
+    width: 50%;
+    height: auto;
+  }
+
+  .post-card--featured .post-card__body {
+    align-items: center;
+  }
+
+  @media screen and (min-width: 1440px) {
+    .post-card__image {
+      height: 400px;
+    }
+
+    .post-card__text {
+      max-width: 600px;
+    }
+
+    .post-card--featured {
+      background-color: transparent;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .post-card {
+      border-radius: var(--radius-16);
+    }
+
+    .post-card__image {
+      min-width: 40%;
+    }
+
+    .post-card__body {
+      padding: 48px 40px;
+    }
+
+    .post-card--featured {
+      flex-flow: column;
+      justify-content: center;
+      min-height: auto;
+    }
+
+    .post-card--featured .post-card__image {
+      width: auto;
+      min-width: auto;
+      max-height: 460px;
+    }
+
+    .post-card--featured .post-card__text {
+      max-width: none;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .post-card {
+      border-radius: var(--radius-12);
+    }
+
+    .post-card__image {
+      min-width: auto;
+    }
+
+    .post-card__body {
+      padding-top: 32px;
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+
+    .post-card--featured {
+      flex-direction: column;
+      min-height: auto;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .post-card--featured {
+      justify-content: flex-start;
+    }
+
+    .post-card__image {
+      position: relative;
+    }
+
+    .post-card__title {
+      font-size: 22px;
+    }
+
+    .post-card__meta {
+      align-items: flex-start;
+    }
+
+    .post-card__meta-item {
+      font-size: 16px;
+    }
+
+    .post-card__icon {
+      font-size: 20px;
+    }
+  }
+</style>

@@ -1,30 +1,169 @@
 ---
+// Blog index, rebuilt without Webflow. Lists every post in src/content/blog, newest first.
+// The post with `featured: true` is also shown in a large card at the top, like live Webflow.
 import { getCollection } from 'astro:content';
-import WebflowLayout from '../../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../../lib/webflow';
-import { getWebflowBlogSlugs, injectContentPostsIntoIndex } from '../../lib/blog';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPostCard from '../../components/blog/BlogPostCard.astro';
 import { breadcrumbNode } from '../../lib/seo';
-import bodyHtml from '../../webflow/blog.html?raw';
 
-const meta = getWebflowMeta('blog');
-const webflowSlugs = getWebflowBlogSlugs();
-const extraPosts = (await getCollection('blog')).filter((post) => !webflowSlugs.has(post.id));
-const html = injectContentPostsIntoIndex(bodyHtml, extraPosts);
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.datePublished.valueOf() - a.data.datePublished.valueOf(),
+);
+const featuredPosts = posts.filter((post) => post.data.featured);
+if (featuredPosts.length > 1) {
+  throw new Error(
+    `Only one blog post can set "featured: true". Found: ${featuredPosts.map((post) => post.id).join(', ')}`,
+  );
+}
+const featured = featuredPosts[0];
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
+<BaseLayout
+  title="Wristband Engineering Blog - Multi-Tenant Authentication Insights"
+  description="Essential best practices for building multi-tenant auth, designed for engineers and founders looking to scale securely and efficiently."
+  ogImage="/images/hero_background.webp"
   jsonLd={[
     breadcrumbNode([
       { name: 'Home', path: '/' },
       { name: 'Blog', path: '/blog' },
     ]),
   ]}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
 >
-  <Fragment set:html={html} />
-</WebflowLayout>
+  <section class="blog-index">
+    <div class="blog-index__container">
+      <div class="blog-index__intro">
+        <h1 class="blog-index__title" data-reveal>
+          Blog
+        </h1>
+        <div class="blog-index__tagline" data-reveal>
+          Mostly technical, sometimes entertaining, always Auth.
+        </div>
+      </div>
+      {featured && (
+        <div class="blog-index__featured" data-reveal="400">
+          <BlogPostCard post={featured} featured />
+        </div>
+      )}
+      <div class="blog-index__latest-heading">
+        <h2 class="blog-index__latest-title" data-reveal>
+          Latest Posts
+        </h2>
+      </div>
+      <div class="blog-index__grid" role="list">
+        {posts.map((post) => (
+          <div class="blog-index__item" role="listitem" data-reveal>
+            <BlogPostCard post={post} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-index {
+    padding-top: 20px;
+    padding-bottom: 160px;
+  }
+
+  .blog-index__container {
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* Shrinks to the title's width and centers, like Webflow's title block. */
+  .blog-index__intro {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Webflow's post lists sit 60px below what comes before them, inset 10px on each side. */
+  .blog-index__featured,
+  .blog-index__grid {
+    margin: 60px 10px 0;
+  }
+
+  .blog-index__title {
+    width: 100%;
+    font-size: 54px;
+    line-height: 1.5em;
+    text-align: center;
+  }
+
+  .blog-index__tagline {
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .blog-index__latest-heading {
+    display: flex;
+    align-items: center;
+    margin-top: 100px;
+  }
+
+  .blog-index__latest-title {
+    width: 100%;
+    margin-bottom: 0;
+    padding-left: 10px;
+    color: var(--color-text);
+    font-size: 42px;
+    line-height: 1.5em;
+    text-align: left;
+  }
+
+  .blog-index__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px 16px;
+  }
+
+  @media screen and (max-width: 991px) {
+    .blog-index {
+      padding-bottom: 100px;
+    }
+
+    .blog-index__grid {
+      row-gap: 48px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .blog-index {
+      padding-bottom: 64px;
+    }
+
+    .blog-index__title {
+      font-size: 48px;
+    }
+
+    .blog-index__latest-title {
+      font-size: 32px;
+    }
+
+    .blog-index__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    /* Webflow's header adds 60px of space below itself at this width; the section's own top padding is 0. */
+    .blog-index {
+      margin-top: 60px;
+      padding-top: 0;
+    }
+
+    .blog-index__title {
+      font-size: 44px;
+    }
+  }
+</style>

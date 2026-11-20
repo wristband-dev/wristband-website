@@ -1,0 +1,91 @@
+---
+// An image in a blog post, with an optional caption. Matches Webflow's full-width rich-text figure.
+// Usage in MDX: <Figure image={diagram} alt="..." /> or <Figure image={diagram}>Caption text.</Figure> (captions are italic already)
+// align="center" shows the image at its own size, up to 60% of the column, like Webflow's centered figures.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  image: ImageMetadata;
+  alt?: string;
+  /** full: the image fills the column (default). center: the image's own size, up to 60% of the column. */
+  align?: 'full' | 'center';
+}
+
+const { image, alt = '', align = 'full' } = Astro.props;
+const hasCaption = Astro.slots.has('default');
+---
+
+<figure class:list={['post-figure', `post-figure--${align}`]}>
+  <div class="post-figure__image">
+    <Image src={image} alt={alt} widths={[800, 1600]} sizes="(max-width: 847px) 100vw, 800px" />
+  </div>
+  {hasCaption && (
+    <figcaption class="post-figure__caption">
+      <slot />
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .post-figure {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 48px auto;
+    text-align: center;
+  }
+
+  /* font-size 0 removes the gap under the image that inline layout would add. */
+  .post-figure__image {
+    display: inline-block;
+    font-size: 0;
+  }
+
+  .post-figure__image img {
+    width: 100%;
+  }
+
+  /* MDX wraps a long caption in a paragraph. Inline, it lays out exactly like plain caption text. */
+  .post-figure__caption :global(p) {
+    display: inline;
+    margin: 0;
+    line-height: inherit;
+  }
+
+  /* Webflow lays centered figures out as a table, so the figure shrinks to the image. */
+  .post-figure--center {
+    display: table;
+    width: auto;
+    max-width: 60%;
+    clear: both;
+    text-align: start;
+  }
+
+  .post-figure--center .post-figure__image {
+    max-width: 100%;
+  }
+
+  .post-figure--center .post-figure__caption {
+    display: table-caption;
+    caption-side: bottom;
+  }
+
+  /* Captions sit a step below body text, and are always italic. */
+  .post-figure__caption {
+    display: block;
+    margin-top: 16px;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 767px) {
+    .post-figure {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+  }
+</style>
