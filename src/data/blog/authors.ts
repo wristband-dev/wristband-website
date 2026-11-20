@@ -1,5 +1,6 @@
 import type { ImageMetadata } from 'astro';
 import jimVerducci from '../../assets/team/jim-verducci.jpeg';
+import davidChu from '../../assets/team/david-chu.jpeg';
 
 export interface Author {
   name: string;
@@ -20,6 +21,14 @@ export const AUTHORS = {
     profileUrl: '/the-team',
     linkedin: 'https://www.linkedin.com/in/jim-verducci/',
     bio: 'A seasoned entrepreneur with a background in tech consulting and platform engineering. Jim co-founded Apitopia Consulting, specializing in designing and scaling distributed software architectures. His experience exposed the need for robust authentication frameworks, leading him to create Wristband.',
+  },
+  'david-chu': {
+    name: 'David Chu',
+    role: 'CTO / Co-founder',
+    photo: davidChu,
+    profileUrl: '/the-team',
+    linkedin: 'https://www.linkedin.com/in/david-chu-19b2424/',
+    bio: "A technical leader with expertise in building highly scalable and reliable distributed systems. David led the development of AppDynamics' Business IQ platform, a crucial component in their acquisition by Cisco. His experience in identity and access management at Deem further strengthens Wristband's foundation.",
   },
 } satisfies Record<string, Author>;
 

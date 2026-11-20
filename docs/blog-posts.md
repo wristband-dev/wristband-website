@@ -53,26 +53,29 @@ cover: './cover.jpg'
 ---
 ```
 
-| Field           | Required | What it does                                                                                                                                                  |
-| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`         | Yes      | Page title, heading, share title and index card title.                                                                                                        |
-| `summary`       | Yes      | Text under the title, index card text and meta description.                                                                                                   |
-| `category`      | Yes      | One of `Auth`, `Engineering` or `Press`. Shown as the badge above the title.                                                                                  |
-| `datePublished` | Yes      | Publish date as `YYYY-MM-DD`. Sets the date on the index card, the JSON-LD and the sitemap.                                                                   |
-| `dateModified`  | No       | Date of the last meaningful edit, as `YYYY-MM-DD`. Used for the sitemap and the JSON-LD's modified date in place of `datePublished`.                          |
-| `author`        | No       | Author name used in JSON-LD when there is no `authorId`. Defaults to `Wristband Team`.                                                                        |
-| `authorId`      | No       | Key from `src/data/blog/authors.ts`. Adds the author card at the end of the post. An unknown key fails the build.                                             |
-| `coverImage`    | Yes      | Public URL of the cover image. Used for the share image and the blog index card.                                                                              |
-| `cover`         | No       | Path to the cover image in the post's folder. Shown at the top of the post, resized and compressed by Astro. If missing, the post shows `coverImage` instead. |
+| Field           | Required | What it does                                                                                                                                                                        |
+| --------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`         | Yes      | Page title, heading, share title and index card title.                                                                                                                              |
+| `summary`       | Yes      | Text under the title, index card text and meta description.                                                                                                                         |
+| `category`      | Yes      | One of `Auth`, `Engineering` or `Press`. Shown as the badge above the title.                                                                                                        |
+| `datePublished` | Yes      | Publish date as `YYYY-MM-DD`. Sets the date on the index card, the JSON-LD and the sitemap.                                                                                         |
+| `dateModified`  | No       | Date of the last meaningful edit, as `YYYY-MM-DD`. Used for the sitemap and the JSON-LD's modified date in place of `datePublished`.                                                |
+| `author`        | No       | Author name used in JSON-LD when there is no `authorId`. Defaults to `Wristband Team`.                                                                                              |
+| `authorId`      | No       | Key from `src/data/blog/authors.ts`. Adds the author card at the end of the post. An unknown key fails the build.                                                                   |
+| `coverImage`    | Yes      | Public URL of the cover image. Used for link previews.                                                                                                                              |
+| `cover`         | No       | Path to the cover image in the post's folder. Shown at the top of the post and on the blog index card, resized and compressed by Astro. If missing, both show `coverImage` instead. |
+| `featured`      | No       | `true` shows the post in the large card at the top of the blog index. Only one post can set it; the build fails if more do.                                                         |
 
 Wrap text values in single quotes. This avoids problems with colons and apostrophes in titles.
 
 ### Why the cover is listed twice
 
-`cover` is the copy Astro optimizes for the post page. `coverImage` must be a fixed public address, because link previews and the blog index card need one. A link preview is the card LinkedIn, Slack and X show when someone pastes the post's link. Optimized images get new file names whenever they change, so a link that was already shared would lose its image. Until the blog index is rebuilt, a new post needs both:
+`cover` is the copy Astro optimizes for the post page and the blog index. `coverImage` must be a fixed public address, because link previews need one. A link preview is the card LinkedIn, Slack and X show when someone pastes the post's link. Optimized images get new file names whenever they change, so a link that was already shared would lose its image. So a post needs both:
 
 - the image in the post's folder, for `cover`
 - a copy in `public/`, for `coverImage` (for example `public/images/blog/<slug>/cover.jpg`)
+
+Both must be the same image.
 
 The example post's cover is 1920 x 1080 (16:9). Use the same size so covers look consistent on the blog index.
 
@@ -80,18 +83,53 @@ The example post's cover is 1920 x 1080 (16:9). Use the same size so covers look
 
 - Start body headings at `##`. The post title is already the page's only `#` heading.
 - Use `###` for subsections.
-- Links, bold, lists, code blocks and quotes use normal Markdown.
-- Code blocks get syntax highlighting when they name a language, for example ` ```ts `.
+- Links, bold, lists and quotes use normal Markdown.
+- To open a link in a new tab, write it as HTML: `<a href="https://example.com" target="_blank">text</a>`. Markdown links always open in the same tab.
+
+### Characters
+
+Write post files in plain ASCII.
+
+- Type straight quotes and apostrophes (`'` and `"`). They show on the page exactly as typed.
+- Write an en dash as `&ndash;`, an em dash as `&mdash;` and a non-breaking space as `&nbsp;`.
+- Do not paste curly quotes, invisible characters or non-breaking spaces from other tools. Editors flag them, and they are hard to spot in review.
+- In frontmatter, an entity like `&ndash;` is not converted. Use a double-quoted value with a `\u` escape instead, for example `summary: "SSO \u2013 explained"`.
+- Markdown turns a plain email address into a link. To show one as plain text, write it as `{'name@wristband.dev'}`.
 
 ### Images in the body
 
-Put the image in the post's folder and reference it with a relative path:
+Put the image in the post's folder, import it, and show it with the `Figure` component:
 
 ```mdx
-![What the image shows](./diagram.png)
+import Figure from '../../../components/blog/Figure.astro';
+import diagram from './diagram.png';
+
+<Figure image={diagram} alt="What the image shows">
+  Caption text.
+</Figure>
 ```
 
-Astro resizes and compresses it at build time. Always write alt text that describes the image.
+- Astro resizes and compresses the image at build time.
+- Always write alt text that describes the image.
+- The caption is optional, and is always shown in italics.
+- By default the image fills the column. Add `align="center"` to show it at its own size, up to 60% of the column.
+
+### Code blocks
+
+Write code blocks as Markdown code fences, with a language:
+
+````mdx
+```bash
+npm install @wristband/express-auth
+```
+````
+
+- Code blocks get syntax highlighting in the same colors as the Wristband docs portal. The colors are set in `src/lib/code-theme.mjs`.
+- Each code block gets a copy button.
+- For command output or anything else readers should not copy, use `text` as the language. A `text` block has no highlighting and no copy button.
+- Any language that Shiki, Astro's highlighter, supports will work. See the list at https://shiki.style/languages. Common ones are `bash`, `ts`, `js`, `json`, `python`, `go`, `csharp` and `yaml`.
+- Check the language name. An unknown name does not fail the build: it shows a warning and the block gets no highlighting.
+- Only shell and JavaScript/TypeScript colors are matched to the docs portal. Other languages use the shared colors, which look close. To match another language, add a group for it in `src/lib/code-theme.mjs`, as its header comment explains.
 
 ### Components
 
@@ -112,6 +150,7 @@ Available components:
 | Component      | Use                                                                                                                                              |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `EventDetails` | Title, date and registration link list for posts announcing an event. `registrationLabel` is optional and defaults to `Event Registration Link`. |
+| `Figure`       | An image with an optional caption. See "Images in the body".                                                                                     |
 
 `AuthorCard` is not imported in posts. The layout adds it when the post has an `authorId`.
 
@@ -161,7 +200,7 @@ npm run build
 ## What happens automatically
 
 - **Post page:** built at `/blog/<slug>` with the blog layout, header and footer.
-- **Blog index:** a card for the post is added at the top of the latest posts list on `/blog`. New posts are sorted newest first.
+- **Blog index:** `/blog` lists every post, newest first, as a card with its cover, category, title, summary, date and read time. The read time is calculated from the post's length, at 200 words a minute.
 - **Sitemap:** the post is listed, with `dateModified` (or `datePublished` if there is none) as its last updated date.
 - **Search and sharing:** title, description, share image, canonical URL and JSON-LD are generated from the frontmatter.
 
@@ -169,5 +208,6 @@ npm run build
 
 - There are no drafts. A merged post is live. Keep unfinished posts on a branch.
 - When you make a meaningful edit to a published post, set `dateModified` to that day.
-- Some older posts are still copied Webflow pages in `src/webflow/blog-*.html`. A copied page wins over a Markdown or MDX file with the same slug. These are being converted to MDX one at a time.
-- `src/content/blog/security-auth-for-small-businesses-best-practices-with-jim-manico-webinar/` is a complete example of a post.
+- Example posts:
+  - `src/content/blog/security-auth-for-small-businesses-best-practices-with-jim-manico-webinar/` uses a component (`EventDetails`).
+  - `src/content/blog/how-to-test-tenant-subdomains-on-macos-with-dnsmasq/` uses `Figure` and code blocks.

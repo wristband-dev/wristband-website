@@ -20,6 +20,8 @@ const blog = defineCollection({
       coverImage: z.string(),
       /** Cover image file next to the post (e.g. './cover.jpg'). Optimized by Astro; shown at the top of the post. */
       cover: image().optional(),
+      /** Show this post in the large card at the top of the blog index. Only one post can set it. */
+      featured: z.boolean().default(false),
     }),
 });
 

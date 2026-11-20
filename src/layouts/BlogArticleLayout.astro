@@ -83,6 +83,44 @@ const { title, summary, category, cover, ogImage, jsonLd, datePublished, author 
   </div>
 </BaseLayout>
 
+<script>
+  // Adds a copy button to each code block in the article, except ```text blocks, which show command output.
+  const COPY_ICON =
+    '<svg class="code-block__icon-copy" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5V3.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>';
+  const DONE_ICON =
+    '<svg class="code-block__icon-done" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>';
+
+  for (const pre of document.querySelectorAll<HTMLPreElement>('.post-article pre:not([data-language="text"])')) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block';
+    pre.replaceWith(wrapper);
+    wrapper.append(pre);
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'code-block__copy';
+    button.setAttribute('aria-label', 'Copy code');
+    button.innerHTML = COPY_ICON + DONE_ICON;
+    wrapper.append(button);
+
+    let timer: number | undefined;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.innerText.replace(/\n$/, ''));
+      } catch {
+        return;
+      }
+      button.classList.add('is-copied');
+      button.setAttribute('aria-label', 'Copied');
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        button.classList.remove('is-copied');
+        button.setAttribute('aria-label', 'Copy code');
+      }, 2000);
+    });
+  }
+</script>
+
 <style>
   /* Header area: badge, title, summary and cover image */
   .post-hero,
@@ -203,7 +241,7 @@ const { title, summary, category, cover, ogImage, jsonLd, datePublished, author 
   /* Webflow's default h4, bold text and inline code color, which the copied posts show. */
   .post-article :global(h4),
   .post-article :global(strong),
-  .post-article :global(code) {
+  .post-article :global(:not(pre) > code) {
     color: var(--color-text-emphasis);
   }
 
@@ -227,10 +265,68 @@ const { title, summary, category, cover, ogImage, jsonLd, datePublished, author 
     margin-top: 48px;
   }
 
+  /*
+    Code blocks: colors come from src/lib/code-theme.mjs (matching the docs portal).
+    The copy button is added by the script at the bottom of this file.
+  */
+  .post-article :global(.code-block) {
+    position: relative;
+    margin: 0 0 20px;
+  }
+
   .post-article :global(pre) {
-    margin: 1.5em 0;
+    margin: 0 0 20px;
+    padding: 20px 24px;
     overflow-x: auto;
     border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .post-article :global(.code-block pre) {
+    margin: 0;
+    padding-right: 64px;
+  }
+
+  .post-article :global(.code-block__copy) {
+    display: flex;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #4a4b4c;
+    border-radius: 4px;
+    background-color: #2e2f30;
+    color: #c8c8c8;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .post-article :global(.code-block__copy:hover),
+  .post-article :global(.code-block__copy:focus-visible) {
+    border-color: #8a8b8c;
+    color: #ffffff;
+  }
+
+  .post-article :global(.code-block__copy svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .post-article :global(.code-block__copy .code-block__icon-done),
+  .post-article :global(.code-block__copy.is-copied .code-block__icon-copy) {
+    display: none;
+  }
+
+  .post-article :global(.code-block__copy.is-copied .code-block__icon-done) {
+    display: block;
   }
 
   .post-article :global(:not(pre) > code) {
