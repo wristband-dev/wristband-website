@@ -29,6 +29,8 @@ interface Props {
   noIndex?: boolean;
   /** Load Termly's policy embed script (only pages with a `termly-embed` div need it). */
   termlyPolicyEmbed?: boolean;
+  /** `dark`: charcoal page background and the dark header. The footer stays light, like live Webflow. */
+  theme?: 'light' | 'dark';
 }
 
 const {
@@ -40,6 +42,7 @@ const {
   jsonLd = [],
   noIndex = false,
   termlyPolicyEmbed = false,
+  theme = 'light',
 } = Astro.props;
 
 const pageTitle = decodeHtmlEntities(title);
@@ -118,7 +121,7 @@ const datePublishedIso =
 
     <JsonLd data={jsonLdGraph(jsonLd)} />
   </head>
-  <body>
+  <body class:list={[theme === 'dark' && 'page-dark']}>
     <noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-KQNQ4T3V"
@@ -128,7 +131,7 @@ const datePublishedIso =
       ></iframe>
     </noscript>
 
-    <Header />
+    <Header theme={theme} />
     <main>
       <slot />
     </main>

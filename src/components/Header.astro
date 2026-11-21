@@ -1,9 +1,17 @@
 ---
-// Site header for rebuilt pages. Matches the light header on live Webflow (every page except
-// home and the Thoughtly case study). Sizes, spacing and breakpoints come from webflow.css.
+// Site header for rebuilt pages. Matches the header on live Webflow. Sizes, spacing and breakpoints come from webflow.css.
+// Dark pages (home and the Thoughtly case study) get the white logo and light desktop links.
+// The open mobile menu stays light on every page, like live Webflow, with larger links on dark pages.
 import { Image } from 'astro:assets';
 import logo from '../assets/brand/wristband-logo.svg';
+import logoWhite from '../assets/brand/wristband-logo-white.svg';
 import { LINKS } from '../lib/constants';
+
+interface Props {
+  theme?: 'light' | 'dark';
+}
+
+const { theme = 'light' } = Astro.props;
 
 const DOCS_URL = 'https://docs.wristband.dev/docs/getting-started';
 
@@ -15,11 +23,11 @@ const navLinks = [
 ];
 ---
 
-<header class="site-header" data-site-header>
+<header class:list={['site-header', theme === 'dark' && 'site-header--dark']} data-site-header>
   <div class="site-header__container">
     <div class="site-header__wrapper">
       <a href="/" class="site-header__logo">
-        <Image src={logo} alt="Wristband" width={220} height={48} loading="eager" />
+        <Image src={theme === 'dark' ? logoWhite : logo} alt="Wristband" width={220} height={48} loading="eager" />
       </a>
 
       <nav class="site-header__menu" id="site-header-menu" aria-label="Main">
@@ -164,6 +172,27 @@ const navLinks = [
 
   .site-header__link:hover {
     color: var(--color-brand);
+  }
+
+  /* Desktop only: below 992px the links sit in the light mobile menu. */
+  @media screen and (min-width: 992px) {
+    .site-header--dark .site-header__link {
+      color: var(--palette-white-smoke);
+    }
+
+    .site-header--dark .site-header__link:hover {
+      color: var(--color-brand);
+    }
+  }
+
+  /* In the open mobile menu, dark pages use Webflow's larger, indented menu links. */
+  @media screen and (max-width: 991px) {
+    .site-header--dark .site-header__link {
+      margin-left: 24px;
+      color: var(--palette-charcoal);
+      font-size: 20px;
+      transition: color 0.35s;
+    }
   }
 
   .site-header__menu-actions {

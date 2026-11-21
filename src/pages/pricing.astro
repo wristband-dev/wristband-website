@@ -1,22 +1,416 @@
 ---
-import WebflowLayout from '../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../lib/webflow';
+// Pricing page, rebuilt without Webflow. Content and layout match live Webflow.
+// The FAQ text lives in src/lib/pricing-faqs.json, which also feeds the page's FAQ JSON-LD.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PricingPlanCard from '../components/pricing/PricingPlanCard.astro';
+import FaqAccordion from '../components/pricing/FaqAccordion.astro';
+import ComparisonTable, { type ComparisonRow } from '../components/ComparisonTable.astro';
+import pricingFaqs from '../lib/pricing-faqs.json';
 import { SITE } from '../lib/constants';
 import { faqPageNode, pagePath } from '../lib/seo';
-import bodyHtml from '../webflow/pricing.html?raw';
 
-const meta = getWebflowMeta('pricing');
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
+const SIGNUP_URL = 'https://dashboard-wristband.us.wristband.dev/signup';
+const DEMO_URL = 'https://calendly.com/wristband/meet-up';
+
+const columns = ['Standard', 'Pro', 'Premium'];
+const yes = { check: true } as const;
+const no = { text: '' };
+const text = (value: string) => ({ text: value });
+const talk = text('Talk to us');
+
+const basics: ComparisonRow[] = [
+  { feature: 'Base Price', cells: [text('$0 / month'), text('$39 / month'), talk] },
+  { feature: 'Included active tenants', cells: [text('5'), text('50'), talk] },
+  { feature: 'Additional active tenants', cells: [text('$0.50 / tenant'), text('$0.50 / tenant'), talk] },
+  { feature: 'Included active users', cells: [text('10,000'), text('10,000'), talk] },
+  { feature: 'Additional active users', cells: [text('$0.02 / user'), text('$0.02 / user'), talk] },
+  { feature: 'Included active machines', cells: [text('20'), text('20'), talk] },
+  { feature: 'Additional active machines', cells: [text('$0.15 / machine'), text('$0.15 / machine'), talk] },
+  { feature: 'Multi-tenant architecture', cells: [yes, yes, yes] },
+  { feature: 'Enterprise SSO (SAML/OIDC)', cells: [yes, yes, yes] },
+  { feature: 'Passwords', cells: [yes, yes, yes] },
+  { feature: 'Magic Links', cells: [yes, yes, yes] },
+  { feature: 'Social logins', cells: [yes, yes, yes] },
+];
+
+const security: ComparisonRow[] = [
+  { feature: 'Password breach detection', cells: [yes, yes, yes] },
+  { feature: 'Multi-factor authentication (MFA)', cells: [yes, yes, yes] },
+  { feature: 'Rotatable signing keys', cells: [yes, yes, yes] },
+  { feature: 'RBAC for users', cells: [yes, yes, yes] },
+  { feature: 'RBAC for machines', cells: [yes, yes, yes] },
+  { feature: 'Fine-grained permission model', cells: [yes, yes, yes] },
+  { feature: 'Just-in-time (JIT) provisioning', cells: [yes, yes, yes] },
+  { feature: 'Custom IdP role-mapping', cells: [yes, yes, yes] },
+  { feature: 'Disposable Email Blocking', cells: [no, yes, yes] },
+];
+
+const customization: ComparisonRow[] = [
+  { feature: 'Custom token claims', cells: [yes, yes, yes] },
+  { feature: 'Custom user and tenant metadata', cells: [yes, yes, yes] },
+  { feature: 'Customizable auth pages', cells: [yes, yes, yes] },
+  { feature: 'Customizable workflow policies', cells: [yes, yes, yes] },
+  { feature: 'Customizable session length', cells: [yes, yes, yes] },
+  { feature: 'App-level branding', cells: [yes, yes, yes] },
+  { feature: 'Remove Wristband watermarks', cells: [no, yes, yes] },
+  { feature: 'Tenant white-labeling', cells: [no, yes, yes] },
+  { feature: 'Custom application domains', cells: [no, yes, yes] },
+  { feature: 'Custom tenant domains', cells: [no, yes, yes] },
+  { feature: 'Custom email domains', cells: [no, yes, yes] },
+  { feature: 'Webhooks', cells: [no, yes, yes] },
+];
+
+const support: ComparisonRow[] = [
+  { feature: 'Email Support', cells: [yes, yes, yes] },
+  { feature: 'Slack Community', cells: [yes, yes, yes] },
+  { feature: 'SOC2 Type II Compliance', cells: [yes, yes, yes] },
+  { feature: 'Premium Support / Response SLAs', cells: [no, no, talk] },
+  { feature: 'Integration and Migration Assistance', cells: [no, no, talk] },
+  { feature: 'Signed BAAs for HIPAA', cells: [no, no, talk] },
+];
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
+<BaseLayout
+  title="Pricing: Affordable Enterprise Auth"
+  description={
+    'No more hidden "enterprise" taxes. SSO, MFA, and Role-based Access Control is free with every plan. No credit card required to start.'
+  }
+  ogImage="/images/hero_background.webp"
   jsonLd={[faqPageNode(canonical)]}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
 >
-  <Fragment set:html={bodyHtml} />
-</WebflowLayout>
+  <section class="pricing">
+    <div class="pricing__container">
+      <div class="pricing__intro">
+        <h1 class="pricing__title" data-reveal>
+          Simple, Scalable Pricing
+        </h1>
+        <p class="pricing__text" data-reveal="300">
+          No more hidden "enterprise" taxes. SSO, MFA, and Role-based Access Control is free with every plan. No credit
+          card required to start.
+        </p>
+      </div>
+      <div class="pricing__body" data-reveal="500">
+        <div class="pricing__plans">
+          <PricingPlanCard
+            name="Standard Plan"
+            price="$0"
+            priceNote={['Upgrade any time', '(plus additional usage)']}
+            description="Multi-tenant auth for building, testing, and even running in production with no upfront costs."
+            features={[
+              '5 Tenants included',
+              '10,000 Users included',
+              'Machine-to-machine Auth',
+              'Fine-grained permission model',
+              'Customizable auth pages',
+              'Comprehensive API Suite',
+              'Slack and email support',
+            ]}
+            cta={{ href: SIGNUP_URL, label: 'Start Building' }}
+          />
+          <PricingPlanCard
+            name="Pro Plan"
+            price="$39"
+            priceNote={['Billed monthly', '(plus additional usage)']}
+            description="Fully customizable experiences for both your business as well as each of your customers."
+            intro="Everything in Standard Plan, plus:"
+            features={[
+              '50 Tenants included',
+              'Remove Wristband watermarks',
+              'Tenant white-labeling',
+              'Custom app domains',
+              'Custom tenant domains',
+              'Custom email domains',
+              'Disposable email blocking',
+              'Webhooks',
+            ]}
+            cta={{ href: SIGNUP_URL, label: 'Start Building' }}
+            highlighted
+          />
+          <PricingPlanCard
+            name="Premium Plan"
+            price="Talk to us"
+            description="Tailored support, hands-on assistance, and priority service for businesses with unique needs."
+            intro="Everything in Pro Plan, plus:"
+            features={[
+              'Integration and migration assistance',
+              'Dedicated Slack support channel',
+              'Support response time SLAs',
+              'Feature request priority',
+              'Bulk volume tenant and user discounts',
+              'Signed BAAs for HIPAA',
+            ]}
+            cta={{ href: DEMO_URL, label: 'Talk to Sales', newTab: true }}
+          />
+        </div>
+
+        <div class="pricing__compare">
+          <div class="pricing__compare-heading">
+            <h2 class="pricing__compare-title" data-reveal>
+              Compare plans
+            </h2>
+          </div>
+          <div class="pricing__compare-list" data-reveal>
+            <ComparisonTable title="B2B Business Basics" columns={columns} rows={basics} spaceAfter />
+            <ComparisonTable title="Security Features" columns={columns} rows={security} spaceAfter />
+            <ComparisonTable title="Deep Customization" columns={columns} rows={customization} spaceAfter />
+            <ComparisonTable title="Support & Compliance" columns={columns} rows={support} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-faq">
+    <div class="pricing__container">
+      <div class="pricing__intro">
+        <h2 class="pricing__section-title" data-reveal>
+          Frequently asked questions
+        </h2>
+      </div>
+      <div data-reveal>
+        <FaqAccordion faqs={pricingFaqs} />
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing-cta">
+    <div class="pricing__container">
+      <div class="pricing__intro">
+        <h2 class="pricing__section-title" data-reveal>
+          Streamlined Auth, Made Simple
+        </h2>
+        <p class="pricing__text" data-reveal="300">
+          Start building in minutes, or talk to our team to get the answers you need.
+        </p>
+        <div class="pricing-cta__buttons">
+          <a href={SIGNUP_URL} class="pricing-cta__signup" set:text="Start Building Free" />
+          <a href={DEMO_URL} target="_blank" class="pricing-cta__demo" set:text="Ask Us Anything" />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pricing {
+    background-color: var(--color-bg);
+    padding-top: 20px;
+    padding-bottom: 100px;
+    text-align: center;
+  }
+
+  /* Webflow's containers are clearfixed, so child margins stay inside the section. */
+  .pricing__container {
+    display: flow-root;
+    max-width: 1440px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .pricing__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto 10px;
+    text-align: center;
+  }
+
+  .pricing__title,
+  .pricing__section-title {
+    color: var(--color-text);
+  }
+
+  .pricing__text {
+    margin-bottom: 20px;
+    color: var(--color-text);
+  }
+
+  .pricing__plans {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .pricing__compare {
+    margin-top: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .pricing__compare-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 550px;
+    margin: 0 auto;
+  }
+
+  .pricing__compare-title {
+    margin-bottom: 0;
+    color: var(--color-text);
+  }
+
+  .pricing__compare-list {
+    position: relative;
+    padding: 80px;
+    border-radius: var(--radius-24);
+    background-color: var(--color-bg);
+    box-shadow: 0 4px 12px #1937650a;
+  }
+
+  .pricing-faq,
+  .pricing-cta {
+    margin-bottom: 100px;
+  }
+
+  .pricing-cta__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .pricing-cta__signup,
+  .pricing-cta__demo {
+    display: inline-block;
+    padding: 16px 32px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    color: var(--palette-charcoal);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+    text-decoration: none;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s,
+      color 0.35s;
+  }
+
+  .pricing-cta__signup {
+    background-color: var(--color-brand-bright);
+  }
+
+  .pricing-cta__signup:hover {
+    border-color: var(--palette-charcoal);
+    color: var(--palette-charcoal);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  .pricing-cta__demo {
+    border-color: var(--palette-lavender);
+    background-color: var(--palette-lavender);
+    box-shadow: 0 4px 10px #14142b0a;
+  }
+
+  .pricing-cta__demo:hover {
+    background-color: var(--palette-charcoal);
+    color: var(--palette-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+    box-shadow: 0 4px 20px #14142b0a;
+  }
+
+  @media screen and (min-width: 1440px) {
+    .pricing__container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .pricing__intro {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .pricing__body {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .pricing__plans {
+      flex-flow: column;
+    }
+
+    .pricing__compare-heading {
+      margin-bottom: 10px;
+    }
+
+    .pricing__compare-list {
+      padding: 64px 40px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .pricing {
+      padding-bottom: 80px;
+    }
+
+    .pricing__plans {
+      align-items: center;
+    }
+
+    .pricing__compare-heading {
+      margin-bottom: 60px;
+    }
+
+    .pricing__compare-list {
+      padding: 0;
+      border-radius: 0;
+      background-color: transparent;
+      box-shadow: none;
+      text-align: center;
+    }
+
+    .pricing-cta__buttons {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    /* Webflow's header adds 60px of space below itself at this width. */
+    .pricing {
+      margin-top: 60px;
+      padding-top: 0;
+    }
+
+    .pricing__container {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+
+    .pricing__body {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .pricing__compare-heading {
+      margin-bottom: 32px;
+    }
+
+    .pricing-cta__buttons {
+      flex-flow: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+    }
+
+    .pricing-cta__signup,
+    .pricing-cta__demo {
+      width: 100%;
+      padding: 12px 20px;
+    }
+
+    .pricing-cta__signup {
+      margin-bottom: 10px;
+    }
+  }
+</style>

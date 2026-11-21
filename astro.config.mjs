@@ -20,6 +20,9 @@ const PAGE_DATE_MODIFIED = {
   '/privacy': '2026-11-19',
   '/cookie-policy': '2026-11-19',
   '/blog': '2026-11-19',
+  '/request-demo': '2026-11-20',
+  '/pricing': '2026-11-20',
+  '/customers/thoughtly': '2026-11-20',
 };
 
 /** @param {string} key */

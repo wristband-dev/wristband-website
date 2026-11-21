@@ -1,18 +1,97 @@
 ---
-import WebflowLayout from '../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../lib/webflow';
-import bodyHtml from '../webflow/request-demo.html?raw';
-
-const meta = getWebflowMeta('request-demo');
+// Request demo page, rebuilt without Webflow. The button opens Calendly, like every other demo link on the site.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ButtonLink from '../components/ButtonLink.astro';
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
+<BaseLayout
+  title="Request A Demo - Wristband"
+  description="Streamline multi-tenant auth, cut dev time, and enhance security with Wristband. Request a demo to see the ROI and talk directly with our developers."
+  ogImage="/images/hero_background.webp"
 >
-  <Fragment set:html={bodyHtml} />
-</WebflowLayout>
+  <section class="request-demo">
+    <div class="request-demo__content">
+      <h1 class="request-demo__title">Request Demo</h1>
+      <p class="request-demo__text">
+        Supercharge your B2B growth with our multi-tenant auth platform. As an early adopter, you'll get white-glove
+        integration support and priority feature requests. See how Wristband can tackle even your trickiest business
+        requirements.
+      </p>
+      <div class="request-demo__action">
+        <ButtonLink href="https://calendly.com/wristband/meet-up" label="Request Demo" newTab />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Bottom padding gives the same space above the footer as the team, policy and 404 pages. */
+  .request-demo {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 80px;
+  }
+
+  /* Like live Webflow, the content fades in over 600ms when the page loads. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js-reveal) .request-demo__content {
+      animation: request-demo-fade-in 0.6s linear both;
+    }
+  }
+
+  @keyframes request-demo-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .request-demo__title {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  .request-demo__text {
+    max-width: 900px;
+    margin: 20px auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    color: var(--color-text);
+    text-align: left;
+  }
+
+  .request-demo__action {
+    display: flex;
+    justify-content: center;
+    padding: 20px 40px;
+  }
+
+  @media screen and (max-width: 991px) {
+    .request-demo__title {
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .request-demo {
+      padding-bottom: 60px;
+    }
+
+    .request-demo__text {
+      font-size: 17px;
+    }
+  }
+
+  /* Webflow's header adds 60px of space below itself at this width. */
+  @media screen and (max-width: 479px) {
+    .request-demo {
+      margin-top: 60px;
+    }
+  }
+</style>

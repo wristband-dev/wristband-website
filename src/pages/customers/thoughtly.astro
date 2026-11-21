@@ -1,35 +1,1079 @@
 ---
-import WebflowLayout from '../../layouts/WebflowLayout.astro';
-import { getWebflowMeta } from '../../lib/webflow';
-import { SITE } from '../../lib/constants';
+// Thoughtly case study, rebuilt without Webflow. Content and layout match live Webflow.
+// Dark page: BaseLayout's dark theme gives the charcoal background and the dark header.
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseStudyQuote from '../../components/customers/CaseStudyQuote.astro';
+import thoughtlyLogo from '../../assets/customers/thoughtly/thoughtly-logo-white.svg';
+import thoughtlyLogin from '../../assets/customers/thoughtly/thoughtly-login.png';
+import torreyLeonard from '../../assets/testimonials/torrey-leonard.webp';
+import victorSanchez from '../../assets/testimonials/victor-sanchez.jpeg';
+import { LINKS, SITE } from '../../lib/constants';
 import { articleNode, breadcrumbNode, pagePath } from '../../lib/seo';
-import bodyHtml from '../../webflow/customers-thoughtly.html?raw';
 
-const meta = getWebflowMeta('customers-thoughtly');
+const TITLE = 'Thoughtly Found an Auth0 Alternative for Multi-Tenant Auth';
+const DESCRIPTION =
+  'Discover how Thoughtly unified auth for product-led growth and enterprise sales by moving from Auth0 to Wristband\u2019s multi-tenant architecture.';
+const OG_IMAGE = '/images/misc/682d7588b08074e3d22ce582_thoughtly-case-study-open-graph.png';
+const DEMO_URL = 'https://calendly.com/wristband/meet-up';
+
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href;
+const torrey = { name: 'Torrey Leonard', role: 'Founder and CEO', photo: torreyLeonard };
+const victor = { name: 'Victor Sanchez', role: 'Senior Software Engineer', photo: victorSanchez };
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
+<BaseLayout
+  title={TITLE}
+  description={DESCRIPTION}
+  ogImage={OG_IMAGE}
   ogType="article"
+  theme="dark"
   jsonLd={[
-    articleNode({
-      url: canonical,
-      headline: meta.title,
-      description: meta.description,
-      image: meta.ogImage,
-    }),
+    articleNode({ url: canonical, headline: TITLE, description: DESCRIPTION, image: OG_IMAGE }),
     breadcrumbNode([
       { name: 'Home', path: '/' },
       { name: 'Case Studies', path: '/customers/thoughtly' },
       { name: 'Thoughtly', path: pagePath(Astro.url.pathname) },
     ]),
   ]}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
 >
-  <Fragment set:html={bodyHtml} />
-</WebflowLayout>
+  <section>
+    <div class="hero">
+      <div class="hero__lead">
+        <h2 class="hero__label">Case Study:</h2>
+        <Image src={thoughtlyLogo} alt="Thoughtly logo" class="hero__logo" loading="eager" />
+        <h2 class="hero__quote">
+          &ldquo;Wristband is a <span class="hero__quote-highlight">must-have</span> for any enterprise SaaS.&rdquo;
+        </h2>
+        <h2 class="hero__attribution">&mdash; Torrey Leonard, Founder and CEO</h2>
+      </div>
+      <div class="hero__media">
+        <div class="hero__screenshot">
+          <Image src={thoughtlyLogin} alt="Thoughtly login page" class="hero__screenshot-image" loading="eager" />
+        </div>
+      </div>
+    </div>
+
+    <section class="intro">
+      <h1 class="intro__title">
+        How Thoughtly leverages Wristband's multi-tenant features to solve authentication for their product-led growth
+        and enterprise sales initiatives.
+      </h1>
+      <h2 class="intro__subtitle">A Conversation With:</h2>
+      <p class="intro__people">
+        Torrey Leonard, Founder and CEO at Thoughtly
+        <br />
+        Victor Sanchez, Senior Software&nbsp;Engineer at Thoughtly
+      </p>
+    </section>
+  </section>
+
+  <section class="stats">
+    <div class="stats__row">
+      <div class="stats__card">
+        <p class="stats__number stats__number--sky stats__number--users">
+          11<span class="stats__suffix">k+</span>
+        </p>
+        <div class="stats__label">Active users</div>
+      </div>
+      <div class="stats__card">
+        <p class="stats__number stats__number--sky stats__number--migration">One</p>
+        <div class="stats__label">Successful migration from Auth0</div>
+      </div>
+      <div class="stats__card">
+        <p class="stats__number stats__number--green">Zero</p>
+        <div class="stats__label">Downtime or auth issues</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story story--about">
+    <h2 class="story__title">About Thoughtly</h2>
+    <div class="story__body">
+      <p class="story__about">
+        <a href="https://www.thoughtly.com/" target="_blank" class="story__link">
+          Thoughtly
+        </a>{' '}
+        provides AI voice agents to enterprise teams that help boost sales conversions and drive revenue. With a no-code
+        interface, businesses can script conversations, customize tone and personality, and deploy in under 20 minutes.
+        These agents integrate with CRMs and come prebuilt for industries like retail, real estate, healthcare, and
+        more. By automating high-volume calls and accelerating lead follow-up, Thoughtly customers have achieved up to
+        15x ROI.
+      </p>
+    </div>
+  </section>
+
+  <section class="story">
+    <h2 class="story__title">The Challenge</h2>
+    <div class="story__body">
+      <div class="story__prose">
+        <p>
+          Not long after coming to market, it became evident that Thoughtly's platform delivered the most value in
+          enterprise environments. In addition, they still needed a way to support their self-serve user base for small
+          businesses and agencies. These dual customer segments came with fundamentally different authentication
+          requirements.
+        </p>
+        <p>
+          Enterprise buyers expected isolated user data, white-labeled domains, and customizable login flows. Meanwhile,
+          Thoughtly&rsquo;s product-led growth motion relied on a common self-signup and login experience shared across
+          all its users. Supporting both of these paths within a single identity system quickly proved difficult.
+        </p>
+        <p>
+          While the team began redesigning their backend systems to support these heterogeneous use cases,
+          authentication remained a sticking point. They were already using Auth0 and briefly explored their approach to
+          multi-tenancy.
+        </p>
+      </div>
+      <CaseStudyQuote {...torrey}>
+        Initially, we considered looking into Auth0's multi-tenancy options, but it seemed so complex that we didn't
+        even seriously pursue that avenue. It was <em>stressful just thinking about implementing it</em>.
+      </CaseStudyQuote>
+      <div class="story__prose">
+        <p>
+          Thoughtly's needs quickly outpaced what Auth0 could offer out of the box. &nbsp;The lack of native support for
+          serving multiple tenant types from a single application made it hard to separate consumer and enterprise login
+          flows cleanly. Furthermore, building a custom solution to bridge the gap would have slowed product velocity
+          and created a long tail of complexity to manage.
+        </p>
+        <p>
+          As Thoughtly weighed their options, the team prioritized looking for a solution that wouldn&rsquo;t drag
+          engineering into months of complex setup or unclear edge cases. Wristband stood out right away with
+          out-of-the-box support for various multi-tenant use cases.
+        </p>
+        <p>So they made the switch.</p>
+      </div>
+      <div class="story__quote--gap-80">
+        <CaseStudyQuote {...victor}>
+          There's a lot of really valuable information in the docs, especially around multi-tenancy. From what I've
+          seen, <em>there's no 'gotchas'</em>. You get what you see, and that feels really good.
+        </CaseStudyQuote>
+      </div>
+      <h3 class="story__subtitle">What Thoughtly Needed From an Auth Provider</h3>
+      <ul role="list" class="story__requirements">
+        <li>Support for both self-serve and enterprise login flows under a single application.</li>
+        <li>
+          Per-tenant user isolation to give their enterprise customers complete control over their users&rsquo;
+          identities.
+        </li>
+        <li>Customizable policies around MFA and SSO to satisfy enterprise security requirements.</li>
+        <li>Custom-branded login pages and domains for agencies that require white-labeling.</li>
+        <li>Cross-tenant administration capabilities to enable internal teams to manage all customers centrally.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="story">
+    <h2 class="story__title">The Solution</h2>
+    <div class="story__body">
+      <div class="story__prose">
+        <p>
+          Today, Thoughtly relies on Wristband to streamline authentication across its diverse customer base. Out of the
+          box, Thoughtly can now support a shared login experience for self-serve users, while also supporting dedicated
+          login flows for enterprise tenants.
+        </p>
+      </div>
+      <div class="story__quote--gap-60">
+        <CaseStudyQuote {...victor}>
+          Wristband's advanced tenant-level features are a game changer. <strong>[The]</strong> team has been extremely
+          responsive, helping to streamline our authentication, <em>freeing up valuable time for our engineers</em>.
+        </CaseStudyQuote>
+      </div>
+      <h3 class="story__subtitle">What Wristband Delivered</h3>
+      <p class="story__delivered">
+        Thoughtly leverages Wristband&rsquo;s multi-tenant features to support the full spectrum of their business use
+        cases:
+      </p>
+      <div class="story__use-case">
+        <h4 class="story__use-case-title">Global Tenant for Product-Led Growth Initiatives</h4>
+        <p class="story__use-case-text">
+          Thoughtly uses Wristband&rsquo;s Global Tenant to support logins for its end consumers, offering a unified
+          login experience with self-signup enabled. Using the Wristband Dashboard, Thoughtly customized the Global
+          Tenant&rsquo;s login flow by:
+        </p>
+        <ul role="list" class="story__use-case-list">
+          <li>Configuring a custom domain so login pages are hosted under the Thoughtly domain.</li>
+          <li>Updating the email domain to send messages from a Thoughtly-branded address.</li>
+          <li>Customizing the appearance of hosted pages and emails to match Thoughtly&rsquo;s branding.</li>
+          <li>Adding a link on the global login page to direct enterprise customers to their dedicated login page.</li>
+        </ul>
+      </div>
+      <div class="story__use-case">
+        <h4 class="story__use-case-title">Standard Tenant for Each Enterprise Customer</h4>
+        <p class="story__use-case-text">
+          Using Wristband&rsquo;s Dashboard, Thoughtly provisions a dedicated Standard Tenant for every enterprise
+          customer. Each Standard Tenant gets a custom login page, allowing enterprise customers to tailor settings like
+          MFA, password policies, and SSO to their specific needs. User accounts are isolated by tenant, giving
+          enterprise customers complete control over their users&rsquo; lifecycle. Self-signup is disabled for
+          enterprise customer tenants, so new users are onboarded through Wristband&rsquo;s invitation flow.
+        </p>
+      </div>
+      <div class="story__use-case story__use-case--last">
+        <h4 class="story__use-case-title">Standard Tenant for Thoughtly Employees</h4>
+        <p class="story__use-case-text">
+          Thoughtly employees are hosted in their own Standard Tenant. &nbsp;This provides a clear separation between
+          Thoughtly end users and internal admin users. &nbsp;Using Wristband&rsquo;s roles and permissions, Thoughtly
+          employees are granted access to their customers&rsquo; tenants to perform administrative tasks or provide
+          customer support.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <h2 class="story__title">Zero-Downtime Migration</h2>
+    <div class="story__body">
+      <div class="story__prose">
+        <p>
+          Thoughtly engineers collaborated closely with Wristband to build scripts that extracted users from Auth0 and
+          imported them into Wristband via API calls. One major concern was handling passwords, which is a common pain
+          point during identity migrations. With password exports gated behind Auth0&rsquo;s higher-tier plans,
+          Thoughtly used a secure reset-on-login flow to balance user experience with business constraints. Wristband
+          supported this by enhancing its login workflow to automatically prompt migrated users to reset their
+          passwords.
+        </p>
+      </div>
+      <CaseStudyQuote {...torrey}>
+        People thought <strong>[password reset detection]</strong> was more secure. Basically, no customers said
+        anything about it except for people who were like: &ldquo;Cool, this is good&rdquo;. It was so{' '}
+        <em>low friction; it just worked</em>.
+      </CaseStudyQuote>
+      <div class="story__prose">
+        <p>
+          When the migration went live, the Wristband team remained on-call to monitor everything in real time. The
+          system handled the surge of thousands of users without issue, and within a few hours, the migration was
+          complete and fully stable.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story story--results">
+    <h2 class="story__title">Key Results</h2>
+    <div class="story__body">
+      <div class="results">
+        <div class="results__item">
+          <h3 class="results__title">Focus Kept on Core Business</h3>
+          <p class="results__text">
+            &#x2705; &nbsp;Saved months of engineering time by avoiding the need to build custom multi-tenant auth,
+            enabling the team to stay focused on core product features.
+          </p>
+        </div>
+        <div class="results__item">
+          <h3 class="results__title">Streamlined Auth Unlocked Growth</h3>
+          <p class="results__text">
+            &#x2705; &nbsp;Removed barriers to scaling by simplifying authentication with a unified solution, enabling
+            both Product-Led Growth and enterprise motions to thrive.
+          </p>
+        </div>
+        <div class="results__item">
+          <h3 class="results__title">Enterprise-grade Security Achieved</h3>
+          <p class="results__text">
+            &#x2705; &nbsp;Provided enterprise-level security features such as MFA and SSO to its customers to better
+            protect their identities.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story story--conclusion">
+    <h2 class="story__title">Final Thoughts</h2>
+    <div class="story__body">
+      <div class="story__quote--gap-top-40">
+        <CaseStudyQuote {...torrey}>
+          Wristband <em>out of the box is meant for enterprise SaaS</em>. As an enterprise SaaS product, it made the
+          most sense for Thoughtly to use Wristband. So we made the switch, and the switch was easy. Wristband is a
+          must-have for any enterprise SaaS.
+        </CaseStudyQuote>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta__container">
+      <h2 class="cta__title">Don&rsquo;t let auth slow your business down.</h2>
+      <p class="cta__text">Start unlocking growth with Wristband&rsquo;s multi-tenant auth platform today.</p>
+      <div class="cta__row">
+        <div class="cta__buttons">
+          <a href={LINKS.signup} class="cta__signup" set:text="Start for Free" />
+          <a href={DEMO_URL} target="_blank" class="cta__demo" set:text="Request Demo" />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero: label, logo, quote and attribution on the left, the login screenshot on the right. */
+  .hero {
+    display: flex;
+    flex: 0 auto;
+    gap: 10px;
+    padding: 60px 5vw 5vh;
+  }
+
+  .hero__lead {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    margin-left: auto;
+    padding-right: 20px;
+  }
+
+  .hero__label {
+    margin: 0;
+    color: var(--palette-sky-blue);
+    font-size: 54px;
+    font-weight: 200;
+    line-height: 1.4em;
+    text-align: center;
+  }
+
+  .hero__logo {
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    margin-top: -2vw;
+  }
+
+  .hero__quote {
+    max-width: 720px;
+    margin-bottom: 24px;
+    color: var(--palette-white-smoke);
+    font-size: 58px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2em;
+  }
+
+  .hero__quote-highlight {
+    background-image: linear-gradient(#0049dc, #00a2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero__attribution {
+    margin: 0 0 16px 10px;
+    color: var(--palette-green);
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.3;
+  }
+
+  .hero__media {
+    display: flex;
+    align-items: flex-start;
+    width: auto;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 20px;
+  }
+
+  .hero__screenshot {
+    width: 100%;
+    min-width: 320px;
+    max-width: 380px;
+    height: 100%;
+    max-height: 500px;
+    border-radius: 20px;
+    box-shadow: 0 0 6px 5px var(--palette-charcoal);
+    transform: rotate(5deg);
+  }
+
+  .hero__screenshot-image {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+  }
+
+  /* Title block under the hero. */
+  .intro {
+    margin-top: 100px;
+    padding: 0 5vw;
+  }
+
+  .intro__title {
+    max-width: 1300px;
+    margin: 0 auto 24px;
+    padding: 0 15px;
+    color: var(--palette-aquamarine);
+    font-size: 42px;
+    font-weight: var(--font-weight-regular);
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .intro__subtitle {
+    max-width: 900px;
+    margin: 60px auto 20px;
+    color: var(--palette-white-smoke);
+    font-size: 30px;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4em;
+    text-align: center;
+  }
+
+  .intro__people {
+    margin-bottom: 20px;
+    color: var(--palette-white);
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1.66667em;
+    text-align: center;
+  }
+
+  /* Three stat cards. */
+  .stats {
+    margin-top: 40px;
+    padding: 60px 5vw;
+  }
+
+  .stats__row {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .stats__card {
+    display: flex;
+    flex-flow: column;
+    padding: 20px;
+    border: 1px solid var(--palette-green);
+    border-radius: var(--radius-16);
+  }
+
+  .stats__number {
+    margin-bottom: 20px;
+    font-size: 9vw;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    text-align: center;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stats__number--sky {
+    background-image: linear-gradient(90deg, var(--palette-sky-blue), var(--palette-white));
+  }
+
+  .stats__number--users,
+  .stats__number--migration {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .stats__number--green {
+    background-image: linear-gradient(0deg, var(--palette-medium-aquamarine), var(--palette-aquamarine));
+  }
+
+  .stats__suffix {
+    font-size: 7vw;
+    font-weight: 300;
+  }
+
+  .stats__label {
+    color: var(--palette-white);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+  }
+
+  /* Story sections: a sky-blue title over a 900px column. */
+  .story {
+    margin-top: 0;
+    padding: 40px;
+    background-color: var(--palette-charcoal);
+  }
+
+  .story--about {
+    margin-top: 40px;
+  }
+
+  .story--results {
+    margin-bottom: 0;
+  }
+
+  .story--conclusion {
+    margin-bottom: 80px;
+  }
+
+  .story__title {
+    margin-bottom: 0;
+    color: var(--palette-sky-blue);
+    font-size: 54px;
+    font-weight: 200;
+    line-height: 1.4em;
+    text-align: center;
+  }
+
+  .story__body {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .story__about,
+  .story__prose {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    color: var(--palette-white);
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.6em;
+  }
+
+  .story__about {
+    margin-bottom: 0;
+  }
+
+  .story__prose p {
+    margin-bottom: 0;
+    line-height: 1.6em;
+  }
+
+  /* Live Webflow separates paragraphs with a blank line. */
+  .story__prose p + p {
+    margin-top: 1.6em;
+  }
+
+  .story__link {
+    color: var(--palette-green);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  .story__link:hover {
+    color: var(--palette-aquamarine);
+  }
+
+  .story__quote--gap-80 {
+    margin-bottom: 80px;
+  }
+
+  .story__quote--gap-60 {
+    margin-bottom: 60px;
+  }
+
+  .story__quote--gap-top-40 {
+    margin-top: 40px;
+  }
+
+  .story__subtitle,
+  .story__use-case-title {
+    background-image: linear-gradient(180deg, var(--palette-green), var(--palette-aquamarine));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: var(--palette-white-smoke);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.4em;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .story__subtitle {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .story__requirements {
+    margin: 20px 0 10px;
+    padding: 0 40px;
+    font-weight: 300;
+  }
+
+  .story__requirements li,
+  .story__use-case-list li {
+    margin-bottom: 20px;
+    color: var(--palette-white);
+    font-size: 18px;
+    font-weight: 300;
+  }
+
+  .story__delivered,
+  .story__use-case-text {
+    margin-bottom: 20px;
+    color: var(--palette-white);
+    font-weight: 300;
+    line-height: 1.6em;
+  }
+
+  .story__delivered {
+    margin-bottom: 40px;
+  }
+
+  /* Live Webflow leaves 30px after each use case except the last. */
+  .story__use-case {
+    margin-bottom: 30px;
+  }
+
+  .story__use-case--last {
+    margin-bottom: 0;
+  }
+
+  .story__use-case-title {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+
+  .story__use-case-list {
+    margin: 0;
+    padding: 0 0 0 40px;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  /* Key results: one column of three. */
+  .results {
+    display: flex;
+    flex-flow: column;
+    gap: 62px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+
+  .results__title {
+    margin-bottom: 20px;
+    background-image: linear-gradient(180deg, var(--palette-pale-lavender), var(--palette-pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: var(--palette-white-smoke);
+    font-size: 22px;
+    line-height: 1.4em;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .results__text {
+    margin-bottom: 0;
+    padding-left: 40px;
+    color: var(--palette-white);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.6em;
+  }
+
+  /* Closing call to action on a blue gradient. */
+  .cta {
+    padding: 60px 5vw;
+    background-image: linear-gradient(180deg, var(--palette-sky-blue), var(--palette-indigo));
+  }
+
+  .cta__container {
+    max-width: 85vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta__title {
+    margin-bottom: 24px;
+    color: var(--palette-dark-gray);
+    font-size: 58px;
+    line-height: 1.2em;
+    text-align: center;
+    text-shadow: 0 1px 1px var(--palette-dim-gray);
+  }
+
+  .cta__text {
+    margin-bottom: 0;
+    color: var(--palette-charcoal);
+    font-size: 20px;
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    text-shadow: 0 1px 1px var(--palette-dim-gray);
+  }
+
+  .cta__row {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 15px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .cta__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta__signup,
+  .cta__demo {
+    display: inline-block;
+    padding: 16px 32px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    color: var(--palette-charcoal);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+    text-decoration: none;
+    cursor: pointer;
+    transform-style: preserve-3d;
+  }
+
+  .cta__signup {
+    background-color: var(--palette-aquamarine);
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s,
+      color 0.35s;
+  }
+
+  .cta__signup:hover {
+    border-color: var(--palette-charcoal);
+    color: var(--palette-charcoal);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  .cta__demo {
+    border-color: var(--palette-lavender);
+    background-color: var(--palette-white);
+    box-shadow: 0 4px 10px #14142b0a;
+    transition:
+      border-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s,
+      background-color 0.3s,
+      color 0.3s;
+  }
+
+  .cta__demo:hover {
+    background-color: var(--palette-charcoal);
+    color: var(--palette-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+    box-shadow: 0 4px 20px #14142b0a;
+  }
+
+  @media screen and (min-width: 1440px) {
+    .hero {
+      gap: 0;
+    }
+
+    .hero__lead {
+      padding-right: 0;
+    }
+
+    .hero__logo {
+      max-width: 750px;
+    }
+
+    .hero__quote {
+      max-width: 750px;
+    }
+
+    .hero__screenshot {
+      width: 380px;
+      min-width: auto;
+      height: 500px;
+    }
+
+    .intro {
+      padding-bottom: 5vh;
+    }
+
+    .intro__subtitle {
+      font-size: 34px;
+    }
+
+    .story,
+    .story--about {
+      margin-top: 60px;
+    }
+  }
+
+  @media screen and (min-width: 1920px) {
+    .hero {
+      padding: 100px 10vw 8vh;
+    }
+
+    .hero__attribution {
+      font-size: 28px;
+    }
+
+    .intro__title {
+      font-size: 48px;
+    }
+
+    .intro__subtitle {
+      margin-top: 80px;
+      font-size: 40px;
+    }
+
+    .intro__people {
+      font-size: 28px;
+    }
+
+    .stats__label {
+      font-size: 20px;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .hero {
+      flex-flow: column;
+      align-items: flex-start;
+    }
+
+    .hero__lead {
+      margin-right: auto;
+      padding-right: 0;
+    }
+
+    .hero__logo {
+      max-width: 640px;
+    }
+
+    .hero__quote {
+      max-width: 640px;
+      margin-bottom: 20px;
+      font-size: 50px;
+    }
+
+    .hero__media {
+      flex: 0 auto;
+      margin-top: 60px;
+      padding-right: 0;
+    }
+
+    .hero__screenshot {
+      min-width: 260px;
+      max-width: 360px;
+      height: auto;
+      max-height: 400px;
+    }
+
+    .intro__title {
+      margin-bottom: 20px;
+    }
+
+    .intro__subtitle {
+      margin-top: 40px;
+      font-size: 32px;
+    }
+
+    .intro__people {
+      font-size: 20px;
+    }
+
+    .stats__card {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stats__number--users {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .stats__number--migration {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .stats__number--green {
+      background-image: linear-gradient(0deg, var(--palette-green), var(--palette-aquamarine));
+    }
+
+    .stats__label {
+      font-size: 16px;
+    }
+
+    .story,
+    .story--about {
+      margin-top: 20px;
+    }
+
+    .cta__title {
+      margin-bottom: 20px;
+      font-size: 50px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .hero {
+      flex-flow: column;
+    }
+
+    .hero__label {
+      font-size: 56px;
+    }
+
+    .hero__logo {
+      max-width: 560px;
+    }
+
+    .hero__quote {
+      max-width: 560px;
+      margin-bottom: 16px;
+      font-size: 40px;
+      line-height: 1.3em;
+    }
+
+    .hero__media {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .hero__screenshot {
+      max-width: 340px;
+    }
+
+    .intro__title {
+      margin-bottom: 16px;
+    }
+
+    .intro__subtitle {
+      font-size: 28px;
+    }
+
+    .intro__people {
+      font-size: 18px;
+    }
+
+    .stats__row {
+      flex-flow: column;
+      justify-content: space-between;
+      align-items: stretch;
+    }
+
+    .stats__label {
+      font-size: 3vw;
+    }
+
+    .story__title {
+      font-size: 48px;
+    }
+
+    .cta__title {
+      margin-bottom: 16px;
+      font-size: 40px;
+      line-height: 1.3em;
+    }
+
+    .cta__row {
+      flex-flow: column;
+      justify-content: space-between;
+      align-items: stretch;
+    }
+
+    .cta__buttons {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    /* Webflow's header adds 60px of space below itself at this width. */
+    .hero {
+      margin-top: 60px;
+    }
+
+    .hero__label {
+      font-size: 44px;
+    }
+
+    .hero__lead {
+      margin-bottom: 20px;
+    }
+
+    .hero__logo {
+      margin-bottom: 20px;
+    }
+
+    .hero__quote {
+      font-size: 32px;
+      line-height: 1.2em;
+    }
+
+    .hero__screenshot {
+      max-width: 300px;
+    }
+
+    .hero__screenshot-image {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .intro__title {
+      font-size: 28px;
+    }
+
+    .intro__subtitle {
+      font-size: 22px;
+    }
+
+    .stats__card {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .stats__number,
+    .stats__number--users {
+      padding-left: 0;
+      padding-right: 0;
+      font-size: 54px;
+    }
+
+    .stats__suffix {
+      font-size: 9vw;
+    }
+
+    .stats__label {
+      font-size: 16px;
+    }
+
+    .story,
+    .story--about {
+      margin-top: 0;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .story__requirements {
+      padding-right: 20px;
+    }
+
+    .story__use-case-list {
+      padding-right: 20px;
+    }
+
+    .results__text {
+      padding-left: 20px;
+    }
+
+    .cta__title {
+      font-size: 36px;
+      line-height: 1.2em;
+    }
+
+    .cta__buttons {
+      flex-flow: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+    }
+
+    .cta__signup,
+    .cta__demo {
+      width: 100%;
+      padding: 12px 20px;
+      text-align: center;
+    }
+
+    .cta__signup {
+      margin-bottom: 10px;
+    }
+  }
+</style>

@@ -1,0 +1,291 @@
+---
+// One plan card on the pricing page: name, price, description, feature list and a button.
+// Matches Webflow's pricing cards. The highlighted card has a green border.
+interface Props {
+  name: string;
+  price: string;
+  /** Small text beside the price, one entry per line. */
+  priceNote?: string[];
+  description: string;
+  /** Line above the features, like "Everything in Standard Plan, plus:". */
+  intro?: string;
+  features: string[];
+  cta: { href: string; label: string; newTab?: boolean };
+  highlighted?: boolean;
+}
+
+const { name, price, priceNote, description, intro, features, cta, highlighted = false } = Astro.props;
+// Glyphs: a check mark in the "Line Square Icons" font, and an arrow in "Icons applay x template", like live Webflow.
+const CHECK_GLYPH = '\u2714';
+const ARROW_GLYPH = '\ue80a';
+---
+
+<div class:list={['plan-card', highlighted && 'plan-card--highlighted']}>
+  <div class="plan-card__inner">
+    <div class="plan-card__top">
+      <p class="plan-card__name">{name}</p>
+      <div class="plan-card__price-row">
+        <h2 class="plan-card__price">{price}</h2>
+        {priceNote && (
+          <div class="plan-card__price-note">
+            {priceNote.map((line, index) => (
+              <>
+                {index > 0 && <br />}
+                {line}
+              </>
+            ))}
+          </div>
+        )}
+      </div>
+      <div class="plan-card__description">{description}</div>
+    </div>
+    <div class="plan-card__bottom">
+      <ul role="list" class="plan-card__features">
+        {intro && (
+          <li class="plan-card__feature">
+            <span class="plan-card__intro">{intro}</span>
+          </li>
+        )}
+        {features.map((feature) => (
+          <li class="plan-card__feature">
+            <span class="plan-card__check" aria-hidden="true">
+              {CHECK_GLYPH}
+            </span>
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <a href={cta.href} class="plan-card__button" target={cta.newTab ? '_blank' : undefined}>
+      <span set:text={cta.label} />
+      <span class="plan-card__arrow" aria-hidden="true">
+        {ARROW_GLYPH}
+      </span>
+    </a>
+  </div>
+</div>
+
+<style>
+  @font-face {
+    font-family: 'Icons applay x template';
+    src: url('/fonts/64d01a3771d020746e331ae2_icons-applay-x-template.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Line Square Icons';
+    src: url('/fonts/64d01a3771d020746e331bc3_line-square-icons.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  .plan-card {
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    margin: 0 12px 24px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-24);
+    background-color: var(--color-bg);
+    box-shadow: 0 2px 12px 0 var(--color-border);
+    color: var(--color-text);
+    text-align: left;
+  }
+
+  .plan-card--highlighted {
+    border-width: 2px;
+    border-color: var(--color-brand);
+  }
+
+  .plan-card__inner {
+    display: flex;
+    flex: 1;
+    flex-flow: column;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 38px 30px 46px;
+  }
+
+  .plan-card__name {
+    margin-bottom: 10px;
+    color: var(--color-brand-medium);
+    font-size: 20px;
+    font-weight: var(--font-weight-medium);
+  }
+
+  .plan-card__price-row {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 10px;
+  }
+
+  .plan-card__price {
+    flex: 0 auto;
+    margin: 0 0 16px;
+    color: var(--color-text);
+    font-size: 36px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.4em;
+    text-align: left;
+  }
+
+  .plan-card__price-note {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.2em;
+    text-align: right;
+  }
+
+  .plan-card__description {
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.4em;
+  }
+
+  .plan-card__bottom {
+    flex: 1;
+  }
+
+  .plan-card__features {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .plan-card__feature {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 1.4em;
+  }
+
+  .plan-card__intro {
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .plan-card__check {
+    display: flex;
+    flex: none;
+    justify-content: center;
+    align-items: center;
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    border-radius: 100%;
+    color: var(--color-brand);
+    font-family: 'Line Square Icons', sans-serif;
+    font-size: 18px;
+  }
+
+  .plan-card__button {
+    display: block;
+    width: 100%;
+    max-width: 85vw;
+    padding: 16px 28px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-12);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-lavender);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition:
+      color 0.35s,
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
+  }
+
+  .plan-card__button:hover {
+    border-color: var(--palette-charcoal);
+    color: var(--palette-off-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  .plan-card__arrow {
+    display: inline-block;
+    margin-left: 4px;
+    font-family: 'Icons applay x template', sans-serif;
+  }
+
+  @media screen and (max-width: 991px) {
+    .plan-card {
+      margin: 0 0 32px;
+    }
+
+    .plan-card__top {
+      margin-bottom: 8px;
+    }
+
+    .plan-card__bottom {
+      display: flex;
+      flex-flow: column;
+    }
+
+    .plan-card__price {
+      font-size: 32px;
+    }
+
+    .plan-card__check {
+      justify-content: flex-start;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .plan-card {
+      margin-bottom: 10px;
+      border-radius: var(--radius-12);
+    }
+
+    .plan-card__inner {
+      display: block;
+      padding-top: 40px;
+      padding-bottom: 48px;
+    }
+
+    .plan-card__price {
+      font-size: 28px;
+    }
+
+    .plan-card__top {
+      margin-bottom: 0;
+    }
+
+    .plan-card__features {
+      margin-top: 10px;
+      margin-bottom: 40px;
+    }
+
+    .plan-card__button {
+      border-radius: 8px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .plan-card__inner {
+      padding: 32px 24px 40px;
+    }
+
+    .plan-card__price {
+      font-size: 22px;
+    }
+
+    .plan-card__check {
+      border-radius: 20px;
+    }
+  }
+</style>

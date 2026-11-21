@@ -1,53 +1,66 @@
 [
   {
+    "id": "whats-a-tenant",
     "question": "What is a tenant?",
     "answer": "A tenant is a grouping of users who have access to a common set of data, configurations, and security settings. Each tenant has its own unique set of data, configurations, and security settings, which are isolated from other tenants, but they share the underlying infrastructure and resources, such as the database and server. Typically for B2B applications, tenants are associated to organizations or companies using your application. In Wristband, multiple tenants can live under a single application, and multiple users can live under a single tenant."
   },
   {
+    "id": "tenant-isolation",
     "question": "How are tenants isolated from each other?",
     "answer": "Tenants are logically isolated from each other. They exist in the same database instance, but data is isolated from each other using a tenant identifier discriminator column. In addition, each tenant has their own subdomain under the application's domain, and authenticated sessions are scoped to the tenant domain."
   },
   {
+    "id": "whats-mau",
     "question": "What is a Monthly Active User (MAU)?",
     "answer": "A user is considered active when they authenticate or perform a token refresh with Wristband at least once in a given month."
   },
   {
+    "id": "whats-mam",
     "question": "What is a Monthly Active Machine (MAM)?",
     "answer": "A machine is any OAuth2 Client in Wristband that generates at least one access token using the [Client Credentials grant type](https://docs.wristband.dev/docs/machine-to-machine-integration) at least once in a given month."
   },
   {
+    "id": "whats-mat",
     "question": "What is a Monthly Active Tenant (MAT)?",
     "answer": "A tenant is considered active when there is at least one active user or at least one active machine within that tenant in a given month. Machines created at the application-level (not under a specific tenant) do not affect the active tenant count. Additionally, a tenant is considered active when a user successfully authenticates through an external identity provider associated with the tenant, regardless of whether the user is provisioned within Wristband or not."
   },
   {
+    "id": "machine-token-amount",
     "question": "How many access tokens can each machine issue for Machine-to-Machine Auth?",
     "answer": "Each machine can issue unlimited access tokens. However, we monitor usage patterns and may reach out if activity becomes unusually high. To prevent your machines from getting flagged for excessive usage, it's important to cache the access tokens locally and reuse them until they expire rather than creating new access tokens for each request."
   },
   {
+    "id": "who-enforces-rbac",
     "question": "Who enforces authorization (RBAC) decisions?",
     "answer": "Wristband manages the association between users, roles, and permissions, but the actual authorization decision is handled by your application. Wristband is responsible for providing the roles and permissions of the authenticated user to your application, but your application is responsible for using those roles and permissions to enforce authorization."
   },
   {
+    "id": "disposable-email-blocking",
     "question": "What is Disposable Email Blocking?",
     "answer": "Disposable Email Blocking prevents users from signing up with temporary or disposable email addresses, which are often used to avoid providing a permanent email address. Enabling this feature helps reduce spam account creation in your application."
   },
   {
+    "id": "q5",
     "question": "Do you provide custom components that we can embed?",
     "answer": "Not exactly. We prioritized our hosted Onboard UI pages for our out-of-the-box offering. We also allow you to host your own UI by configuring \"Custom Page URLs\" that lets you take control of our workflows through API calls. As a result, we don't currently support an embedded widget, though it is possible we may add some widgets in the future."
   },
   {
+    "id": "wristband-sdks",
     "question": "Are there SDKs provided for integrating with Wristband?",
     "answer": "Yes! You can checkout our list of currently supported [auth SDKs](https://docs.wristband.dev/docs/auth-sdks-github). We are working on adding more SDK's for your development. We'll provide updates to our documentation as they get released."
   },
   {
+    "id": "wristband-uptime-slas",
     "question": "Do you offer an uptime SLA?",
     "answer": "Yes. All plans, including the Standard plan, come with a guaranteed 99.9% uptime SLA. In practice, our uptime historically runs closer to 99.99%. If your business requires a higher, contractually guaranteed SLA, reach out to us about our Premium plan."
   },
   {
+    "id": "migrate-to-wristband",
     "question": "How can we migrate data from our system into Wristband?",
     "answer": "You can use this [import script](https://github.com/wristband-dev/user-import) to import user information from a CSV file into your Wristband tenants. You can also leverage our [APIs](https://docs.wristband.dev/reference/createuserv1) to create users as well. For larger volumes of data, we work with our customers on a case-by-case basis. In the future, we aim to support bulk user import and export APIs. If you have more complex needs, reach out to support and we will get you sorted."
   },
   {
+    "id": "migrate-from-wristband",
     "question": "What if I want to migrate my data out of Wristband?",
     "answer": "If something isn't working for you, we'll go above and beyond to make your experience with us better. That said, we understand that sometimes you may have different needs. In that event, you can use this [export script](https://github.com/wristband-dev/user-export) to export your data as a CSV. If you have more complex needs, reach out to support and we will get you sorted."
   }

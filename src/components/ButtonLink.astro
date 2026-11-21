@@ -1,0 +1,57 @@
+---
+// The large dark button link from live Webflow (its .butt class), used on the 404 and request demo pages.
+// Full width on phones (479px and below), like Webflow.
+interface Props {
+  href: string;
+  label: string;
+  /** Open the link in a new tab. */
+  newTab?: boolean;
+}
+
+const { href, label, newTab = false } = Astro.props;
+---
+
+<a href={href} class="button-link" target={newTab ? '_blank' : undefined} set:text={label} />
+
+<style>
+  .button-link {
+    display: inline-block;
+    padding: 26px 38px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-12);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-lavender);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition:
+      color 0.35s,
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
+  }
+
+  .button-link:hover {
+    border-color: var(--palette-charcoal);
+    color: var(--palette-off-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  @media screen and (max-width: 767px) {
+    .button-link {
+      padding: 20px 28px;
+      border-radius: 8px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .button-link {
+      display: block;
+      width: 100%;
+    }
+  }
+</style>
