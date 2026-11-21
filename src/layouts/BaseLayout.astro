@@ -1,6 +1,5 @@
 ---
-// Layout for rebuilt pages: same <head> and third-party setup as WebflowLayout.astro,
-// without webflow.css, jQuery or the Webflow scripts.
+// Layout for every page: the shared <head>, third-party setup, header and footer.
 import '../styles/tokens.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
@@ -8,15 +7,7 @@ import Footer from '../components/Footer.astro';
 import JsonLd from '../components/JsonLd.astro';
 import CalendlyPopup from '../components/CalendlyPopup.astro';
 import Fonts from '../components/Fonts.astro';
-import {
-  TWITTER_HANDLE,
-  absoluteUrl,
-  decodeHtmlEntities,
-  jsonLdGraph,
-  pagePath,
-  resolveOgImage,
-  type JsonLdNode,
-} from '../lib/seo';
+import { TWITTER_HANDLE, absoluteUrl, decodeHtmlEntities, jsonLdGraph, pagePath, type JsonLdNode } from '../lib/seo';
 import { SITE } from '../lib/constants';
 
 interface Props {
@@ -31,6 +22,8 @@ interface Props {
   termlyPolicyEmbed?: boolean;
   /** `dark`: charcoal page background and the dark header. The footer stays light, like live Webflow. */
   theme?: 'light' | 'dark';
+  /** The header's look, when it differs from the page's. The home page has a light page with a dark header over its hero. */
+  headerTheme?: 'light' | 'dark';
 }
 
 const {
@@ -43,13 +36,15 @@ const {
   noIndex = false,
   termlyPolicyEmbed = false,
   theme = 'light',
+  headerTheme = theme,
 } = Astro.props;
 
 const pageTitle = decodeHtmlEntities(title);
 const pageDescription = decodeHtmlEntities(description);
 // No trailing slash (trailingSlash: 'never'), so the home page matches the sitemap URL.
 const canonical = new URL(pagePath(Astro.url.pathname), Astro.site ?? SITE.url).href.replace(/\/$/, '');
-const ogImageAbs = absoluteUrl(resolveOgImage(ogImage), Astro.site?.href ?? SITE.url);
+// Pages without an ogImage get no og:image or twitter:image tag, like live Webflow.
+const ogImageAbs = ogImage?.trim() ? absoluteUrl(ogImage, Astro.site?.href ?? SITE.url) : undefined;
 const datePublishedIso =
   datePublished instanceof Date
     ? datePublished.toISOString()
@@ -81,13 +76,13 @@ const datePublishedIso =
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImageAbs} />
+    {ogImageAbs && <meta property="og:image" content={ogImageAbs} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content={TWITTER_HANDLE} />
     <meta name="twitter:creator" content={TWITTER_HANDLE} />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
-    <meta name="twitter:image" content={ogImageAbs} />
+    {ogImageAbs && <meta name="twitter:image" content={ogImageAbs} />}
     {datePublishedIso && <meta property="article:published_time" content={datePublishedIso} />}
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
@@ -131,7 +126,7 @@ const datePublishedIso =
       ></iframe>
     </noscript>
 
-    <Header theme={theme} />
+    <Header theme={headerTheme} />
     <main>
       <slot />
     </main>

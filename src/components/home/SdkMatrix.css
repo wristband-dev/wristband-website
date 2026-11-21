@@ -1,0 +1,148 @@
+.sdk-matrix {
+  display: flex;
+  width: 100%;
+  max-width: 961px;
+  height: 542px;
+  margin: 0 auto;
+  background: #252525;
+  border: 1px solid #5a5757;
+  color: #fff;
+  overflow: hidden;
+}
+
+.sdk-matrix-rail {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-right: 1px solid #5a5757;
+}
+
+.sdk-matrix-fw {
+  box-sizing: border-box;
+  width: 65px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  background: #1a1c1d;
+  border: none;
+  border-bottom: 1px solid #5a5757;
+  transition: background-color 0.3s ease;
+}
+
+.sdk-matrix-fw:last-child {
+  border-bottom: none;
+}
+
+.sdk-matrix-fw:hover {
+  background: #3a3c3d;
+}
+
+.sdk-matrix-fw.is-selected {
+  background: #06ffc1;
+}
+
+.sdk-matrix-fw.is-selected:hover {
+  background: #06ffc1;
+}
+
+.sdk-matrix-fw:focus-visible {
+  outline: 2px solid #64afff;
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.sdk-matrix-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sdk-matrix-tabs {
+  display: flex;
+  align-items: stretch;
+  min-height: 54px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sdk-matrix-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.sdk-matrix-tab {
+  flex-shrink: 0;
+  margin: 0 8px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #fff;
+  font-family: Inter, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 54px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.sdk-matrix-tab:hover {
+  background: #3a3c3d;
+  color: #64afff;
+}
+
+.sdk-matrix-tab.is-selected {
+  color: #64afff;
+  border-bottom-color: #64afff;
+}
+
+.sdk-matrix-tab:focus-visible {
+  outline: 2px solid #64afff;
+  outline-offset: -2px;
+}
+
+.sdk-matrix-code {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px 28px;
+  border-top: 1px solid #5a5757;
+}
+
+.sdk-matrix-code pre {
+  margin: 0;
+  background: transparent !important;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow: visible;
+  width: max-content;
+  min-width: 100%;
+}
+
+.sdk-matrix-code code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  background: transparent !important;
+}
+
+@media (max-width: 767px) {
+  .sdk-matrix {
+    height: 480px;
+  }
+
+  .sdk-matrix-fw {
+    width: 52px;
+  }
+
+  .sdk-matrix-code {
+    padding: 14px 16px;
+  }
+}

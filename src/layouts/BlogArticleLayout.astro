@@ -1,6 +1,6 @@
 ---
 // Layout for blog posts written in Markdown or MDX (src/content/blog).
-// Built on BaseLayout, with no Webflow CSS or scripts. Matches the copied Webflow blog posts:
+// Built on BaseLayout. Matches the blog posts on live Webflow:
 // category badge, title, summary and cover image, then the article and the author card.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -238,7 +238,7 @@ const { title, summary, category, cover, ogImage, jsonLd, datePublished, author 
     font-weight: var(--font-weight-semibold);
   }
 
-  /* Webflow's default h4, bold text and inline code color, which the copied posts show. */
+  /* Webflow's default h4, bold text and inline code color, which the live posts show. */
   .post-article :global(h4),
   .post-article :global(strong),
   .post-article :global(:not(pre) > code) {

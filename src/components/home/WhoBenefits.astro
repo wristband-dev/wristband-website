@@ -1,0 +1,68 @@
+---
+// Who Benefits section of the home page: an accordion with one item per audience.
+// The item itself (markup, opening and closing) comes from src/components/Accordion.astro.
+// The look of this section is set here.
+import { Image } from 'astro:assets';
+import Accordion from '../Accordion.astro';
+import b2bSaasIcon from '../../assets/home/who-benefits/b2b-saas.svg';
+import startupsSmbsIcon from '../../assets/home/who-benefits/startups-smbs.svg';
+---
+
+<div class="who">
+  <div class="who__list">
+    <Accordion id="benefits-b2b-saas" title="B2B SaaS" headingTag="h2" data-reveal>
+      <Image slot="icon" src={b2bSaasIcon} alt="benefits b2b saas icon" loading="lazy" />
+      <p>
+        Wristband can be used to implement many styles of authentication; however, it&rsquo;s primarily designed for B2B
+        SaaS applications whose users authenticate as employees of an organization rather than as individual consumers.
+        For these types of applications, Wristband&rsquo;s support for features such as multi-tenancy, single sign-on
+        (SSO), and role-based access control (RBAC) provide the most value. Examples of such applications include:
+      </p>
+      <ul role="list" class="who__examples">
+        <li>Project management and productivity tools</li>
+        <li>HR systems</li>
+        <li>Finance and legal applications</li>
+        <li>Cybersecurity tools</li>
+        <li>E-Commerce and marketplace platforms</li>
+        <li>Sales and Marketing tech</li>
+        <li>EdTech</li>
+      </ul>
+    </Accordion>
+    <Accordion id="benefits-startups-smbs" title="Startups & SMBs" headingTag="h2" data-reveal>
+      <Image slot="icon" src={startupsSmbsIcon} alt="benefits startup smbs icon" loading="lazy" />
+      <p>
+        Wristband is committed to providing companies of all sizes with the tools they need to secure their
+        application&rsquo;s identities. &nbsp;We believe that security is an essential right rather than a luxury item.
+        As such, all of Wristband&rsquo;s security features are available on the free tier. &nbsp;Even if you&rsquo;re
+        just starting to build your application, you&rsquo;ll still have access to advanced capabilities such as MFA and
+        SSO. With Wristband, your application can have enterprise level authentication from day one.
+      </p>
+    </Accordion>
+  </div>
+</div>
+
+<style>
+  .who {
+    margin-bottom: 40px;
+  }
+
+  .who__list {
+    --accordion-bg: #f5f5f5;
+    --accordion-shadow: 1px 4px 10px 1px #14142b17;
+    --accordion-title-size: 24px;
+    --accordion-title-color: var(--palette-charcoal);
+    --accordion-arrow-color: var(--palette-charcoal);
+
+    display: flex;
+    flex-flow: column;
+    gap: 40px;
+    max-width: 900px;
+    margin: 40px auto 0;
+  }
+
+  .who__examples {
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
+  }
+</style>

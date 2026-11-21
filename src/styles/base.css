@@ -1,10 +1,10 @@
 /*
-  Base styles for rebuilt pages (BaseLayout.astro): a reset plus element defaults from tokens.css.
-  The reset matches the one in webflow.css (normalize.css v3 plus Webflow's base rules), except:
+  Base styles for every page (BaseLayout.astro): a reset plus element defaults from tokens.css.
+  The reset matches the one live Webflow used (normalize.css v3 plus Webflow's base rules), except:
   - Focus outlines are kept on links, for keyboard users.
   - Webflow-only rules (.w-* classes, w-mod-touch) are left out.
   - blockquote, figure, figcaption and label are styled in the components that use them.
-  Sizes and spacing match webflow.css. Colors match what the copied pages show on screen.
+  Sizes and spacing match live Webflow's CSS. Colors match what live Webflow shows on screen.
 */
 
 *,
@@ -282,7 +282,7 @@ legend {
 }
 
 /*
-  Zoom-in reveal, matching Webflow's "Zoom In" interaction on copied pages:
+  Zoom-in reveal, matching live Webflow's "Zoom In" interaction:
   starts at 97% size and invisible, then grows and fades in over 350ms when scrolled into view.
   Use data-reveal (200ms delay) or data-reveal="300" (custom delay in ms). The script is in BaseLayout.astro.
   Only applies once that script has run (the js-reveal class), and never for visitors who prefer reduced motion.
@@ -301,6 +301,23 @@ legend {
     opacity: 1;
     transform: none;
   }
+}
+
+/*
+  Accordions (src/lib/accordion.ts): the whole clickable row shows the hand cursor,
+  and the title turns green while its item is open.
+*/
+[data-accordion-trigger] {
+  cursor: pointer;
+}
+
+[data-accordion-trigger] button[aria-controls] {
+  transition: color 0.2s ease-in;
+}
+
+[data-accordion-trigger].is-open button[aria-controls] {
+  color: var(--palette-green);
+  transition-timing-function: ease-out;
 }
 
 @media screen and (max-width: 991px) {
