@@ -4,10 +4,10 @@ Marketing site for [wristband.dev](https://www.wristband.dev), migrated from Web
 
 ## Stack
 
-- Astro (SSG) hosting **exported Webflow HTML + CSS + JS** for visual 1:1 parity
-- Page bodies live in [`src/webflow/*.html`](src/webflow) (scraped from production Webflow)
-- Styles: [`public/css/webflow.css`](public/css/webflow.css); interactions: [`public/js/webflow*.js`](public/js)
-- Blog posts are MDX in `src/content/blog/`. Posts not yet converted are still copied Webflow HTML in `src/webflow/blog-*.html`.
+- Astro (static build). Every page is an Astro page on [`BaseLayout`](src/layouts/BaseLayout.astro), built to match live Webflow. No Webflow HTML, CSS or JavaScript is used.
+- A few interactive sections are React components (`.tsx`), such as the home page's How It Works tabs and testimonial slider.
+- Styles: design tokens in [`src/styles/tokens.css`](src/styles/tokens.css), element defaults in [`src/styles/base.css`](src/styles/base.css), and each page's own scoped styles.
+- Blog posts are MDX in `src/content/blog/`.
 - Cloudflare Pages
 
 ## Develop
@@ -22,13 +22,17 @@ npm run build
 npm run preview
 ```
 
+## Pages
+
+Pages are Astro files in [`src/pages/`](src/pages). See [`docs/pages.md`](docs/pages.md) for how to add a page.
+
 ## Blog (no CMS)
 
 Posts are MDX files in [`src/content/blog/`](src/content/blog), one folder per post. See [`docs/blog-posts.md`](docs/blog-posts.md) for how to write and add a post.
 
 ## Assets
 
-Site images are in [`public/images`](public/images) and served by Cloudflare Pages.
+Images are in [`src/assets/`](src/assets), shown with Astro's `<Image>`, which optimizes them at build time. [`public/`](public) holds files that need a fixed URL, such as favicons, link preview images and images referenced from CSS.
 
 ## CI/CD
 
@@ -57,11 +61,13 @@ Create a Pages project named `wristband-website` (or change `--project-name` in 
 
 ```
 src/
-  components/          # Astro + react/ islands
+  assets/              # Images, one folder per page or use
+  components/          # Shared components; page-only ones in a folder per page (home/, pricing/, ...)
   content/blog/        # Markdown / MDX posts
-  layouts/
-  lib/
-  pages/
-  styles/
-public/images/         # Migrated Webflow assets
+  data/                # Blog authors and SDK matrix content
+  layouts/             # BaseLayout, BlogArticleLayout
+  lib/                 # Constants, SEO helpers, shared scripts
+  pages/               # One file per page; the path is the URL
+  styles/              # tokens.css, base.css
+public/                # Files that need a fixed URL
 ```
