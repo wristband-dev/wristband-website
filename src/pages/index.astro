@@ -1,51 +1,2048 @@
 ---
-import WebflowLayout from '../layouts/WebflowLayout.astro';
-import SdkMatrix from '../components/SdkMatrix.astro';
-import { getWebflowMeta } from '../lib/webflow';
+// Home page, rebuilt without Webflow. Content and layout match live Webflow.
+// The hero is dark and runs up behind the header. The rest of the page is light.
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SdkMatrix from '../components/home/SdkMatrix.astro';
+import RbacDiagram from '../components/home/RbacDiagram.astro';
+import WhoBenefits from '../components/home/WhoBenefits.astro';
+import HowItWorks from '../components/home/HowItWorks';
+import Testimonials from '../components/home/Testimonials';
+import { LINKS } from '../lib/constants';
 import { softwareApplicationNode } from '../lib/seo';
-import bodyHtml from '../webflow/home.html?raw';
 
-const meta = getWebflowMeta('home');
+import curoworkLogo from '../assets/home/logos/curowork.svg';
+import thoughtlyLogo from '../assets/home/logos/thoughtly.svg';
+import infinityLoopLogo from '../assets/home/logos/infinity-loop.svg';
+import perfaiLogo from '../assets/home/logos/perfai.webp';
+import roostrLogo from '../assets/home/logos/roostr.svg';
+import porkchopLogo from '../assets/home/logos/porkchop.webp';
+import breachMonitorLogo from '../assets/home/logos/breach-monitor.webp';
+import datapathLogo from '../assets/home/logos/datapath.svg';
+import loneReportLogo from '../assets/home/logos/lone-report.svg';
+import onlineTrainingConceptsLogo from '../assets/home/logos/online-training-concepts.webp';
+import lynxLogo from '../assets/home/logos/lynx.webp';
+import greenRightArrow from '../assets/home/green-right-arrow.svg';
+import nextjsIcon from '../assets/home/frameworks/nextjs.png';
+import expressIcon from '../assets/home/frameworks/express.png';
+import pythonIcon from '../assets/home/frameworks/python.webp';
+import nestjsIcon from '../assets/home/frameworks/nestjs.png';
+import dotnetIcon from '../assets/home/frameworks/dotnet.png';
+import tenantLoginPages from '../assets/home/benefits/tenant-login-pages.svg';
+import tenantLoginPagesMobile from '../assets/home/benefits/tenant-login-pages-mobile.webp';
+import tenantGroups from '../assets/home/benefits/tenant-groups.webp';
+import userManagementScreens from '../assets/home/benefits/user-management-screens.svg';
+import userManagementScreensMobile from '../assets/home/benefits/user-management-screens-mobile.webp';
+import slackLogo from '../assets/home/slack-logo.svg';
+import victorSanchez from '../assets/testimonials/victor-sanchez.jpeg';
 
-// Render the SDK matrix inside the empty placeholder div from the Webflow export, so it is in the right spot in the HTML.
-const MATRIX_PLACEHOLDER = '<div id="wristband-sdk-matrix" class="sdk-matrix-container">';
-const placeholderStart = bodyHtml.indexOf(MATRIX_PLACEHOLDER);
-if (placeholderStart === -1 || bodyHtml.indexOf(MATRIX_PLACEHOLDER, placeholderStart + 1) !== -1) {
-  throw new Error('home.html must contain exactly one SDK matrix placeholder');
-}
-const splitAt = placeholderStart + MATRIX_PLACEHOLDER.length;
-const beforeMatrix = bodyHtml.slice(0, splitAt);
-const afterMatrix = bodyHtml.slice(splitAt);
+const TITLE = 'Wristband | Multi-Tenant Authentication for B2B SaaS';
+const DESCRIPTION =
+  'Developers can quickly integrate multi-tenant auth flows with Wristband\u2019s hosted pages and APIs, helping B2B companies scale faster with enterprise-grade security.';
+
+// The hero backgrounds are Webflow images in public/images/misc/, as on live Webflow.
+const HERO_BACKGROUND = '/images/misc/67e63012d18f7f9092cdd846_hero-background-linear-grad-adjusted-2.svg';
+const HERO_BACKGROUND_PHONE = '/images/misc/67cca2a2c5839fca18c84583_hero-background-conic-gradient.svg';
+
+// The demo site button's label and arrow, as one string so nothing puts a space between them:
+// on phones the button is a block, where a space would show.
+const demoArrow = await getImage({ src: greenRightArrow, width: 24, height: 24 });
+const demoButtonHtml = `<span class="demo-site-button__label">Go To Demo Site</span><img src="${demoArrow.src}" width="24" height="24" alt="green right arrow" class="demo-site-button__arrow" loading="lazy" decoding="async">`;
+
+// Customer logos in the scrolling "Trusted By" strip. Each has its own size, like live Webflow.
+const logos = [
+  { image: curoworkLogo, alt: 'curowork logo', variant: 'curowork' },
+  { image: thoughtlyLogo, alt: 'thoughtly logo', variant: 'thoughtly' },
+  { image: infinityLoopLogo, alt: 'infinity loop logo', variant: 'infinity-loop' },
+  { image: perfaiLogo, alt: 'perfai logo', variant: 'perfai' },
+  { image: roostrLogo, alt: 'roostr logo', variant: 'roostr' },
+  { image: porkchopLogo, alt: 'porkchop_logo', variant: 'porkchop' },
+  { image: breachMonitorLogo, alt: 'breach_monitor_logo_gray', variant: 'breach-monitor' },
+  { image: datapathLogo, alt: 'datapath logo', variant: 'datapath' },
+  { image: loneReportLogo, alt: 'lone report logo', variant: 'lone-report' },
+  { image: onlineTrainingConceptsLogo, alt: 'online training concepts logo', variant: 'online-training-concepts' },
+  { image: lynxLogo, alt: 'Lynx logo', variant: 'lynx' },
+];
+
+const demoApps = [
+  {
+    label: 'Next.js',
+    href: 'https://github.com/wristband-dev/nextjs-app-router-demo-app',
+    icon: nextjsIcon,
+    alt: 'nextjs icon',
+    invertOnHover: true,
+  },
+  {
+    label: 'Express',
+    href: 'https://github.com/wristband-dev/expressjs-demo-app',
+    icon: expressIcon,
+    alt: 'expressjs icon',
+  },
+  { label: 'Django', href: 'https://github.com/wristband-dev/django-demo-app', icon: pythonIcon, alt: 'python logo' },
+  { label: 'NestJS', href: 'https://github.com/wristband-dev/nestjs-demo-app', icon: nestjsIcon, alt: 'nestjs-icon' },
+  { label: 'ASP.NET', href: 'https://github.com/wristband-dev/aspnet-demo-app', icon: dotnetIcon, alt: 'dotnet icon' },
+];
 ---
 
-<WebflowLayout
-  title={meta.title}
-  description={meta.description || undefined}
-  ogImage={meta.ogImage || undefined}
+<BaseLayout
+  title={TITLE}
+  description={DESCRIPTION}
+  ogImage="https://assets.wristband.dev/corp-site/webflow/opengraph/home-page-v2.png"
+  headerTheme="dark"
   jsonLd={[softwareApplicationNode()]}
-  wfPage={meta.wfPage}
-  wfSite={meta.wfSite}
-  bodyClass={meta.bodyClass}
 >
-  <!-- The hero background is a CSS background-image, so without a preload the browser
-       only finds it after webflow.css is parsed. On phones it is the LCP element. -->
+  {/* The hero background is a CSS background, so without a preload the browser only finds it after the CSS loads. On phones it is the largest thing on screen. */}
   <link
     slot="head"
     rel="preload"
     as="image"
     fetchpriority="high"
     media="(max-width: 479px)"
-    href="/images/misc/67cca2a2c5839fca18c84583_hero-background-conic-gradient.svg"
+    href={HERO_BACKGROUND_PHONE}
   />
-  <link
-    slot="head"
-    rel="preload"
-    as="image"
-    fetchpriority="high"
-    media="(min-width: 480px)"
-    href="/images/misc/67e63012d18f7f9092cdd846_hero-background-linear-grad-adjusted-2.svg"
-  />
-  <Fragment set:html={beforeMatrix} />
-  <SdkMatrix />
-  <Fragment set:html={afterMatrix} />
-</WebflowLayout>
+  <link slot="head" rel="preload" as="image" fetchpriority="high" media="(min-width: 480px)" href={HERO_BACKGROUND} />
+
+  <div
+    class="home"
+    style={`--hero-background: url('${HERO_BACKGROUND}'); --hero-background-phone: url('${HERO_BACKGROUND_PHONE}');`}
+  >
+    {/* Hero: the desktop and phone versions have different wording on live Webflow, so both are here. */}
+    <div class="hero">
+      <div class="hero__container">
+        <div class="hero__version hero__version--desktop">
+          <div class="hero__inner">
+            <div class="hero__content">
+              <div class="hero__text">
+                <h1 class="hero__title">
+                  <strong class="hero__title-strong">Authentication for multi-tenant apps</strong>
+                </h1>
+                <p class="hero__description">
+                  Easily build multi-tenant auth flows for your SaaS applications using our comprehensive set of hosted
+                  pages and APIs.
+                </p>
+              </div>
+              <div class="hero__buttons">
+                <a href={LINKS.signup} target="_blank" class="hero__primary" set:text="Try For Free" />
+                <a href={LINKS.calendly} target="_blank" class="hero__secondary" set:text="Request Demo" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero__version hero__version--phone">
+          <div class="hero__inner">
+            <div class="hero__content">
+              <div class="hero__text">
+                <h2 class="hero__title hero__title--phone">
+                  <strong class="hero__title-strong">Auth for multi-tenant apps</strong>
+                </h2>
+                <p class="hero__description hero__description--phone">
+                  Easily build multi-tenant auth flows for your SaaS applications using our comprehensive set of hosted
+                  pages and APIs.
+                </p>
+              </div>
+              <div class="hero__buttons">
+                <a href={LINKS.signup} target="_blank" class="hero__phone-primary" set:text="Try For Free" />
+                <a href={LINKS.calendly} target="_blank" class="hero__phone-secondary" set:text="Book a Demo" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Trusted By: the logos scroll left forever. The list is in twice so the strip never runs out. */}
+    <div class="trusted">
+      <div class="container">
+        <div class="section-heading">
+          <h2 class="trusted__title">Trusted By</h2>
+        </div>
+        <div class="trusted__carousel">
+          {[false, true].map((duplicate) => (
+            <div class="trusted__logos" aria-hidden={duplicate ? 'true' : undefined}>
+              {logos.map((logo) => (
+                <Image
+                  src={logo.image}
+                  alt={duplicate ? '' : logo.alt}
+                  class={`trusted__logo trusted__logo--${logo.variant}`}
+                  loading="lazy"
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <section class="dark how-it-works">
+      <div class="container">
+        <div class="how-it-works__center">
+          <div class="how-it-works__column">
+            <div class="how-it-works__heading">
+              <h2 class="eyebrow">How It Works</h2>
+              <h2 class="how-it-works__title">Build Multi-Tenant Auth In a Snap!</h2>
+            </div>
+            <div class="how-it-works__tabs">
+              <HowItWorks client:visible />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="callout">
+      <div class="container">
+        <div class="section-heading">
+          <h2 class="eyebrow">See Wristband In Action</h2>
+          <h2 class="section-title" data-reveal>
+            Check out our live demo site
+          </h2>
+        </div>
+        <div class="button-row">
+          <div class="reveal-wrap" data-reveal="400">
+            <a href={LINKS.demo} target="_blank" class="demo-site-button" set:html={demoButtonHtml} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="dark">
+      <div class="dark__heading">
+        <div class="eyebrow eyebrow--plain">How To Integrate</div>
+        <h2 class="dark__title">Use Our Developer Friendly SDKs</h2>
+      </div>
+      <div class="container">
+        <div class="sdk">
+          <SdkMatrix />
+        </div>
+      </div>
+    </section>
+
+    <div class="callout callout--subtle">
+      <div class="container">
+        <div class="section-heading">
+          <h2 class="eyebrow">Interested In A Complete Example?</h2>
+          <h2 class="section-title" data-reveal>
+            View our demo apps on GitHub
+          </h2>
+        </div>
+        <div class="button-row">
+          <div class="demo-apps" data-reveal="400">
+            {demoApps.map((app) => (
+              <a
+                href={app.href}
+                target="_blank"
+                class:list={['demo-app', app.invertOnHover && 'demo-app--invert-icon']}
+              >
+                <span class="demo-app__inner">
+                  <Image
+                    src={app.icon}
+                    width={35}
+                    height={35}
+                    densities={[1, 2]}
+                    alt={app.alt}
+                    class="demo-app__icon"
+                    loading="lazy"
+                  />
+                  <span class="demo-app__label">{app.label}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="dark benefits benefits--purple">
+      <div class="benefits__heading">
+        <h2 class="benefits__eyebrow">What Makes Us Different</h2>
+        <h2 class="benefits__title">Key Benefits of Using Wristband</h2>
+      </div>
+      <div class="container">
+        <div class="benefit benefit--text-left">
+          <div class="benefit__text">
+            <div class="benefit__text-inner benefit__text-inner--first">
+              <h2 class="benefit__eyebrow">Flexible Tenant Customization</h2>
+              <h2 class="benefit__title">Create Custom Auth Experiences For Each Tenant</h2>
+              <p class="benefit__description">
+                Not all tenants have the same authentication requirements. &nbsp;Using Wristband&rsquo;s Dashboard or
+                APIs, you can customize the authentication flows for each tenant. Key features include:
+              </p>
+              <ul class="benefit__list">
+                <li>Fully brandable auth pages and emails</li>
+                <li>Customizable login methods such as MFA and SSO</li>
+                <li>Configurable security policies</li>
+                <li>Tenant-level custom domain support</li>
+              </ul>
+              <a href="https://docs.wristband.dev/docs/tenant-configurations" class="benefit__link">
+                Learn about tenant customizations -&gt;
+              </a>
+            </div>
+          </div>
+          <div class="benefit__media">
+            <Image
+              src={tenantLoginPages}
+              width={475}
+              height={436}
+              alt="tenant login screens"
+              class="benefit__image"
+              loading="lazy"
+            />
+            <Image
+              src={tenantLoginPagesMobile}
+              width={475}
+              height={436}
+              densities={[1, 2]}
+              alt="tenant login screens"
+              class="benefit__image-mobile"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="benefit benefit--text-right">
+          <div class="benefit__media">
+            <Image
+              src={tenantGroups}
+              width={448}
+              height={445}
+              densities={[1, 2]}
+              alt="tenant groups"
+              class="benefit__image"
+              loading="lazy"
+            />
+            <Image
+              src={tenantGroups}
+              width={448}
+              height={445}
+              densities={[1, 2]}
+              alt="tenant groups"
+              class="benefit__image-mobile"
+              loading="lazy"
+            />
+          </div>
+          <div class="benefit__text">
+            <div class="benefit__text-inner">
+              <h2 class="benefit__eyebrow">Strict Tenant Isolation</h2>
+              <h2 class="benefit__title">Protect User Data and Prevent Cross-Tenant conflicts</h2>
+              <p class="benefit__description">
+                Wristband&rsquo;s model enforces strict tenant isolation. &nbsp;Users must belong to a single tenant,
+                and tenant users are logically isolated from each other. &nbsp;This model provides the following
+                benefits:
+              </p>
+              <ul class="benefit__list">
+                <li>Tenants have full ownership of their users</li>
+                <li>User data, such as emails, won&rsquo;t conflict across tenants</li>
+                <li>Reduces the risk of user data leaking across tenants</li>
+                <li>Users can be logged in to multiple tenants simultaneously</li>
+              </ul>
+              <a href="https://docs.wristband.dev/docs/tenant-isolation" class="benefit__link">
+                Learn about Wristband&rsquo;s tenant isolation model -&gt;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark benefits benefits--fuchsia">
+      <div class="container">
+        <div class="benefit benefit--text-left">
+          <div class="benefit__text">
+            <div class="benefit__text-inner benefit__text-inner--users">
+              <h2 class="benefit__eyebrow">Complete User Management</h2>
+              <h2 class="benefit__title">Easily Manage Your Tenant Users</h2>
+              <p class="benefit__description">
+                There&rsquo;s more to identity management than just authentication. &nbsp;Wristband provides a full
+                suite of turn-key solutions for common user workflows. &nbsp;Out-of-the-box Wristband supports flows
+                such as:
+              </p>
+              <ul class="benefit__list">
+                <li>User invitation: Invite users to join tenants</li>
+                <li>Self-signup: Enable users to create new tenants or join existing ones</li>
+                <li>Change email: Allow users to securely change their email</li>
+                <li>Email verification: Ensure users have valid emails</li>
+              </ul>
+              <a href="https://docs.wristband.dev/docs/authentication-workflows" class="benefit__link">
+                Learn about Wristband&rsquo;s supported workflows -&gt;
+              </a>
+            </div>
+          </div>
+          <div class="benefit__media">
+            <Image
+              src={userManagementScreens}
+              width={565}
+              height={432}
+              alt="user management screens"
+              class="benefit__image"
+              loading="lazy"
+            />
+            <Image
+              src={userManagementScreensMobile}
+              width={565}
+              height={432}
+              densities={[1, 2]}
+              alt="user management screens"
+              class="benefit__image-mobile"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="benefit benefit--text-right">
+          <div class="benefit__media">
+            <RbacDiagram />
+          </div>
+          <div class="benefit__text">
+            <div class="benefit__text-inner">
+              <h2 class="benefit__eyebrow">Robust RBAC Support</h2>
+              <h2 class="benefit__title">Control access to application Resources</h2>
+              <p class="benefit__description">
+                Wristband&rsquo;s built-in support for Role Based Access Control (RBAC) makes implementing authorization
+                checks within your application simple. &nbsp;Using Wristband&rsquo;s RBAC features, you can:
+              </p>
+              <ul class="benefit__list">
+                <li>Create custom roles and permissions for your app</li>
+                <li>Use predefined permissions to control access to Wristband APIs</li>
+                <li>Assign roles to both humans and machines</li>
+                <li>Quickly access assigned roles through token claims</li>
+              </ul>
+              <a href="https://docs.wristband.dev/docs/authorization" class="benefit__link">
+                Learn about Wristband&rsquo;s support for authorization -&gt;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="callout callout--subtle">
+      <div class="container">
+        <div class="section-heading">
+          <h2 class="benefits__eyebrow">Is Wristband Right For You?</h2>
+          <h2 class="section-title">Who Benefits The Most From Using Wristband</h2>
+        </div>
+        <WhoBenefits />
+      </div>
+    </div>
+
+    <section class="dark">
+      <div class="dark__heading">
+        <div class="eyebrow eyebrow--plain">Got Questions?</div>
+        <h2 class="dark__title dark__title--slack" data-reveal>
+          Talk directly with our developers
+        </h2>
+        <div class="reveal-wrap" data-reveal="400">
+          <a href={LINKS.slack} target="_blank" class="slack-button">
+            <span class="slack-button__inner">
+              <span class="slack-button__label">Talk over Slack</span>
+              <span class="slack-button__logo">
+                <Image src={slackLogo} width={35} height={35} alt="slack logo" loading="lazy" />
+              </span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="testimonials-section">
+      <div class="container">
+        <div class="testimonials-section__heading">
+          <h2 class="testimonials-section__title">Hear what our amazing customers say about us</h2>
+        </div>
+        <div class="featured">
+          <div class="featured__quote">
+            <div class="featured__photo">
+              <Image
+                src={victorSanchez}
+                widths={[92, 184]}
+                sizes="92px"
+                alt="victor-sanchez-thoughtly"
+                loading="lazy"
+              />
+            </div>
+            <p class="featured__text">
+              <span class="featured__mark featured__mark--open">&ldquo;</span>We felt lost in our previous auth
+              provider's application authentications, disparate environments, and our intricate tenant setup.
+              Wristband's <span>advanced tenant-level features are a game changer</span>, enabling us to spin up
+              customized environments for each client with just a few clicks. Their team has been extremely responsive,
+              helping to streamline our authentication,{' '}
+              <span class="featured__highlight">freeing up valuable time for our engineers</span>.
+              <span class="featured__mark featured__mark--close">&rdquo;</span>
+            </p>
+            <div>
+              <div class="featured__name">Victor Sanchez</div>
+              <div class="featured__role">Senior Software Engineer at Thoughtly</div>
+            </div>
+          </div>
+          <div class="featured__case-study">
+            <div class="featured__case-study-title">Multi-Tenant Auth, Solved</div>
+            <p class="featured__case-study-text">
+              Learn how Thoughtly leveraged Wristband's multi-tenant architecture to solve authentication for their
+              product-led growth and enterprise sales initiatives.
+            </p>
+            <div class="reveal-wrap" data-reveal>
+              <a href="/customers/thoughtly" class="featured__case-study-button" set:text="Read the Case Study" />
+            </div>
+          </div>
+        </div>
+        <div class="slider">
+          <section class="slider__section">
+            <div class="slider__wrapper">
+              <Testimonials client:visible />
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <section class="closing">
+      <div class="closing__wrapper">
+        <div class="closing__container">
+          <div class="closing__grid">
+            <div>
+              <h2 class="closing__title" data-reveal>
+                Deploy your multi-tenant auth solution today. No credit card required.
+              </h2>
+            </div>
+            <div class="closing__action" data-reveal="400">
+              <a href={LINKS.signup} target="_blank" class="closing__button" set:text="Get Started" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Live Webflow's home page sits on off-white, not the white of other pages. */
+  .home {
+    display: flow-root;
+    background-color: var(--palette-off-white);
+  }
+
+  /* Shared pieces. Webflow's containers keep their children's margins inside, so these are flow-root too. */
+  .container {
+    display: flow-root;
+    max-width: 1271px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .section-heading {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .eyebrow {
+    margin-bottom: 30px;
+    color: #3882d2;
+    font-size: 24px;
+    font-weight: var(--font-weight-medium);
+    line-height: 30px;
+    text-align: center;
+  }
+
+  .eyebrow--plain {
+    margin-bottom: 0;
+    line-height: 28.8px;
+    text-align: left;
+  }
+
+  .section-title {
+    color: var(--palette-charcoal);
+    font-size: 52px;
+    text-align: center;
+  }
+
+  .button-row {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 46px;
+  }
+
+  .dark {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    background-color: var(--palette-dark-gray);
+  }
+
+  .dark__heading {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .dark__title {
+    margin-bottom: 24px;
+    color: var(--palette-white-smoke);
+    font-size: 58px;
+    line-height: 1.2em;
+    text-align: center;
+  }
+
+  .callout {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background-color: var(--palette-white);
+  }
+
+  .callout--subtle {
+    margin-top: 28px;
+    margin-bottom: 28px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: var(--palette-off-white);
+  }
+
+  /* Hero. It pulls up behind the header (whose height changes by width) so the dark background fills both. */
+  .hero {
+    display: grid;
+    justify-content: center;
+    margin-top: -133px;
+    padding-top: 149px;
+    padding-bottom: 140px;
+    background-color: var(--palette-charcoal);
+    background-image: var(--hero-background);
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .hero__container {
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero__version {
+    display: flex;
+  }
+
+  .hero__version--phone {
+    display: none;
+  }
+
+  .hero__inner {
+    display: flow-root;
+    flex: 1;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.666vw;
+    padding-right: 1.666vw;
+  }
+
+  .hero__content {
+    max-width: 1098px;
+    margin: 40px auto;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .hero__text {
+    margin-bottom: 40px;
+  }
+
+  .hero__title {
+    max-width: 768px;
+    margin-bottom: 24px;
+    color: var(--palette-lavender);
+    font-size: 42px;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2em;
+    text-align: left;
+    word-break: keep-all;
+  }
+
+  .hero__title--phone {
+    margin-bottom: 16px;
+    line-height: 1.4em;
+  }
+
+  .hero__title-strong {
+    max-width: 1271px;
+    color: var(--palette-lavender);
+    font-size: 72px;
+    line-height: 1.2em;
+    text-align: left;
+    text-shadow: 3px 3px 4px #0003;
+  }
+
+  .hero__description {
+    max-width: 700px;
+    color: #f5f5f5;
+    font-size: 24px;
+    font-weight: 300;
+    text-align: left;
+    text-shadow: 3px 3px 3px #0003;
+    white-space: normal;
+    word-break: keep-all;
+  }
+
+  .hero__buttons {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .hero__primary,
+  .hero__secondary,
+  .hero__phone-primary,
+  .hero__phone-secondary {
+    display: inline-block;
+    min-width: 200px;
+    padding: 16px 40px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+    text-align: center;
+    text-decoration: none;
+    transform-style: preserve-3d;
+  }
+
+  .hero__primary,
+  .hero__phone-primary {
+    background-color: var(--palette-aquamarine);
+    color: var(--palette-charcoal);
+    transition:
+      color 0.35s,
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
+  }
+
+  /* Like live Webflow, hover keeps the colors and only adds a border and shrinks. */
+  .hero__primary:hover,
+  .hero__phone-primary:hover {
+    border-color: var(--palette-charcoal);
+    transform: scale3d(0.96, 0.96, 0.01);
+  }
+
+  .hero__secondary,
+  .hero__phone-secondary {
+    display: block;
+    border-color: var(--palette-lavender);
+    background-color: var(--palette-white);
+    color: var(--palette-black);
+    box-shadow: 0 4px 10px #14142b0a;
+    transition:
+      background-color 0.35s,
+      transform 0.35s,
+      box-shadow 0.35s,
+      color 0.35s,
+      border-color 0.35s;
+  }
+
+  .hero__secondary:hover,
+  .hero__phone-secondary:hover {
+    background-color: #0c0c0c;
+    color: var(--palette-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+    box-shadow: 0 4px 20px #14142b0a;
+  }
+
+  .hero__phone-primary,
+  .hero__phone-secondary {
+    min-width: 0;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  /* Trusted By */
+  .trusted {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: var(--palette-white);
+  }
+
+  .trusted__title {
+    color: #00000080;
+    font-size: 24px;
+    font-weight: 300;
+  }
+
+  .trusted__carousel {
+    display: flex;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+  }
+
+  .trusted__logos {
+    display: flex;
+    flex: none;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 2700px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    animation: trusted-scroll 23s linear infinite;
+  }
+
+  @keyframes trusted-scroll {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  .trusted__logo {
+    flex: none;
+    width: auto;
+    max-width: 350px;
+    height: 50px;
+    padding-right: 40px;
+  }
+
+  .trusted__logo--curowork {
+    max-width: 198px;
+  }
+
+  .trusted__logo--thoughtly {
+    max-width: 200px;
+  }
+
+  .trusted__logo--infinity-loop {
+    max-width: 312px;
+    height: 32px;
+  }
+
+  .trusted__logo--perfai {
+    max-width: 203px;
+  }
+
+  .trusted__logo--roostr {
+    max-width: 188px;
+    height: 40px;
+  }
+
+  .trusted__logo--porkchop {
+    max-width: 204px;
+  }
+
+  .trusted__logo--breach-monitor {
+    max-width: 345px;
+    height: 32px;
+  }
+
+  .trusted__logo--datapath {
+    max-width: 265px;
+    height: 40px;
+  }
+
+  .trusted__logo--lone-report {
+    max-width: 275px;
+  }
+
+  .trusted__logo--online-training-concepts {
+    max-width: 330px;
+    padding-right: 30px;
+  }
+
+  .trusted__logo--lynx {
+    height: 45px;
+  }
+
+  /* How It Works */
+  .how-it-works {
+    padding-bottom: 120px;
+  }
+
+  .how-it-works__center {
+    display: flex;
+    justify-content: center;
+  }
+
+  .how-it-works__column {
+    display: flex;
+    flex: 1;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .how-it-works__heading {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .how-it-works__title {
+    color: var(--palette-lavender);
+    font-size: 54px;
+    text-align: center;
+  }
+
+  .how-it-works__tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  /* Buttons reveal through a wrapper, since their own hover transitions would replace the reveal's delay.
+     On live Webflow these revealed buttons don't shrink on hover (the reveal leaves an inline transform behind),
+     so their hover styles here don't shrink them either. */
+  .reveal-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Demo site button */
+  .demo-site-button {
+    display: inline-flex;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px 38px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-lavender);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 10px #14142b08;
+    transition:
+      border-color 0.3s,
+      color 0.3s,
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
+  }
+
+  .demo-site-button:hover {
+    border-color: var(--palette-aquamarine);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-off-white);
+  }
+
+  .demo-site-button :global(.demo-site-button__arrow) {
+    display: inline-block;
+    max-width: 24px;
+    max-height: 24px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  /* SDK examples */
+  .sdk {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  /* GitHub demo apps */
+  .demo-apps {
+    display: flex;
+    align-items: flex-start;
+    gap: 26px;
+    margin-top: 40px;
+  }
+
+  .demo-app {
+    display: block;
+    min-width: 160px;
+    padding: 16px 20px;
+    border: 2px solid var(--palette-black);
+    border-radius: var(--radius-12);
+    background-color: var(--palette-white);
+    color: var(--palette-black);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    text-align: center;
+    text-decoration: none;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 10px #14142b0a;
+    transition:
+      background-color 0.35s,
+      transform 0.35s,
+      box-shadow 0.35s,
+      color 0.35s,
+      border-color 0.35s;
+  }
+
+  .demo-app:hover {
+    border-color: #0c0c0c;
+    background-color: #0c0c0c;
+    color: var(--palette-white);
+    transform: scale3d(0.96, 0.96, 0.01);
+    box-shadow: 0 4px 20px #14142b0a;
+  }
+
+  /* The black Next.js logo turns white on the dark hover background. */
+  .demo-app--invert-icon:hover .demo-app__icon {
+    filter: invert(1);
+  }
+
+  .demo-app__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: inherit;
+  }
+
+  .demo-app__label {
+    padding-left: 5px;
+  }
+
+  /* Key Benefits */
+  .benefits--purple {
+    background-image: linear-gradient(
+      -10deg,
+      #1a1c1d36 19%,
+      #9507dc36 34%,
+      #a72de44a 44%,
+      #58117d73 56%,
+      #1a1c1db3 89%,
+      #1a1c1db3
+    );
+  }
+
+  .benefits--fuchsia {
+    background-image: linear-gradient(8deg, #1a1c1d36 19%, #8a008c36 34%, #ff00d54a 44%, #95009873 56%, #1a1c1db3 89%);
+  }
+
+  .benefits__heading {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-left: 1.666vw;
+    padding-right: 1.666vw;
+    text-align: center;
+  }
+
+  .benefits__eyebrow {
+    margin-bottom: 30px;
+    color: #3882d2;
+    font-size: 24px;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.6em;
+    text-align: center;
+  }
+
+  .benefits__title {
+    margin-bottom: 24px;
+    color: var(--palette-white-smoke);
+    font-size: 45px;
+    line-height: 70px;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+
+  .benefit {
+    display: flex;
+    gap: 120px;
+  }
+
+  .benefit--text-left {
+    align-items: stretch;
+    margin-bottom: 80px;
+  }
+
+  .benefit--text-right {
+    align-items: center;
+  }
+
+  .benefit__text {
+    display: flex;
+    flex: 1;
+    flex-flow: column;
+    align-items: stretch;
+  }
+
+  .benefit__text-inner {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+  }
+
+  .benefit__eyebrow {
+    color: #3882d2;
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 70px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 1px #00000080;
+  }
+
+  .benefit__title {
+    margin-bottom: 33px;
+    color: var(--palette-white-smoke);
+    font-size: 40px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .benefit__description {
+    color: var(--palette-white-smoke);
+    font-size: 17px;
+    line-height: 25px;
+  }
+
+  .benefit__list {
+    margin-bottom: 33px;
+    color: var(--palette-white-smoke);
+    font-size: 17px;
+    line-height: 25px;
+  }
+
+  .benefit__link {
+    border-bottom: 1px solid transparent;
+    color: var(--palette-aquamarine);
+    font-size: 17px;
+    line-height: 25px;
+    text-decoration: none;
+    transition:
+      border-color 0.3s,
+      color 0.3s;
+  }
+
+  .benefit__link:hover {
+    border-bottom-color: var(--palette-aquamarine);
+    color: var(--palette-aquamarine);
+  }
+
+  .benefit__media {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  /* Like live Webflow, the images keep their height attribute when they shrink to fit. */
+  .benefit__image {
+    display: inline-block;
+    max-width: 100%;
+    object-fit: fill;
+  }
+
+  .benefit__image-mobile {
+    display: none;
+    max-width: 100%;
+  }
+
+  /* Slack */
+  .dark__title--slack {
+    margin-bottom: 24px;
+  }
+
+  .slack-button {
+    min-width: 160px;
+    padding: 16px 20px;
+    border: 2px solid var(--palette-white-smoke);
+    border-radius: var(--radius-12);
+    background-color: transparent;
+    color: var(--palette-white-smoke);
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 10px #14142b0a;
+    transition:
+      box-shadow 0.3s,
+      background-color 0.3s,
+      transform 0.3s,
+      color 0.3s;
+  }
+
+  .slack-button:hover {
+    border-color: var(--palette-charcoal);
+    background-color: var(--palette-lavender);
+    color: var(--palette-charcoal);
+  }
+
+  .slack-button__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: inherit;
+    text-align: center;
+  }
+
+  .slack-button__label {
+    padding-right: 10px;
+    color: inherit;
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  .slack-button__label:hover {
+    color: #0c0c0c;
+  }
+
+  .slack-button__logo {
+    display: flex;
+  }
+
+  /* Testimonials */
+  .testimonials-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .testimonials-section__heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 56px;
+  }
+
+  .testimonials-section__title {
+    flex: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: var(--palette-charcoal);
+    font-size: 44px;
+    font-weight: var(--font-weight-regular);
+    text-align: center;
+  }
+
+  .featured {
+    position: relative;
+    display: flex;
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto 80px;
+  }
+
+  .featured__quote {
+    width: 100%;
+    margin-top: 46px;
+    padding: 60px 30px 50px;
+    border-radius: var(--radius-8);
+    background-color: #0c0c0c;
+  }
+
+  .featured__photo {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 92px;
+    height: 92px;
+    overflow: hidden;
+    border-radius: 1000px;
+  }
+
+  .featured__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .featured__text {
+    margin-bottom: 33px;
+    color: var(--palette-white);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .featured__mark {
+    color: var(--palette-white);
+    font-size: 24px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .featured__mark--open {
+    padding-right: 5px;
+  }
+
+  .featured__mark--close {
+    padding-left: 3px;
+  }
+
+  .featured__highlight {
+    color: var(--palette-aquamarine);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .featured__name {
+    color: var(--palette-white);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .featured__role {
+    color: var(--palette-white);
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .featured__case-study {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    padding: 60px 30px;
+  }
+
+  .featured__case-study-title {
+    color: #3882d2;
+    font-family: Inter, sans-serif;
+    font-size: 26px;
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    text-shadow: 0 1px 1px var(--palette-gray-border);
+  }
+
+  .featured__case-study-text {
+    margin-bottom: 10px;
+    color: #333;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: var(--font-weight-regular);
+    line-height: 1.6em;
+    letter-spacing: -0.2px;
+    text-align: center;
+    text-shadow: 0 1px 1px var(--palette-gray-border);
+  }
+
+  .featured__case-study-button {
+    display: inline-block;
+    padding: 16px 32px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    background-color: var(--palette-pink);
+    color: var(--palette-white);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    line-height: 18px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s,
+      color 0.3s;
+  }
+
+  .featured__case-study-button:hover {
+    border-color: var(--palette-pink);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-pink);
+  }
+
+  .slider {
+    width: 90%;
+    max-width: 1400px;
+    min-height: 500px;
+    margin: 20px auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-radius: var(--radius-8);
+    box-shadow: 1px 0 26px 3px #c9c9c9;
+  }
+
+  .slider__section {
+    display: flex;
+    align-items: flex-start;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .slider__wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Closing call to action */
+  .closing__wrapper {
+    padding: 80px 56px;
+    background-color: var(--palette-charcoal);
+  }
+
+  .closing__container {
+    flex: 1;
+    max-width: none;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .closing__grid {
+    display: grid;
+    grid-auto-flow: column dense;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
+    place-items: center;
+    gap: 24px;
+  }
+
+  .closing__title {
+    max-width: 960px;
+    margin: 0 auto;
+    color: var(--palette-off-white);
+    font-size: 42px;
+    line-height: 1.5em;
+    text-align: center;
+  }
+
+  .closing__button {
+    display: block;
+    padding: 20px 38px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-12);
+    background-color: var(--palette-off-white);
+    color: var(--palette-charcoal);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: 20px;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transition:
+      border-color 0.3s,
+      color 0.3s,
+      transform 0.3s,
+      box-shadow 0.3s,
+      background-color 0.3s;
+  }
+
+  .closing__button:hover {
+    border-color: var(--palette-off-white);
+    background-color: var(--palette-charcoal);
+    color: var(--palette-off-white);
+  }
+
+  @media screen and (min-width: 1440px) {
+    .dark {
+      padding-top: 100px;
+    }
+
+    .hero__inner {
+      max-width: 1440px;
+      margin-left: 1.666vw;
+      margin-right: 1.666vw;
+    }
+
+    .demo-app {
+      min-width: 200px;
+    }
+
+    .benefits__heading {
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .closing {
+      display: flex;
+    }
+
+    .closing__wrapper {
+      width: 100%;
+      padding-top: 120px;
+      padding-bottom: 120px;
+      background-color: #0c0c0c;
+    }
+
+    .closing__container {
+      position: relative;
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .closing__grid {
+      grid-template-columns: 1.5fr;
+      margin-left: 25px;
+      margin-right: 25px;
+    }
+
+    .closing__title {
+      color: #fff;
+    }
+  }
+
+  @media screen and (max-width: 991px) {
+    .container {
+      padding-top: 0;
+    }
+
+    .dark {
+      padding-top: 54px;
+    }
+
+    .dark__heading {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .dark__title {
+      margin-bottom: 20px;
+      font-size: 50px;
+    }
+
+    .hero {
+      margin-top: -120px;
+      padding-top: 136px;
+      padding-bottom: 120px;
+    }
+
+    .hero__container {
+      max-width: 728px;
+    }
+
+    .hero__inner {
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+    }
+
+    .hero__content {
+      padding-left: 24px;
+    }
+
+    .hero__title {
+      margin-bottom: 20px;
+      font-size: 70px;
+    }
+
+    .hero__title--phone {
+      margin-bottom: 16px;
+    }
+
+    .how-it-works__tabs {
+      flex-flow: column;
+    }
+
+    .demo-apps {
+      flex-flow: wrap;
+      justify-content: center;
+      max-width: 700px;
+    }
+
+    .benefits__heading {
+      padding-left: 24px;
+    }
+
+    .benefit--text-left {
+      flex-flow: column-reverse;
+      justify-content: center;
+      gap: 50px;
+      margin-bottom: 40px;
+    }
+
+    .benefit--text-right {
+      flex-flow: column-reverse;
+      justify-content: center;
+      gap: 50px;
+    }
+
+    .benefit__text-inner--first {
+      margin-bottom: 20px;
+    }
+
+    .benefit__text-inner--users {
+      margin-bottom: 80px;
+    }
+
+    .benefit__media {
+      flex: 0 auto;
+      order: 1;
+      justify-content: center;
+    }
+
+    .benefit__image {
+      flex: 0 auto;
+      align-self: auto;
+    }
+
+    .testimonials-section {
+      padding-top: 50px;
+      padding-bottom: 120px;
+    }
+
+    .testimonials-section__heading {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .testimonials-section__title {
+      max-width: 740px;
+      margin-bottom: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .featured__quote {
+      margin-right: 20px;
+    }
+
+    .featured__case-study {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .slider {
+      margin-bottom: 0;
+    }
+
+    .closing__wrapper {
+      padding-top: 100px;
+      padding-bottom: 100px;
+    }
+
+    .closing__container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .closing__title {
+      max-width: none;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .callout {
+      padding-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    .callout--subtle {
+      padding-top: 0;
+      padding-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 44px;
+    }
+
+    .dark__title {
+      margin-bottom: 16px;
+      font-size: 40px;
+      line-height: 1.3em;
+    }
+
+    .hero {
+      margin-top: -104px;
+      padding-top: 120px;
+      padding-bottom: 0;
+      background-position: 100%;
+    }
+
+    .hero__container {
+      max-width: none;
+    }
+
+    .hero__version--desktop {
+      display: none;
+    }
+
+    .hero__version--phone {
+      display: block;
+    }
+
+    .hero__inner {
+      margin: 0;
+      padding-right: 1.666vw;
+    }
+
+    .hero__content {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      padding-left: 0;
+      padding-bottom: 90px;
+    }
+
+    .hero__title {
+      font-size: 60px;
+      line-height: 1.3em;
+    }
+
+    .hero__title--phone {
+      max-width: 540px;
+      line-height: 1.4em;
+    }
+
+    .hero__title-strong {
+      max-width: 100%;
+      font-size: 64px;
+    }
+
+    .hero__description--phone {
+      font-size: 20px;
+    }
+
+    .trusted {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .section-heading {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .hero__phone-secondary {
+      border-radius: var(--radius-8);
+    }
+
+    .trusted__logos {
+      min-width: 1650px;
+    }
+
+    .demo-site-button {
+      margin-top: 0;
+      padding: 20px 28px;
+      border-radius: var(--radius-8);
+    }
+
+    .demo-apps {
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      width: auto;
+      max-width: none;
+      margin-top: 10px;
+    }
+
+    .demo-app {
+      width: 100%;
+      padding: 20px 40px;
+      border-radius: var(--radius-8);
+    }
+
+    .benefit__image {
+      display: none;
+    }
+
+    .benefit__image-mobile {
+      display: block;
+    }
+
+    .testimonials-section {
+      padding-top: 0;
+      padding-bottom: 100px;
+    }
+
+    .testimonials-section__heading {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .testimonials-section__title {
+      max-width: 560px;
+      margin-bottom: 16px;
+    }
+
+    .featured {
+      flex-flow: column;
+      margin-bottom: 40px;
+    }
+
+    .featured__photo {
+      width: 78px;
+      height: 78px;
+    }
+
+    .featured__quote {
+      margin-top: 55px;
+      margin-right: 0;
+      padding: 50px 20px 40px;
+    }
+
+    .featured__case-study {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .featured__case-study-title {
+      text-shadow: 0 1px 1px var(--palette-pale-lavender);
+    }
+
+    .slider__section {
+      padding: 40px 10px;
+    }
+
+    .closing__wrapper {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .closing__container {
+      padding-right: 24px;
+    }
+
+    .closing__grid {
+      row-gap: 40px;
+    }
+
+    .closing__title {
+      padding-left: 10px;
+      padding-right: 10px;
+      font-size: 36px;
+    }
+
+    .closing__action {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .closing__button {
+      padding: 20px 28px;
+      border-radius: var(--radius-8);
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .container {
+      margin-top: 0;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    /* Webflow's header adds 60px of space below itself at this width. */
+    .hero {
+      margin-top: -92px;
+      padding-top: 168px;
+      background-image: var(--hero-background-phone);
+    }
+
+    .hero__inner {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .hero__content {
+      margin-top: 0;
+    }
+
+    .hero__title {
+      font-size: 40px;
+      line-height: 1.4em;
+    }
+
+    .hero__title-strong {
+      font-size: 40px;
+      line-height: 20px;
+      text-align: center;
+      word-break: normal;
+    }
+
+    .hero__description--phone {
+      font-size: 16px;
+    }
+
+    .how-it-works__title {
+      font-size: 44px;
+    }
+
+    .dark__title {
+      font-size: 36px;
+      line-height: 1.2em;
+    }
+
+    .hero__buttons {
+      flex-flow: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .hero__phone-primary {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 10px;
+      margin-left: 4px;
+      padding: 12px 20px;
+      font-size: 16px;
+      line-height: 16px;
+      text-align: center;
+    }
+
+    .hero__phone-secondary {
+      display: flex;
+      flex-flow: row;
+      border-radius: var(--radius-12);
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 12px 20px;
+    }
+
+    .section-heading,
+    .testimonials-section__heading {
+      margin-top: 20px;
+      margin-bottom: 30px;
+    }
+
+    .demo-site-button {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+    }
+
+    .demo-site-button :global(.demo-site-button__label) {
+      display: inline-block;
+      margin-top: 2px;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .demo-apps {
+      width: 100%;
+      margin: 0 10px;
+    }
+
+    .demo-app {
+      width: 100%;
+      padding: 12px 20px;
+    }
+
+    .benefits--purple {
+      padding-bottom: 0;
+    }
+
+    .benefits--fuchsia {
+      padding-top: 20px;
+      padding-bottom: 60px;
+    }
+
+    .benefits__heading {
+      margin-bottom: 20px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .benefit__eyebrow {
+      line-height: 1.6em;
+    }
+
+    .benefit--text-left {
+      gap: 25px;
+      margin-bottom: 0;
+    }
+
+    .benefit--text-right {
+      gap: 25px;
+    }
+
+    .benefit__text-inner--users {
+      margin-bottom: 40px;
+    }
+
+    .benefit__link:hover {
+      border-bottom-color: transparent;
+    }
+
+    .benefit__image-mobile {
+      margin-top: 20px;
+      object-fit: contain;
+    }
+
+    .reveal-wrap {
+      width: 100%;
+    }
+
+    .slack-button {
+      width: 100%;
+      padding: 12px 20px;
+    }
+
+    .slack-button__label {
+      padding-left: 10px;
+    }
+
+    .slack-button__logo {
+      width: 30px;
+    }
+
+    .testimonials-section {
+      padding-top: 32px;
+      padding-bottom: 80px;
+    }
+
+    .testimonials-section__title {
+      padding-left: 20px;
+      padding-right: 20px;
+      font-size: 40px;
+    }
+
+    .featured__photo {
+      width: 65px;
+      height: 65px;
+    }
+
+    .featured__quote {
+      margin-top: 45px;
+      padding-top: 40px;
+      padding-bottom: 30px;
+    }
+
+    .featured__case-study-button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 12px 20px;
+    }
+
+    .slider {
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .slider__section {
+      width: 100%;
+    }
+
+    .closing__container {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .closing__grid {
+      row-gap: 32px;
+    }
+
+    .closing__action {
+      width: 100%;
+    }
+
+    .closing__button {
+      width: 100%;
+    }
+  }
+</style>

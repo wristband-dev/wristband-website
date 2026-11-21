@@ -1,7 +1,7 @@
 /*
-  Design tokens for rebuilt pages.
+  Design tokens for every page.
 
-  Values match live Webflow (public/css/webflow.css) so rebuilt pages look the same as copied ones.
+  Values match live Webflow's CSS so the pages look the same as on live Webflow.
   Only colors that appear on screen are included (see the color audit).
 
   Two layers:
@@ -85,7 +85,7 @@
   --container-header-max: 1440px; /* .container-header */
   --container-gutter: 24px;
 
-  /* Spacing: the most used values in webflow.css */
+  /* Spacing: the most used values in live Webflow's CSS */
   --space-4: 4px;
   --space-8: 8px;
   --space-10: 10px;
@@ -104,10 +104,10 @@
   --space-100: 100px;
   --space-120: 120px;
 
-  /* Gap between the header and the first content (page title) on rebuilt pages. Matches /pricing. */
+  /* Gap between the header and the first content (page title). Matches /pricing. */
   --space-page-top: 20px;
 
-  /* Corner radius: the most used values in webflow.css */
+  /* Corner radius: the most used values in live Webflow's CSS */
   --radius-3: 3px;
   --radius-6: 6px;
   --radius-8: 8px;

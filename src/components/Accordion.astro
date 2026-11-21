@@ -1,0 +1,139 @@
+---
+// One accordion item, shared by every accordion on the site: a clickable title row with an
+// optional icon and a turning arrow, and an answer that slides open below it.
+// Opening and closing come from src/lib/accordion.ts. The hand cursor and green open title come from base.css.
+// Without JavaScript the answer stays open.
+//
+// Usage: <Accordion id="..." title="..."><p>Answer</p></Accordion>
+// - The `icon` slot puts an image to the left of the title.
+// - Other attributes (such as data-reveal) go on the item's outer element.
+// - The caller sets the look with these CSS variables on a wrapper:
+//   --accordion-bg, --accordion-shadow, --accordion-radius, --accordion-spacing (space below each item),
+//   --accordion-title-size, --accordion-title-color, --accordion-arrow-color.
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  id: string;
+  title: string;
+  headingTag?: 'h2' | 'h3';
+}
+
+const { id, title, headingTag: Heading = 'h3', ...attrs } = Astro.props;
+const hasIcon = Astro.slots.has('icon');
+---
+
+<div class="accordion" {...attrs}>
+  <div id={id} class="accordion__trigger" data-accordion-trigger>
+    {hasIcon && (
+      <div class="accordion__icon">
+        <slot name="icon" />
+      </div>
+    )}
+    <Heading class="accordion__heading">
+      <button
+        type="button"
+        class="accordion__button"
+        aria-expanded="true"
+        aria-controls={`${id}-answer`}
+        set:text={title}
+      />
+    </Heading>
+    <span class="accordion__arrow" aria-hidden="true">
+      keyboard_arrow_down
+    </span>
+  </div>
+  <div id={`${id}-answer`} class="accordion__content">
+    <slot />
+  </div>
+</div>
+
+<script>
+  import { initAccordions } from '../lib/accordion';
+
+  initAccordions();
+</script>
+
+<style>
+  .accordion {
+    margin-bottom: var(--accordion-spacing, 0);
+    padding: 24px 30px 14px;
+    border-radius: var(--accordion-radius, 0);
+    background-color: var(--accordion-bg, transparent);
+    box-shadow: var(--accordion-shadow, none);
+  }
+
+  .accordion__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .accordion__icon {
+    width: 40px;
+    margin-right: 40px;
+  }
+
+  .accordion__icon :global(img) {
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+  }
+
+  .accordion__heading {
+    flex: 1;
+    margin: 0;
+    color: var(--accordion-title-color, inherit);
+    font-size: var(--accordion-title-size, 20px);
+    font-weight: var(--font-weight-medium);
+    line-height: 30px;
+  }
+
+  .accordion__button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .accordion__arrow {
+    color: var(--accordion-arrow-color, inherit);
+    font-family: 'Material Icons', sans-serif;
+    font-size: 32px;
+    line-height: 30px;
+    font-feature-settings: 'liga';
+    /* Webflow's easings: inQuad when closing, outQuad when opening. */
+    transition: transform 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  }
+
+  .accordion__trigger.is-open .accordion__arrow {
+    transform: rotate(180deg);
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .accordion__content {
+    margin-top: 10px;
+    margin-right: 30px;
+    overflow: hidden;
+  }
+
+  /* With JavaScript on (BaseLayout adds js-reveal before first paint), answers start closed. */
+  :global(.js-reveal) .accordion__content {
+    height: 0;
+  }
+
+  @media screen and (max-width: 767px) {
+    .accordion__content {
+      margin-right: 0;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .accordion__icon {
+      margin-right: 20px;
+    }
+  }
+</style>

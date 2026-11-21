@@ -9,8 +9,7 @@ import { codeTheme } from './src/lib/code-theme.mjs';
 const SITE = 'https://www.wristband.dev';
 
 // Each page's last modified date, written to the sitemap as <lastmod>.
-// Copied Webflow pages: the `lastmod` field in src/webflow/meta.json.
-// Rebuilt pages: PAGE_DATE_MODIFIED below. Update a page's date when its content changes.
+// Pages: PAGE_DATE_MODIFIED below. Update a page's date when its content changes.
 // Blog posts: the post's `dateModified` frontmatter, or `datePublished` if it has none
 // (a `slug.md(x)` file or a `slug/index.mdx` folder).
 const PAGE_DATE_MODIFIED = {
@@ -23,24 +22,12 @@ const PAGE_DATE_MODIFIED = {
   '/request-demo': '2026-11-20',
   '/pricing': '2026-11-20',
   '/customers/thoughtly': '2026-11-20',
+  // The home page's path is '' (no trailing slash), like the sitemap entry it matches.
+  '': '2026-11-20',
 };
-
-/** @param {string} key */
-function webflowPath(key) {
-  if (key === 'home') return '';
-  if (key.startsWith('blog-')) return `/blog/${key.slice('blog-'.length)}`;
-  if (key.startsWith('compare-')) return `/compare/${key.slice('compare-'.length)}`;
-  if (key.startsWith('customers-')) return `/customers/${key.slice('customers-'.length)}`;
-  return `/${key}`;
-}
 
 function buildDateModifiedByPath() {
   const dateModifiedByPath = new Map();
-
-  const meta = JSON.parse(readFileSync(new URL('./src/webflow/meta.json', import.meta.url), 'utf8'));
-  for (const [key, page] of Object.entries(meta)) {
-    if (page.lastmod) dateModifiedByPath.set(webflowPath(key), page.lastmod);
-  }
 
   for (const [path, dateModified] of Object.entries(PAGE_DATE_MODIFIED)) {
     dateModifiedByPath.set(path, new Date(dateModified).toISOString());

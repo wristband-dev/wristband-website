@@ -1,0 +1,322 @@
+/* Styles for HowItWorks.tsx. Values match live Webflow (its .tabs, .tab-link and step classes).
+   The tab shapes are the Webflow images in public/images/misc/, referenced by path. */
+
+.hiw {
+  width: 100%;
+  margin: 10px 10px 0;
+}
+
+/* Step tabs */
+.hiw__menu {
+  display: flex;
+  flex-flow: wrap;
+  gap: 4px;
+  max-width: 700px;
+  margin-bottom: 28px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #64afff;
+}
+
+.hiw__tab {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 9px 30px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--palette-dark-gray);
+  background-image: url('/images/misc/67cdd4d00e39a0a44d760c01_stepping-rectangle-unselected.svg');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: var(--palette-white-smoke);
+  font: inherit;
+  font-size: 18px;
+  line-height: 28.8px;
+  text-align: left;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.hiw__tab:hover {
+  color: var(--palette-medium-aquamarine);
+}
+
+.hiw__tab.is-current {
+  background-image: url('/images/misc/67cdd35bf20d12844b4994fe_stepping-rectangle.svg');
+}
+
+.hiw__tab--first {
+  background-image: url('/images/misc/67cf80cf2efa38414681b5b0_1251de0ea0309b1ebfe74748f936a925_stepping-rectangle-step-1.svg');
+}
+
+.hiw__tab--first.is-current {
+  z-index: 1;
+  background-color: transparent;
+  background-image: url('/images/misc/67cdd35bf20d12844b4994fe_stepping-rectangle.svg');
+}
+
+.hiw__tab--step {
+  z-index: 0;
+  margin-left: -10px;
+  padding-left: 30px;
+  background-color: transparent;
+}
+
+.hiw__tab--step.is-current {
+  background-image: url('/images/misc/67cf811ab0030be7025b3141_7d51283f8aaf6fcf8cbd98cff3e663a8_stepping-rectangle-current.svg');
+}
+
+/* Step panes */
+.hiw__pane {
+  min-height: 660px;
+}
+
+.hiw__pane[hidden] {
+  display: none;
+}
+
+.hiw__heading,
+.hiw__figure,
+.hiw__callouts {
+  max-width: 1191px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hiw__heading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hiw__number {
+  margin: 0 0 24px;
+  color: var(--palette-white);
+  font-family: 'JetBrains Mono', sans-serif;
+  font-size: 58px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2em;
+}
+
+.hiw__title {
+  margin-bottom: 24px;
+  color: var(--palette-white);
+  font-size: 25px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2em;
+}
+
+.hiw__figure {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.hiw__diagram {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+
+.hiw__diagram--desktop {
+  width: 100%;
+  margin: 20px auto 40px;
+}
+
+.hiw__pane--step-1 .hiw__diagram--desktop {
+  display: block;
+  max-width: 1100px;
+}
+
+.hiw__pane--step-2 .hiw__diagram--desktop {
+  max-width: 900px;
+}
+
+.hiw__pane--step-3 .hiw__diagram--desktop {
+  max-width: 1000px;
+  max-height: 360px;
+  margin-bottom: 100px;
+  padding-left: 140px;
+  padding-right: 140px;
+}
+
+.hiw__pane--step-4 .hiw__diagram--desktop {
+  max-width: 1000px;
+  max-height: 400px;
+}
+
+.hiw__pane--step-5 .hiw__diagram--desktop,
+.hiw__pane--step-6 .hiw__diagram--desktop {
+  max-width: 640px;
+}
+
+.hiw__diagram--mobile {
+  display: none;
+}
+
+/* Callouts: below the diagram, or beside it for steps 5 and 6 on desktop */
+.hiw__callouts {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 30px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.hiw__callouts--beside {
+  flex: 0 auto;
+  flex-flow: wrap;
+  gap: 40px;
+  width: auto;
+  max-width: 400px;
+  margin: 0 0 0 30px;
+}
+
+.hiw__callouts--below-tablet {
+  display: none;
+}
+
+.hiw__callout {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 15px;
+  width: 100%;
+  max-width: 360px;
+  padding: 10px;
+  border: 1px solid var(--palette-white-smoke);
+  border-radius: var(--radius-8);
+}
+
+.hiw__callout-text {
+  margin-bottom: 20px;
+  color: var(--palette-white-smoke);
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@media screen and (min-width: 1440px) {
+  .hiw__title {
+    margin-bottom: 10px;
+  }
+
+  .hiw__pane--step-3 .hiw__diagram--desktop,
+  .hiw__pane--step-4 .hiw__diagram--desktop {
+    max-width: 1100px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .hiw__number {
+    margin-bottom: 20px;
+    font-size: 50px;
+  }
+
+  .hiw__pane:not(.hiw__pane--step-1) .hiw__diagram--desktop {
+    object-fit: contain;
+  }
+
+  .hiw__pane--step-1 .hiw__diagram--desktop {
+    margin-bottom: 60px;
+  }
+
+  .hiw__pane--step-3 .hiw__diagram--desktop {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+
+  .hiw__pane--step-4 .hiw__diagram--desktop {
+    max-height: 320px;
+  }
+
+  .hiw__pane--step-5 .hiw__diagram--desktop,
+  .hiw__pane--step-6 .hiw__diagram--desktop {
+    max-width: 540px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .hiw__callouts--beside {
+    display: none;
+  }
+
+  .hiw__callouts--below-tablet {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hiw__menu {
+    justify-content: center;
+    gap: 24px;
+  }
+
+  /* Phones: the tabs become small pills with no label, like live Webflow. */
+  .hiw__tab,
+  .hiw__tab--first,
+  .hiw__tab--step {
+    margin-left: 0;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: var(--palette-dim-gray);
+    background-image: none;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+
+  .hiw__tab:hover {
+    background-color: #acabc7;
+  }
+
+  .hiw__tab.is-current,
+  .hiw__tab--first.is-current {
+    background-color: #64a;
+    background-image: none;
+  }
+
+  .hiw__tab-label {
+    display: none;
+  }
+
+  .hiw__number {
+    margin-bottom: 16px;
+    font-size: 40px;
+    line-height: 1.3em;
+  }
+
+  .hiw__figure {
+    justify-content: center;
+  }
+
+  .hiw__diagram--desktop {
+    display: none;
+  }
+
+  .hiw__pane--step-1 .hiw__diagram--desktop {
+    display: none;
+  }
+
+  .hiw__diagram--mobile {
+    display: inline-flex;
+    max-width: 360px;
+  }
+
+  .hiw__callouts {
+    flex-flow: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .hiw__number {
+    font-size: 36px;
+    line-height: 1.2em;
+  }
+}

@@ -1,7 +1,6 @@
 import { LINKS, SITE } from './constants';
 import pricingFaqs from './pricing-faqs.json';
 
-export const DEFAULT_OG_IMAGE = '/images/hero_background.webp';
 export const TWITTER_HANDLE = '@wristband_dev';
 
 export type JsonLdNode = Record<string, unknown>;
@@ -29,11 +28,7 @@ export function absoluteUrl(pathOrUrl: string, site: string = SITE.url): string 
   if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
     return pathOrUrl;
   }
-  return new URL(pathOrUrl || DEFAULT_OG_IMAGE, site).href;
-}
-
-export function resolveOgImage(ogImage?: string): string {
-  return ogImage?.trim() ? ogImage : DEFAULT_OG_IMAGE;
+  return new URL(pathOrUrl, site).href;
 }
 
 function markdownLinksToPlain(text: string): string {
@@ -144,7 +139,7 @@ export function blogPostingNode(input: {
     '@id': `${input.url}#article`,
     headline: decodeHtmlEntities(input.headline),
     description: input.description ? decodeHtmlEntities(input.description) : undefined,
-    image: input.image ? absoluteUrl(input.image) : absoluteUrl(DEFAULT_OG_IMAGE),
+    image: input.image ? absoluteUrl(input.image) : undefined,
     datePublished,
     dateModified,
     author: input.authorPerson
@@ -176,7 +171,7 @@ export function articleNode(input: {
     '@id': `${input.url}#article`,
     headline: decodeHtmlEntities(input.headline),
     description: input.description ? decodeHtmlEntities(input.description) : undefined,
-    image: input.image ? absoluteUrl(input.image) : absoluteUrl(DEFAULT_OG_IMAGE),
+    image: input.image ? absoluteUrl(input.image) : undefined,
     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': input.url },
     url: input.url,

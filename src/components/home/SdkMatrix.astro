@@ -1,0 +1,33 @@
+---
+import { codeToHtml } from 'shiki';
+import { ENDPOINT_IDS, SDK_FRAMEWORKS } from '../../data/sdk-matrix';
+import SdkMatrix, { type HighlightedFramework } from './SdkMatrix.tsx';
+
+const frameworks: HighlightedFramework[] = await Promise.all(
+  SDK_FRAMEWORKS.map(async (framework) => {
+    const samples = {} as HighlightedFramework['samples'];
+    for (const id of ENDPOINT_IDS) {
+      const sample = framework.samples[id];
+      samples[id] = {
+        ...sample,
+        html: await codeToHtml(sample.code.trimEnd(), {
+          lang: sample.language,
+          theme: 'night-owl',
+        }),
+      };
+    }
+    return { id: framework.id, name: framework.name, samples };
+  }),
+);
+---
+
+{/* The matrix renders into the page's HTML at build time, so every code sample is in the source. */}
+<div id="seo-matrix-source">
+  <SdkMatrix client:load frameworks={frameworks} />
+</div>
+
+<style>
+  #seo-matrix-source {
+    width: 100%;
+  }
+</style>

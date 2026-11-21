@@ -1,14 +1,16 @@
 // Accordion behavior shared by every accordion on the site. Runs in the browser.
-// Each page owns its own markup and styles. This file only opens and closes items,
-// with Webflow's timing: 200ms, easing out when opening and easing in when closing.
+// The markup comes from src/components/Accordion.astro, which follows the contract below.
+// This file only opens and closes items, with Webflow's timing: 200ms, easing out when
+// opening and easing in when closing.
 //
 // Markup contract:
-// - The clickable row has `data-accordion-trigger`.
+// - The clickable row has `data-accordion-trigger`. base.css gives that row the hand cursor
+//   and turns the button's title green while the item is open.
 // - Inside it, a <button> with `aria-expanded` and `aria-controls` set to the answer's id.
-// - While an item is open, the clickable row has the class `is-open`, for page styles
-//   such as turning the arrow over or changing the heading color.
+// - While an item is open, the clickable row has the class `is-open`, for styles
+//   such as turning the arrow over.
 // - Answers render open, so they stay readable without JavaScript. To avoid a flash of
-//   open answers, the page's CSS should give answers `height: 0` under `.js-reveal`
+//   open answers, the CSS gives answers `height: 0` under `.js-reveal`
 //   (BaseLayout adds that class before first paint).
 
 const DURATION_MS = 200;
