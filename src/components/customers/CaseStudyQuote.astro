@@ -1,0 +1,147 @@
+---
+// A customer quote in a case study: the quote in a pink-bordered box, with the speaker's name,
+// role and photo below it. Matches the quotes on the live Webflow Thoughtly case study.
+// The quote text goes in the slot. Wrap phrases to highlight in <em>; they show in aquamarine.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  name: string;
+  role: string;
+  photo: ImageMetadata;
+}
+
+const { name, role, photo } = Astro.props;
+// Built as one string, trimmed, so the quote marks sit right against the text whatever line breaks
+// the page or the formatter adds.
+const quote = (await Astro.slots.render('default')).trim();
+const quoteHtml = `<span class="quote__mark quote__mark--open" aria-hidden="true">&ldquo;</span>${quote}<span class="quote__mark quote__mark--close" aria-hidden="true">&rdquo;</span>`;
+---
+
+<figure class="quote">
+  <blockquote class="quote__text" set:html={quoteHtml} />
+  <figcaption class="quote__author">
+    <span class="quote__byline">
+      <span class="quote__name">{name}</span>
+      <br />
+      {role}
+    </span>
+    <span class="quote__photo">
+      <Image src={photo} alt={name} widths={[68, 136]} sizes="68px" loading="lazy" />
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .quote {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 15px;
+    border: 1px solid var(--palette-pink);
+    border-radius: var(--radius-16);
+  }
+
+  .quote__text {
+    max-width: 90%;
+    margin: 0 auto 10px;
+    padding: 0;
+    color: var(--palette-white);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.8em;
+  }
+
+  .quote__text :global(em) {
+    color: var(--palette-aquamarine);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+  }
+
+  .quote__text :global(strong) {
+    color: inherit;
+    font-weight: var(--font-weight-medium);
+  }
+
+  .quote__text :global(.quote__mark) {
+    font-size: 24px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .quote__text :global(.quote__mark--open) {
+    padding-right: 5px;
+  }
+
+  .quote__text :global(.quote__mark--close) {
+    padding-left: 3px;
+  }
+
+  .quote__author {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .quote__byline {
+    width: 100%;
+    padding-right: 20px;
+    color: var(--palette-white);
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.4em;
+    text-align: right;
+  }
+
+  .quote__name {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .quote__photo {
+    flex: none;
+    width: 68px;
+    height: 68px;
+    margin-left: auto;
+    overflow: hidden;
+    border-radius: 1000px;
+  }
+
+  .quote__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media screen and (max-width: 991px) {
+    .quote {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .quote__name {
+      font-size: 15px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .quote__text {
+      font-size: 17px;
+    }
+
+    .quote__photo {
+      width: 65px;
+      height: 65px;
+    }
+  }
+
+  @media screen and (max-width: 479px) {
+    .quote__byline {
+      max-width: 300px;
+      padding-right: 10px;
+    }
+  }
+</style>

@@ -1,15 +1,4 @@
 {
-  "customers-thoughtly": {
-    "title": "Thoughtly Found an Auth0 Alternative for Multi-Tenant Auth",
-    "description": "Discover how Thoughtly unified auth for product-led growth and enterprise sales by moving from Auth0 to Wristband’s multi-tenant architecture.",
-    "ogImage": "/images/misc/682d7588b08074e3d22ce582_thoughtly-case-study-open-graph.png",
-    "wfPage": "680d8f80fc716f3fc0ed998c",
-    "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body-4",
-    "lastmod": "2025-05-21T06:41:46.622Z",
-    "file": "src/webflow/customers-thoughtly.html",
-    "bytes": 24248
-  },
   "home": {
     "title": "Wristband | Multi-Tenant Authentication for B2B SaaS",
     "description": "Developers can quickly integrate multi-tenant auth flows with Wristband’s hosted pages and APIs, helping B2B companies scale faster with enterprise-grade security.",
@@ -20,27 +9,5 @@
     "lastmod": "2026-10-28T17:40:33.879Z",
     "file": "src/webflow/home.html",
     "bytes": 92622
-  },
-  "pricing": {
-    "title": "Pricing: Affordable Enterprise Auth",
-    "description": "No more hidden \"enterprise\" taxes. SSO, MFA, and Role-based Access Control is free with every plan. No credit card required to start.",
-    "ogImage": "/images/hero_background.webp",
-    "wfPage": "64d01a3771d020746e331abf",
-    "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "",
-    "lastmod": "2026-10-15T18:04:28.030Z",
-    "file": "src/webflow/pricing.html",
-    "bytes": 44384
-  },
-  "request-demo": {
-    "title": "Request A Demo - Wristband",
-    "description": "Streamline multi-tenant auth, cut dev time, and enhance security with Wristband. Request a demo to see the ROI and talk directly with our developers.",
-    "ogImage": "/images/hero_background.webp",
-    "wfPage": "64d01a3771d020746e331aa1",
-    "wfSite": "64d01a3671d020746e331a42",
-    "bodyClass": "body-2",
-    "lastmod": "2025-04-28T18:41:15.391Z",
-    "file": "src/webflow/request-demo.html",
-    "bytes": 13450
   }
 }

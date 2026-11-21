@@ -47,6 +47,11 @@ body {
   line-height: var(--line-height-body);
 }
 
+/* Dark pages (BaseLayout theme="dark"): charcoal behind the header and content. */
+body.page-dark {
+  background-color: var(--palette-charcoal);
+}
+
 h1,
 h2,
 h3,
